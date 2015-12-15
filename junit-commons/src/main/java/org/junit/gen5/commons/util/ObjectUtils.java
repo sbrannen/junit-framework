@@ -48,7 +48,7 @@ public final class ObjectUtils {
 		}
 
 		Class<? extends Object> type = obj.getClass();
-		return (type.isArray() && PRIMITIVE_TO_WRAPPER_MAP.containsKey(type.getComponentType()));
+		return (type.isArray() && type.getComponentType().isPrimitive());
 	}
 
 	public static Object[] convertToObjectArray(Object obj) {
