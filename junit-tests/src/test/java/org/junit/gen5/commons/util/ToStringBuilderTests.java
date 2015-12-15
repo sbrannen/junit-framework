@@ -64,6 +64,24 @@ public class ToStringBuilderTests {
 	}
 
 	@Test
+	public void withIntArrayField() {
+		assertEquals("RoleModel [magic numbers = [1, 42, 99]]",
+			new ToStringBuilder(new RoleModel()).append("magic numbers", new int[] { 1, 42, 99 }).toString());
+	}
+
+	@Test
+	public void withCharArrayField() {
+		assertEquals("RoleModel [magic characters = [a, b]]",
+			new ToStringBuilder(new RoleModel()).append("magic characters", new char[] { 'a', 'b' }).toString());
+	}
+
+	@Test
+	public void withPrimitiveBooleanArrayField() {
+		assertEquals("RoleModel [booleans = [true, false, true]]",
+			new ToStringBuilder(new RoleModel()).append("booleans", new boolean[] { true, false, true }).toString());
+	}
+
+	@Test
 	@SuppressWarnings("serial")
 	public void withMapField() {
 		// @formatter:off

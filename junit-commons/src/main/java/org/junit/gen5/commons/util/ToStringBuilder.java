@@ -45,17 +45,20 @@ public class ToStringBuilder {
 		return this;
 	}
 
-	private String toString(Object value) {
-		if (value == null) {
+	private String toString(Object obj) {
+		if (obj == null) {
 			return "null";
 		}
-		if (value instanceof CharSequence) {
-			return "'" + value + "'";
+		if (obj instanceof CharSequence) {
+			return "'" + obj + "'";
 		}
-		if (value instanceof Object[]) {
-			return Arrays.deepToString((Object[]) value);
+		if (ObjectUtils.isPrimitiveArray(obj)) {
+			obj = ObjectUtils.convertToObjectArray(obj);
 		}
-		return Objects.toString(value);
+		if (obj instanceof Object[]) {
+			return Arrays.deepToString((Object[]) obj);
+		}
+		return Objects.toString(obj);
 	}
 
 	@Override
