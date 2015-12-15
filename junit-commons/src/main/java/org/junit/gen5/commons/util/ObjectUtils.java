@@ -42,12 +42,21 @@ public final class ObjectUtils {
 		PRIMITIVE_TO_WRAPPER_MAP = Collections.unmodifiableMap(map);
 	}
 
+	public static boolean isPrimitiveArray(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+
+		Class<? extends Object> type = obj.getClass();
+		return (type.isArray() && PRIMITIVE_TO_WRAPPER_MAP.containsKey(type.getComponentType()));
+	}
+
 	public static Object[] convertToObjectArray(Object obj) {
 		if (obj == null) {
 			return new Object[0];
 		}
 
-		Class<? extends Object> type = obj.getClass();
+		Class<?> type = obj.getClass();
 		Preconditions.condition(type.isArray(),
 			() -> "The supplied object must be an array, not an instance of [" + type + "]");
 
@@ -59,19 +68,6 @@ public final class ObjectUtils {
 			array[i] = Array.get(obj, i);
 		}
 		return array;
-	}
-
-	public static boolean isPrimitiveArray(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-
-		Class<? extends Object> type = obj.getClass();
-		if (!type.isArray()) {
-			return false;
-		}
-
-		return PRIMITIVE_TO_WRAPPER_MAP.containsKey(type.getComponentType());
 	}
 
 	public static String nullSafeToString(Class<?>... classes) {
