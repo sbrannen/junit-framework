@@ -65,8 +65,9 @@ public class ToStringBuilderTests {
 
 	@Test
 	public void withIntArrayField() {
-		assertEquals("RoleModel [magic numbers = [1, 42, 99]]",
-			new ToStringBuilder(new RoleModel()).append("magic numbers", new int[] { 1, 42, 99 }).toString());
+		assertEquals("RoleModel [magic numbers = [[1], [42], [99, 23]]]",
+			new ToStringBuilder(new RoleModel()).append("magic numbers",
+				new int[][] { { 1 }, { 42 }, { 99, 23 } }).toString());
 	}
 
 	@Test
@@ -79,6 +80,38 @@ public class ToStringBuilderTests {
 	public void withPrimitiveBooleanArrayField() {
 		assertEquals("RoleModel [booleans = [true, false, true]]",
 			new ToStringBuilder(new RoleModel()).append("booleans", new boolean[] { true, false, true }).toString());
+	}
+
+	@Test
+	public void withShortArrayField() {
+		assertEquals("RoleModel [values = [[23], [42, 17]]]",
+			new ToStringBuilder(new RoleModel()).append("values", new short[][] { { 23 }, { 42, 17 } }).toString());
+	}
+
+	@Test
+	public void withByteArrayField() {
+		assertEquals("RoleModel [values = [[23], [42, 17]]]",
+			new ToStringBuilder(new RoleModel()).append("values", new byte[][] { { 23 }, { 42, 17 } }).toString());
+	}
+
+	@Test
+	public void withPrimitiveLongArrayField() {
+		assertEquals("RoleModel [values = [[23], [42, 17]]]",
+			new ToStringBuilder(new RoleModel()).append("values", new long[][] { { 23 }, { 42, 17 } }).toString());
+	}
+
+	@Test
+	public void withPrimitiveFloatArrayField() {
+		assertEquals("RoleModel [values = [[23.45], [42.0, 17.13]]]",
+			new ToStringBuilder(new RoleModel()).append("values",
+				new float[][] { { 23.45f }, { 42, 17.13f } }).toString());
+	}
+
+	@Test
+	public void withPrimitiveDoubleArrayField() {
+		assertEquals("RoleModel [values = [[23.45], [42.0, 17.13]]]",
+			new ToStringBuilder(new RoleModel()).append("values",
+				new double[][] { { 23.45d }, { 42, 17.13d } }).toString());
 	}
 
 	@Test
