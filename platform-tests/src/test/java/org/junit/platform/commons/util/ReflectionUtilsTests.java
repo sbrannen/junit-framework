@@ -38,7 +38,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.extensions.TempDirectory;
@@ -616,18 +615,16 @@ class ReflectionUtilsTests {
 
 	@Test
 	void findMethodByParameterTypesInGenericInterface() {
-		Optional<Method> method = ReflectionUtils.findMethod(InterfaceWithGenericDefaultMethod.class, "foo",
-			Number.class);
+		Class<?> ifc = InterfaceWithGenericDefaultMethod.class;
+		Optional<Method> method = ReflectionUtils.findMethod(ifc, "foo", Number.class);
 		assertThat(method).isNotEmpty();
 		assertThat(method.get().getName()).isEqualTo("foo");
 	}
 
-	// TODO [#969] Enable and complete @Disabled test.
-	@Disabled("Disabled until #969 is resolved")
 	@Test
 	void findMethodByParameterTypesInGenericInterfaceViaParameterizedSubclass() {
-		Optional<Method> method = ReflectionUtils.findMethod(InterfaceWithGenericDefaultMethodImpl.class, "foo",
-			Long.class);
+		Class<?> clazz = InterfaceWithGenericDefaultMethodImpl.class;
+		Optional<Method> method = ReflectionUtils.findMethod(clazz, "foo", Long.class);
 		assertThat(method).isNotEmpty();
 		assertThat(method.get().getName()).isEqualTo("foo");
 	}
