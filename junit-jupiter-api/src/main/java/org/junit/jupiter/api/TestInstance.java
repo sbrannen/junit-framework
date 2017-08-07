@@ -57,6 +57,9 @@ public @interface TestInstance {
 
 	/**
 	 * Enumeration of test instance lifecycle <em>modes</em>.
+	 *
+	 * @see #PER_METHOD
+	 * @see #PER_CLASS
 	 */
 	enum Lifecycle {
 
