@@ -14,6 +14,7 @@ import static java.lang.String.format;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
+import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
 import static org.junit.platform.commons.util.BlacklistedExceptions.rethrowIfBlacklisted;
 import static org.junit.platform.commons.util.ClassUtils.nullSafeToString;
 import static org.junit.platform.commons.util.ReflectionUtils.findAllClassesInClasspathRoot;
@@ -27,7 +28,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.MethodOrdering;
 import org.junit.jupiter.engine.JupiterTestEngine;
 import org.junit.jupiter.engine.descriptor.ClassTestDescriptor;
 import org.junit.jupiter.engine.descriptor.Filterable;
@@ -44,7 +44,6 @@ import org.junit.jupiter.engine.descriptor.MethodBasedTestDescriptor;
 import org.junit.jupiter.engine.discovery.predicates.IsInnerClass;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
-import org.junit.platform.commons.util.AnnotationUtils;
 import org.junit.platform.commons.util.ClassFilter;
 import org.junit.platform.commons.util.ReflectionUtils;
 import org.junit.platform.engine.TestDescriptor;
@@ -277,31 +276,37 @@ class JavaElementsResolver {
 			ClassTestDescriptor classTestDescriptor = (ClassTestDescriptor) descriptor;
 			Class<?> testClass = classTestDescriptor.getTestClass();
 
-			resolveContainedMethods(descriptor, testClass);
-
-			List<MethodDescriptor> methodDescriptors = classTestDescriptor.getChildren().stream()//
-					.filter(MethodBasedTestDescriptor.class::isInstance)//
-					.map(MethodBasedTestDescriptor.class::cast)//
-					.map(MethodDescriptor::new)//
-					.collect(toCollection(ArrayList::new));
-
-			orderMethods(methodDescriptors);
-
-			Set<TestDescriptor> sortedTestDescriptors = methodDescriptors.stream()//
-					.map(MethodDescriptor::getTestDescriptor)//
-					.collect(toCollection(LinkedHashSet::new));
-
-			// Currently no way to removeAll or addAll children at once.
-			sortedTestDescriptors.forEach(classTestDescriptor::removeChild);
-			sortedTestDescriptors.forEach(classTestDescriptor::addChild);
-
-			resolveContainedNestedClasses(descriptor, testClass);
+			resolveContainedMethods(classTestDescriptor, testClass);
+			orderContainedMethods(classTestDescriptor, testClass);
+			resolveContainedNestedClasses(classTestDescriptor, testClass);
 		}
 	}
 
-	// TODO Move orderMethods to new extension SPI.
-	private void orderMethods(List<MethodDescriptor> methodDescriptors) {
-		methodDescriptors.sort(new OrderAnnotationComparator());
+	/**
+	 * @since 5.4
+	 */
+	private void orderContainedMethods(ClassTestDescriptor classTestDescriptor, Class<?> testClass) {
+		findAnnotation(testClass, MethodOrdering.class)//
+				.map(MethodOrdering::value)//
+				.map(ReflectionUtils::newInstance)//
+				.ifPresent(methodOrderer -> {
+
+					List<DefaultMethodDescriptor> methodDescriptors = classTestDescriptor.getChildren().stream()//
+							.filter(MethodBasedTestDescriptor.class::isInstance)//
+							.map(MethodBasedTestDescriptor.class::cast)//
+							.map(DefaultMethodDescriptor::new)//
+							.collect(toCollection(ArrayList::new));
+
+					methodOrderer.orderMethods(methodDescriptors);
+
+					Set<TestDescriptor> sortedTestDescriptors = methodDescriptors.stream()//
+							.map(DefaultMethodDescriptor::getTestDescriptor)//
+							.collect(toCollection(LinkedHashSet::new));
+
+					// Currently no way to removeAll or addAll children at once.
+					sortedTestDescriptors.forEach(classTestDescriptor::removeChild);
+					sortedTestDescriptors.forEach(classTestDescriptor::addChild);
+				});
 	}
 
 	private void resolveContainedNestedClasses(TestDescriptor containerDescriptor, Class<?> clazz) {
@@ -361,21 +366,6 @@ class JavaElementsResolver {
 						+ "This is typically the result of annotating a method with multiple competing annotations "
 						+ "such as @Test, @RepeatedTest, @ParameterizedTest, @TestFactory, etc.",
 				method.toGenericString(), descriptors.stream().map(d -> d.getClass().getName()).collect(toList())));
-		}
-	}
-
-	// TODO Move OrderAnnotationComparator to implementation of new extension SPI.
-	private static final class OrderAnnotationComparator implements Comparator<MethodDescriptor> {
-
-		@Override
-		public int compare(MethodDescriptor descriptor1, MethodDescriptor descriptor2) {
-			return Integer.compare(getOrder(descriptor1), getOrder(descriptor2));
-		}
-
-		private Integer getOrder(MethodDescriptor descriptor) {
-			return AnnotationUtils.findAnnotation(descriptor.getTestMethod(), Order.class)//
-					.map(Order::value)//
-					.orElse(Integer.MAX_VALUE);
 		}
 	}
 

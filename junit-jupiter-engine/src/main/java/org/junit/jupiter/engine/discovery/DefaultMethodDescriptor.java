@@ -12,18 +12,18 @@ package org.junit.jupiter.engine.discovery;
 
 import java.lang.reflect.Method;
 
+import org.junit.jupiter.api.MethodOrderer.MethodDescriptor;
 import org.junit.jupiter.engine.descriptor.MethodBasedTestDescriptor;
 import org.junit.platform.commons.util.ToStringBuilder;
 
 /**
  * @since 5.4
  */
-// TODO Move MethodDescriptor to new extension SPI, and convert to interface.
-public class MethodDescriptor {
+class DefaultMethodDescriptor implements MethodDescriptor {
 
 	private final MethodBasedTestDescriptor testDescriptor;
 
-	MethodDescriptor(MethodBasedTestDescriptor testDescriptor) {
+	DefaultMethodDescriptor(MethodBasedTestDescriptor testDescriptor) {
 		this.testDescriptor = testDescriptor;
 	}
 
@@ -31,10 +31,12 @@ public class MethodDescriptor {
 		return testDescriptor;
 	}
 
+	@Override
 	public final Class<?> getTestClass() {
 		return this.testDescriptor.getTestClass();
 	}
 
+	@Override
 	public final Method getTestMethod() {
 		return this.testDescriptor.getTestMethod();
 	}
