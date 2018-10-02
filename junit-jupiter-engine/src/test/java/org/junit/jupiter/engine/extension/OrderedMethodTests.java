@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.MethodOrdering;
 import org.junit.jupiter.api.Order;
@@ -43,15 +44,65 @@ class OrderedMethodTests extends AbstractJupiterTestEngineTests {
 	}
 
 	@Test
+	void alphanumeric() {
+		ExecutionEventRecorder eventRecorder = executeTestsForClass(AlphanumericTestCase.class);
+
+		assertEquals(callSequence.size(), eventRecorder.getTestStartedCount(), "# tests started");
+		assertEquals(callSequence.size(), eventRecorder.getTestSuccessfulCount(), "# tests succeeded");
+		assertThat(callSequence).containsExactly("$", "AAA", "ZZ_Top", "___", "a1", "a2", "b", "zzz");
+	}
+
+	@Test
 	void orderAnnotation() {
 		ExecutionEventRecorder eventRecorder = executeTestsForClass(OrderAnnotationTestCase.class);
 
-		assertEquals(6, eventRecorder.getTestStartedCount(), "# tests started");
-		assertEquals(6, eventRecorder.getTestSuccessfulCount(), "# tests succeeded");
+		assertEquals(callSequence.size(), eventRecorder.getTestStartedCount(), "# tests started");
+		assertEquals(callSequence.size(), eventRecorder.getTestSuccessfulCount(), "# tests succeeded");
 		assertThat(callSequence).containsExactly("test1", "test2", "test3", "test4", "test5", "test6");
 	}
 
 	// -------------------------------------------------------------------------
+
+	@MethodOrdering(Alphanumeric.class)
+	static class AlphanumericTestCase {
+
+		@BeforeEach
+		void trackInvocations(TestInfo testInfo) {
+			callSequence.add(testInfo.getTestMethod().get().getName());
+		}
+
+		@Test
+		void b() {
+		}
+
+		@Test
+		void $() {
+		}
+
+		@Test
+		void ___() {
+		}
+
+		@Test
+		void AAA() {
+		}
+
+		@Test
+		void ZZ_Top() {
+		}
+
+		@Test
+		void a1() {
+		}
+
+		@Test
+		void a2() {
+		}
+
+		@Test
+		void zzz() {
+		}
+	}
 
 	@MethodOrdering(OrderAnnotation.class)
 	static class OrderAnnotationTestCase {

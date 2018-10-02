@@ -36,6 +36,31 @@ public interface MethodOrderer {
 	}
 
 	/**
+	 * {@code MethodOrderer} that sorts methods alphanumerically.
+	 */
+	class Alphanumeric implements MethodOrderer {
+
+		private static final Comparator<MethodDescriptor> comparator = new AlphanumericComparator();
+
+		@Override
+		public void orderMethods(List<? extends MethodDescriptor> methodDescriptors) {
+			methodDescriptors.sort(comparator);
+		}
+
+		private static final class AlphanumericComparator implements Comparator<MethodDescriptor> {
+
+			@Override
+			public int compare(MethodDescriptor descriptor1, MethodDescriptor descriptor2) {
+				Method method1 = descriptor1.getTestMethod();
+				Method method2 = descriptor2.getTestMethod();
+
+				int result = method1.getName().compareTo(method2.getName());
+				return (result != 0) ? result : method1.toString().compareTo(method2.toString());
+			}
+		}
+	}
+
+	/**
 	 * {@code MethodOrderer} that supports the {@link Order @Order} annotation.
 	 */
 	class OrderAnnotation implements MethodOrderer {
@@ -60,7 +85,6 @@ public interface MethodOrderer {
 						.orElse(Integer.MAX_VALUE);
 			}
 		}
-
 	}
 
 }
