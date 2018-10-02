@@ -40,12 +40,14 @@ public interface MethodOrderer {
 	 */
 	class OrderAnnotation implements MethodOrderer {
 
+		private static final Comparator<MethodDescriptor> comparator = new OrderAnnotationComparator();
+
 		@Override
 		public void orderMethods(List<? extends MethodDescriptor> methodDescriptors) {
 			methodDescriptors.sort(comparator);
 		}
 
-		private static final Comparator<MethodDescriptor> comparator = new Comparator<>() {
+		private static final class OrderAnnotationComparator implements Comparator<MethodDescriptor> {
 
 			@Override
 			public int compare(MethodDescriptor descriptor1, MethodDescriptor descriptor2) {
@@ -57,7 +59,7 @@ public interface MethodOrderer {
 						.map(Order::value)//
 						.orElse(Integer.MAX_VALUE);
 			}
-		};
+		}
 
 	}
 
