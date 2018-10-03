@@ -36,7 +36,11 @@ public interface MethodOrderer {
 	}
 
 	/**
-	 * {@code MethodOrderer} that sorts methods alphanumerically.
+	 * {@code MethodOrderer} that sorts methods alphanumerically based on their
+	 * names using {@link String#compareTo(String)}.
+	 *
+	 * <p>If two methods have the same name, {@link Method#toString()} will be
+	 * used as a fallback for comparing them.
 	 */
 	class Alphanumeric implements MethodOrderer {
 
@@ -55,7 +59,11 @@ public interface MethodOrderer {
 	}
 
 	/**
-	 * {@code MethodOrderer} that supports the {@link Order @Order} annotation.
+	 * {@code MethodOrderer} that sorts methods based on the {@link Order @Order}
+	 * annotation.
+	 *
+	 * <p>Any methods not annotated with {@code @Order} will appear at the end of
+	 * the sorted list.
 	 */
 	class OrderAnnotation implements MethodOrderer {
 
