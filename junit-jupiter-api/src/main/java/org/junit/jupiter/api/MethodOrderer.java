@@ -40,24 +40,18 @@ public interface MethodOrderer {
 	 */
 	class Alphanumeric implements MethodOrderer {
 
-		private static final Comparator<MethodDescriptor> comparator = new AlphanumericComparator();
-
 		@Override
 		public void orderMethods(List<? extends MethodDescriptor> methodDescriptors) {
 			methodDescriptors.sort(comparator);
 		}
 
-		private static final class AlphanumericComparator implements Comparator<MethodDescriptor> {
+		private static final Comparator<MethodDescriptor> comparator = (descriptor1, descriptor2) -> {
+			Method method1 = descriptor1.getTestMethod();
+			Method method2 = descriptor2.getTestMethod();
 
-			@Override
-			public int compare(MethodDescriptor descriptor1, MethodDescriptor descriptor2) {
-				Method method1 = descriptor1.getTestMethod();
-				Method method2 = descriptor2.getTestMethod();
-
-				int result = method1.getName().compareTo(method2.getName());
-				return (result != 0) ? result : method1.toString().compareTo(method2.toString());
-			}
-		}
+			int result = method1.getName().compareTo(method2.getName());
+			return (result != 0) ? result : method1.toString().compareTo(method2.toString());
+		};
 	}
 
 	/**
@@ -65,25 +59,19 @@ public interface MethodOrderer {
 	 */
 	class OrderAnnotation implements MethodOrderer {
 
-		private static final Comparator<MethodDescriptor> comparator = new OrderAnnotationComparator();
-
 		@Override
 		public void orderMethods(List<? extends MethodDescriptor> methodDescriptors) {
 			methodDescriptors.sort(comparator);
 		}
 
-		private static final class OrderAnnotationComparator implements Comparator<MethodDescriptor> {
+		private static final Comparator<MethodDescriptor> comparator = (descriptor1, descriptor2) -> {
+			return Integer.compare(getOrder(descriptor1), getOrder(descriptor2));
+		};
 
-			@Override
-			public int compare(MethodDescriptor descriptor1, MethodDescriptor descriptor2) {
-				return Integer.compare(getOrder(descriptor1), getOrder(descriptor2));
-			}
-
-			private Integer getOrder(MethodDescriptor descriptor) {
-				return AnnotationUtils.findAnnotation(descriptor.getTestMethod(), Order.class)//
-						.map(Order::value)//
-						.orElse(Integer.MAX_VALUE);
-			}
+		private static Integer getOrder(MethodDescriptor descriptor) {
+			return AnnotationUtils.findAnnotation(descriptor.getTestMethod(), Order.class)//
+					.map(Order::value)//
+					.orElse(Integer.MAX_VALUE);
 		}
 	}
 
