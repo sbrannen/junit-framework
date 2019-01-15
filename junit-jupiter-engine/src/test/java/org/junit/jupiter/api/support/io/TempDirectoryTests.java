@@ -78,6 +78,14 @@ class TempDirectoryTests extends AbstractJupiterTestEngineTests {
 	class SharedTempDir {
 
 		@Test
+		@DisplayName("when @TempDir is used on instance field")
+		void resolvesSharedTempDirWhenAnnotationIsUsedOnInstanceField() {
+			executeTestsForClass(AnnotationOnInstanceFieldTestCase.class)//
+					.tests()//
+					.assertStatistics(stats -> stats.started(1).failed(0).succeeded(1));
+		}
+
+		@Test
 		@DisplayName("when @TempDir is used on constructor parameter")
 		void resolvesSharedTempDirWhenAnnotationIsUsedOnConstructorParameter() {
 			assertResolvesSharedTempDir(AnnotationOnConstructorParameterTestCase.class);
@@ -162,12 +170,21 @@ class TempDirectoryTests extends AbstractJupiterTestEngineTests {
 	class Failures {
 
 		@Test
+		@DisplayName("when @TempDir is used on field of an unsupported type")
+		void onlySupportsFieldsOfTypePath() {
+			var results = executeTests(selectClass(AnnotationOnInstanceFieldWithUnsupportedTypeTestCase.class));
+
+			assertSingleFailedTest(results, ParameterResolutionException.class,
+				"Can only resolve @TempDir field of type java.nio.file.Path");
+		}
+
+		@Test
 		@DisplayName("when @TempDir is used on parameter of wrong type")
 		void onlySupportsParametersOfTypePath() {
 			var results = executeTests(selectClass(InvalidTestCase.class));
 
 			assertSingleFailedTest(results, ParameterResolutionException.class,
-				"Can only resolve parameter of type java.nio.file.Path");
+				"Can only resolve @TempDir parameter of type java.nio.file.Path");
 		}
 
 		@Test
@@ -211,6 +228,8 @@ class TempDirectoryTests extends AbstractJupiterTestEngineTests {
 		assertThat(tempDirs).hasSize(2);
 	}
 
+	// -------------------------------------------------------------------------
+
 	@ExtendWith(TempDirectory.class)
 	static class BaseSharedTempDirTestCase {
 		static Path tempDir;
@@ -243,6 +262,47 @@ class TempDirectoryTests extends AbstractJupiterTestEngineTests {
 		}
 	}
 
+	@ExtendWith(TempDirectory.class)
+	static class AnnotationOnInstanceFieldTestCase {
+
+		@TempDir
+		Path tempDir;
+
+		@BeforeEach
+		void beforeEach() {
+			check();
+		}
+
+		@Test
+		void test1(TestInfo testInfo) throws Exception {
+			check();
+			writeFile(tempDir, testInfo);
+		}
+
+		@AfterEach
+		void afterEach() {
+			check();
+		}
+
+		void check() {
+			assertThat(tempDir).isNotNull();
+			assertTrue(Files.exists(tempDir));
+		}
+
+	}
+
+	@ExtendWith(TempDirectory.class)
+	static class AnnotationOnInstanceFieldWithUnsupportedTypeTestCase {
+
+		@TempDir
+		String tempDir;
+
+		@Test
+		void test1() {
+		}
+
+	}
+
 	static class AnnotationOnConstructorParameterTestCase extends BaseSharedTempDirTestCase {
 		AnnotationOnConstructorParameterTestCase(@TempDir Path tempDir) {
 			if (BaseSharedTempDirTestCase.tempDir != null) {
@@ -255,20 +315,21 @@ class TempDirectoryTests extends AbstractJupiterTestEngineTests {
 		}
 	}
 
+	@TestInstance(PER_CLASS)
+	static class AnnotationOnConstructorParameterWithTestInstancePerClassTestCase
+			extends AnnotationOnConstructorParameterTestCase {
+
+		AnnotationOnConstructorParameterWithTestInstancePerClassTestCase(@TempDir Path tempDir) {
+			super(tempDir);
+		}
+	}
+
 	static class AnnotationOnBeforeAllMethodParameterTestCase extends BaseSharedTempDirTestCase {
 		@BeforeAll
 		static void beforeAll(@TempDir Path tempDir) {
 			assertThat(BaseSharedTempDirTestCase.tempDir).isNull();
 			BaseSharedTempDirTestCase.tempDir = tempDir;
 			check(tempDir);
-		}
-	}
-
-	@TestInstance(PER_CLASS)
-	static class AnnotationOnConstructorParameterWithTestInstancePerClassTestCase
-			extends AnnotationOnConstructorParameterTestCase {
-		AnnotationOnConstructorParameterWithTestInstancePerClassTestCase(@TempDir Path tempDir) {
-			super(tempDir);
 		}
 	}
 

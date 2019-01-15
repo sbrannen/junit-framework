@@ -13,6 +13,10 @@ package org.junit.jupiter.api.support.io;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.util.stream.Collectors.joining;
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+import static org.junit.platform.commons.util.AnnotationUtils.findAnnotatedFields;
+import static org.junit.platform.commons.util.ReflectionUtils.isPrivate;
+import static org.junit.platform.commons.util.ReflectionUtils.isStatic;
+import static org.junit.platform.commons.util.ReflectionUtils.makeAccessible;
 
 import java.io.IOException;
 import java.lang.annotation.Documented;
@@ -20,11 +24,13 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Field;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.Callable;
@@ -37,6 +43,8 @@ import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.api.extension.TestInstancePostProcessor;
+import org.junit.platform.commons.util.ExceptionUtils;
 import org.junit.platform.commons.util.Preconditions;
 
 /**
@@ -83,16 +91,17 @@ import org.junit.platform.commons.util.Preconditions;
  * @see Files#createTempDirectory
  */
 @API(status = EXPERIMENTAL, since = "5.4")
-public final class TempDirectory implements ParameterResolver {
+public final class TempDirectory implements TestInstancePostProcessor, ParameterResolver {
 
 	/**
-	 * {@code TempDir} can be used to annotate a test or lifecycle method or
-	 * test class constructor parameter of type {@link Path} that should be
-	 * resolved into a temporary directory.
+	 * {@code @TempDir} can be used to annotate an instance field in a test
+	 * class or a parameter in a test method, lifecycle method, or test class
+	 * constructor of type {@link Path} that should be resolved into a temporary
+	 * directory.
 	 *
 	 * @see TempDirectory
 	 */
-	@Target(ElementType.PARAMETER)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
 	@Retention(RetentionPolicy.RUNTIME)
 	@Documented
 	public @interface TempDir {
@@ -218,6 +227,24 @@ public final class TempDirectory implements ParameterResolver {
 	}
 
 	@Override
+	public void postProcessTestInstance(Object testInstance, ExtensionContext context) {
+		List<Field> fields = findAnnotatedFields(testInstance.getClass(), TempDir.class, field -> true);
+
+		if (!fields.isEmpty()) {
+			Path path = getPath(null, context);
+			fields.forEach(field -> {
+				assertValidFieldCandidate(field);
+				try {
+					makeAccessible(field).set(testInstance, path);
+				}
+				catch (Throwable t) {
+					ExceptionUtils.throwAsUncheckedException(t);
+				}
+			});
+		}
+	}
+
+	@Override
 	public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) {
 		return parameterContext.isAnnotated(TempDir.class);
 	}
@@ -225,10 +252,25 @@ public final class TempDirectory implements ParameterResolver {
 	@Override
 	public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) {
 		Class<?> parameterType = parameterContext.getParameter().getType();
-		if (parameterType != Path.class) {
-			throw new ParameterResolutionException(
-				"Can only resolve parameter of type " + Path.class.getName() + " but was: " + parameterType.getName());
+		assertSupportedType("parameter", parameterType);
+		return getPath(parameterContext, extensionContext);
+	}
+
+	private void assertSupportedType(String target, Class<?> type) {
+		if (type != Path.class) {
+			throw new ParameterResolutionException("Can only resolve @TempDir " + target + " of type "
+					+ Path.class.getName() + " but was: " + type.getName());
 		}
+	}
+
+	private void assertValidFieldCandidate(Field field) {
+		assertSupportedType("field", field.getType());
+		if (isPrivate(field) || isStatic(field)) {
+			throw new ParameterResolutionException("@TempDir field [" + field + "] must not be private or static.");
+		}
+	}
+
+	private Path getPath(ParameterContext parameterContext, ExtensionContext extensionContext) {
 		return extensionContext.getStore(NAMESPACE) //
 				.getOrComputeIfAbsent(KEY,
 					key -> tempDirProvider.get(parameterContext, extensionContext, TEMP_DIR_PREFIX),
