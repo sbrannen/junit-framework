@@ -19,11 +19,13 @@ import static org.junit.platform.commons.util.ReflectionUtils.isStatic;
 import static org.junit.platform.commons.util.ReflectionUtils.makeAccessible;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -31,6 +33,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.Callable;
@@ -108,6 +111,42 @@ public final class TempDirectory implements TestInstancePostProcessor, Parameter
 	}
 
 	/**
+	 * {@code TempDirContext} encapsulates the <em>context</em> in which
+	 * {@link TempDir @TempDir} is declared.
+	 *
+	 * @see ParentDirProvider
+	 */
+	public interface TempDirContext {
+
+		/**
+		 * Get the {@link AnnotatedElement} corresponding to the current context.
+		 *
+		 * <p>The annotated element will be the corresponding {@link Field} or
+		 * {@link Parameter} on which {@link TempDir @TempDir} is declared.
+		 *
+		 * <p>Favor this method over more specific methods whenever the
+		 * {@code AnnotatedElement} API suits the task at hand &mdash; for example,
+		 * when looking up annotations regardless of concrete element type.
+		 *
+		 * @return the {@code AnnotatedElement}; never {@code null}
+		 * @see #getField()
+		 * @see #getParameterContext()
+		 */
+		AnnotatedElement getElement();
+
+		Optional<Field> getField();
+
+		Optional<ParameterContext> getParameterContext();
+
+		boolean isAnnotated(Class<? extends Annotation> annotationType);
+
+		<A extends Annotation> Optional<A> findAnnotation(Class<A> annotationType);
+
+		<A extends Annotation> List<A> findRepeatableAnnotations(Class<A> annotationType);
+
+	}
+
+	/**
 	 * {@code ParentDirProvider} can be used to configure a custom parent
 	 * directory for all temporary directories created by the
 	 * {@link TempDirectory} extension this is used with.
@@ -122,13 +161,13 @@ public final class TempDirectory implements TestInstancePostProcessor, Parameter
 		 * Get the parent directory for all temporary directories created by the
 		 * {@link TempDirectory} extension this is used with.
 		 *
-		 * @param parameterContext the context for the parameter for which a
+		 * @param tempDirContext the context for the field or parameter for which a
 		 * temporary directory should be created; never {@code null}
 		 * @param extensionContext the current extension context; never {@code null}
 		 * @return the parent directory for all temporary directories; never
 		 * {@code null}
 		 */
-		Path get(ParameterContext parameterContext, ExtensionContext extensionContext) throws Exception;
+		Path get(TempDirContext tempDirContext, ExtensionContext extensionContext) throws Exception;
 	}
 
 	/**
@@ -144,7 +183,8 @@ public final class TempDirectory implements TestInstancePostProcessor, Parameter
 	 */
 	@FunctionalInterface
 	private interface TempDirProvider {
-		CloseablePath get(ParameterContext parameterContext, ExtensionContext extensionContext, String dirPrefix);
+
+		CloseablePath get(TempDirContext tempDirContext, ExtensionContext extensionContext, String dirPrefix);
 	}
 
 	private static final Namespace NAMESPACE = Namespace.create(TempDirectory.class);
@@ -203,8 +243,8 @@ public final class TempDirectory implements TestInstancePostProcessor, Parameter
 		Preconditions.notNull(parentDirProvider, "ParentDirProvider must not be null");
 
 		// @formatter:off
-		return new TempDirectory((parameterContext, extensionContext, dirPrefix) ->
-				createCustomTempDir(parentDirProvider, parameterContext, extensionContext, dirPrefix));
+		return new TempDirectory((tempDirContext, extensionContext, dirPrefix) ->
+				createCustomTempDir(parentDirProvider, tempDirContext, extensionContext, dirPrefix));
 		// @formatter:on
 	}
 
@@ -223,7 +263,7 @@ public final class TempDirectory implements TestInstancePostProcessor, Parameter
 	 */
 	public static TempDirectory createInCustomDirectory(Callable<Path> parentDirProvider) {
 		Preconditions.notNull(parentDirProvider, "parentDirProvider must not be null");
-		return createInCustomDirectory((parameterContext, extensionContext) -> parentDirProvider.call());
+		return createInCustomDirectory((tempDirContext, extensionContext) -> parentDirProvider.call());
 	}
 
 	@Override
@@ -231,11 +271,10 @@ public final class TempDirectory implements TestInstancePostProcessor, Parameter
 		List<Field> fields = findAnnotatedFields(testInstance.getClass(), TempDir.class, field -> true);
 
 		if (!fields.isEmpty()) {
-			Path path = getPath(null, context);
 			fields.forEach(field -> {
 				assertValidFieldCandidate(field);
 				try {
-					makeAccessible(field).set(testInstance, path);
+					makeAccessible(field).set(testInstance, getPath(DefaultTempDirContext.from(field), context));
 				}
 				catch (Throwable t) {
 					ExceptionUtils.throwAsUncheckedException(t);
@@ -253,7 +292,7 @@ public final class TempDirectory implements TestInstancePostProcessor, Parameter
 	public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) {
 		Class<?> parameterType = parameterContext.getParameter().getType();
 		assertSupportedType("parameter", parameterType);
-		return getPath(parameterContext, extensionContext);
+		return getPath(DefaultTempDirContext.from(parameterContext), extensionContext);
 	}
 
 	private void assertSupportedType(String target, Class<?> type) {
@@ -270,11 +309,10 @@ public final class TempDirectory implements TestInstancePostProcessor, Parameter
 		}
 	}
 
-	private Path getPath(ParameterContext parameterContext, ExtensionContext extensionContext) {
+	private Path getPath(TempDirContext tempDirContext, ExtensionContext extensionContext) {
 		return extensionContext.getStore(NAMESPACE) //
 				.getOrComputeIfAbsent(KEY,
-					key -> tempDirProvider.get(parameterContext, extensionContext, TEMP_DIR_PREFIX),
-					CloseablePath.class) //
+					key -> tempDirProvider.get(tempDirContext, extensionContext, TEMP_DIR_PREFIX), CloseablePath.class) //
 				.get();
 	}
 
@@ -287,12 +325,12 @@ public final class TempDirectory implements TestInstancePostProcessor, Parameter
 		}
 	}
 
-	private static CloseablePath createCustomTempDir(ParentDirProvider parentDirProvider,
-			ParameterContext parameterContext, ExtensionContext extensionContext, String dirPrefix) {
+	private static CloseablePath createCustomTempDir(ParentDirProvider parentDirProvider, TempDirContext tempDirContext,
+			ExtensionContext extensionContext, String dirPrefix) {
 
 		Path parentDir;
 		try {
-			parentDir = parentDirProvider.get(parameterContext, extensionContext);
+			parentDir = parentDirProvider.get(tempDirContext, extensionContext);
 			Preconditions.notNull(parentDir, "ParentDirProvider returned null for the parent directory");
 		}
 		catch (Exception ex) {

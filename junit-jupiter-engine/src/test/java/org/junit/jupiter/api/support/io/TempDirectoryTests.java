@@ -445,7 +445,7 @@ class TempDirectoryTests extends AbstractJupiterTestEngineTests {
 
 		@RegisterExtension
 		@SuppressWarnings("unused")
-		Extension tempDirectory = TempDirectory.createInCustomDirectory((parameterContext, extensionContext) -> {
+		Extension tempDirectory = TempDirectory.createInCustomDirectory((tempDirContext, extensionContext) -> {
 			Store store = extensionContext.getRoot().getStore(Namespace.GLOBAL);
 			FileSystem fileSystem = store.getOrComputeIfAbsent("jimfs.fileSystem", key -> new JimfsFileSystemResource(),
 				JimfsFileSystemResource.class).get();
