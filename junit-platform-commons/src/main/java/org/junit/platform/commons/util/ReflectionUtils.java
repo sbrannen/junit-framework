@@ -998,13 +998,18 @@ public final class ReflectionUtils {
 	}
 
 	private static void findNestedClasses(Class<?> clazz, Set<Class<?>> candidates) {
-		if (clazz == Object.class || clazz == null) {
+		if (!isSearchable(clazz)) {
 			return;
 		}
 
+		detectInnerClassCycle(clazz);
+
 		try {
 			// Candidates in current class
-			Collections.addAll(candidates, clazz.getDeclaredClasses());
+			for (Class<?> nestedClass : clazz.getDeclaredClasses()) {
+				detectInnerClassCycle(nestedClass);
+				candidates.add(nestedClass);
+			}
 		}
 		catch (NoClassDefFoundError error) {
 			logger.debug(error, () -> "Failed to retrieve declared classes for " + clazz.getName());
@@ -1016,6 +1021,40 @@ public final class ReflectionUtils {
 		// Search interface hierarchy
 		for (Class<?> ifc : clazz.getInterfaces()) {
 			findNestedClasses(ifc, candidates);
+		}
+	}
+
+	/**
+	 * Detect a cycle in the inner class hierarchy in which the supplied class
+	 * resides &mdash; from the supplied class to the outermost enclosing class
+	 * &mdash; and throw a {@link JUnitException} if a cycle is detected.
+	 * <p>If the supplied class is not an inner class and does not have a
+	 * searchable superclass, this method is effectively a no-op.
+	 * @since 1.6
+	 * @see #isInnerClass(Class)
+	 * @see #isSearchable(Class)
+	 */
+	@SuppressWarnings("null")
+	private static void detectInnerClassCycle(Class<?> clazz) {
+		Preconditions.notNull(clazz, "Class must not be null");
+
+		Class<?> superclass = clazz.getSuperclass();
+		if (!(isInnerClass(clazz) && isSearchable(superclass))) {
+			return;
+		}
+
+		for (Class<?> enclosing = clazz.getEnclosingClass(); enclosing != null; enclosing = enclosing.getEnclosingClass()) {
+			// System.err.println("> current: " + clazz.getSimpleName());
+			// System.err.println("> enclosing: " + enclosing.getSimpleName());
+			// System.err.println("> superclass: " + superclass.getSimpleName());
+			// System.err.println("-----------------------------------------------");
+
+			// TODO Determine if it makes sense to check common supertypes.
+			// if (superclass.isAssignableFrom(enclosing)) {
+			if (superclass.equals(enclosing)) {
+				throw new JUnitException(String.format("Detected cycle in inner class hierarchy between %s and %s",
+					clazz.getName(), enclosing.getName()));
+			}
 		}
 	}
 
@@ -1230,7 +1269,7 @@ public final class ReflectionUtils {
 		Preconditions.notNull(clazz, "Class must not be null");
 		Preconditions.notNull(predicate, "Predicate must not be null");
 
-		for (Class<?> current = clazz; current != null && current != Object.class; current = current.getSuperclass()) {
+		for (Class<?> current = clazz; isSearchable(current); current = current.getSuperclass()) {
 			// Search for match in current type
 			List<Method> methods = current.isInterface() ? getMethods(current) : getDeclaredMethods(current, BOTTOM_UP);
 			for (Method method : methods) {
@@ -1487,7 +1526,7 @@ public final class ReflectionUtils {
 
 	private static List<Field> getSuperclassFields(Class<?> clazz, HierarchyTraversalMode traversalMode) {
 		Class<?> superclass = clazz.getSuperclass();
-		if (superclass == null || superclass == Object.class) {
+		if (!isSearchable(superclass)) {
 			return Collections.emptyList();
 		}
 		return findAllFieldsInHierarchy(superclass, traversalMode);
@@ -1499,7 +1538,7 @@ public final class ReflectionUtils {
 
 	private static List<Method> getSuperclassMethods(Class<?> clazz, HierarchyTraversalMode traversalMode) {
 		Class<?> superclass = clazz.getSuperclass();
-		if (superclass == null || superclass == Object.class) {
+		if (!isSearchable(superclass)) {
 			return Collections.emptyList();
 		}
 		return findAllMethodsInHierarchy(superclass, traversalMode);
@@ -1587,6 +1626,17 @@ public final class ReflectionUtils {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Determines if the supplied class is <em>searchable</em> (i.e., non-null
+	 * and not {@code java.lang.Object}) &mdash; often used to determine
+	 * if a superclass should be searched but may be applicable for other use
+	 * cases as well.
+	 * @since 1.6
+	 */
+	private static boolean isSearchable(Class<?> superclass) {
+		return (superclass != null && superclass != Object.class);
 	}
 
 	/**

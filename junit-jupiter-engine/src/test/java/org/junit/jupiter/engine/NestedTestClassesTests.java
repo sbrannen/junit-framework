@@ -277,4 +277,40 @@ class NestedTestClassesTests extends AbstractJupiterTestEngineTests {
 		}
 	}
 
+	static class AbstractOuterClass {
+	}
+
+	// TODO Add @Test methods to assert the expected behavior in Jupiter.
+	static class OuterClass extends AbstractOuterClass {
+
+		@Test
+		void outer() {
+		}
+
+		@Nested
+		class NestedClass {
+
+			@Test
+			void nested() {
+			}
+
+			@Nested
+			class RecursiveNestedClass extends OuterClass {
+
+				@Test
+				void nested() {
+				}
+			}
+
+			@Nested
+			// sibling of OuterClass due to common super type
+			class RecursiveNestedSiblingClass extends AbstractOuterClass {
+
+				@Test
+				void nested() {
+				}
+			}
+		}
+	}
+
 }
