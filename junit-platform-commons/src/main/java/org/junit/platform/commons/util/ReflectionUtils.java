@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -118,6 +119,16 @@ public final class ReflectionUtils {
 
 	private static final ClasspathScanner classpathScanner = new ClasspathScanner(
 		ClassLoaderUtils::getDefaultClassLoader, ReflectionUtils::tryToLoadClass);
+
+	/**
+	 * Set of fully qualified class names for which no cycles have been detected
+	 * in inner class hierarchies.
+	 * <p>This serves as a cache to avoid repeated cycle detection for classes
+	 * that have already been checked.
+	 * @since 1.6
+	 * @see #detectInnerClassCycle(Class)
+	 */
+	private static final Set<String> noCyclesDetectedCache = new HashSet<>();
 
 	/**
 	 * Internal cache of common class names mapped to their types.
@@ -1034,28 +1045,25 @@ public final class ReflectionUtils {
 	 * @see #isInnerClass(Class)
 	 * @see #isSearchable(Class)
 	 */
-	@SuppressWarnings("null")
 	private static void detectInnerClassCycle(Class<?> clazz) {
 		Preconditions.notNull(clazz, "Class must not be null");
+		String className = clazz.getName();
 
-		Class<?> superclass = clazz.getSuperclass();
-		if (!(isInnerClass(clazz) && isSearchable(superclass))) {
+		if (noCyclesDetectedCache.contains(className)) {
 			return;
 		}
 
-		for (Class<?> enclosing = clazz.getEnclosingClass(); enclosing != null; enclosing = enclosing.getEnclosingClass()) {
-			// System.err.println("> current: " + clazz.getSimpleName());
-			// System.err.println("> enclosing: " + enclosing.getSimpleName());
-			// System.err.println("> superclass: " + superclass.getSimpleName());
-			// System.err.println("-----------------------------------------------");
-
-			// TODO Determine if it makes sense to check common supertypes.
-			// if (superclass.isAssignableFrom(enclosing)) {
-			if (superclass.equals(enclosing)) {
-				throw new JUnitException(String.format("Detected cycle in inner class hierarchy between %s and %s",
-					clazz.getName(), enclosing.getName()));
+		Class<?> superclass = clazz.getSuperclass();
+		if (isInnerClass(clazz) && isSearchable(superclass)) {
+			for (Class<?> enclosing = clazz.getEnclosingClass(); enclosing != null; enclosing = enclosing.getEnclosingClass()) {
+				if (superclass.equals(enclosing)) {
+					throw new JUnitException(String.format("Detected cycle in inner class hierarchy between %s and %s",
+						className, enclosing.getName()));
+				}
 			}
 		}
+
+		noCyclesDetectedCache.add(className);
 	}
 
 	/**
@@ -1629,14 +1637,15 @@ public final class ReflectionUtils {
 	}
 
 	/**
-	 * Determines if the supplied class is <em>searchable</em> (i.e., non-null
-	 * and not {@code java.lang.Object}) &mdash; often used to determine
-	 * if a superclass should be searched but may be applicable for other use
-	 * cases as well.
+	 * Determine if the supplied class is <em>searchable</em>: is non-null and is
+	 * not equal to the class reference for {@code java.lang.Object}.
+	 *
+	 * <p>This method is often used to determine if a superclass should be
+	 * searched but may be applicable for other use cases as well.
 	 * @since 1.6
 	 */
-	private static boolean isSearchable(Class<?> superclass) {
-		return (superclass != null && superclass != Object.class);
+	private static boolean isSearchable(Class<?> clazz) {
+		return (clazz != null && clazz != Object.class);
 	}
 
 	/**
