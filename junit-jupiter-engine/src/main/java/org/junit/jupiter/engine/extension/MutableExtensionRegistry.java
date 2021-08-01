@@ -77,7 +77,7 @@ public class MutableExtensionRegistry implements ExtensionRegistry, ExtensionReg
 						.collect(toList()));
 		// @formatter:on
 
-		DEFAULT_EXTENSIONS.forEach(extensionRegistry::registerDefaultExtension);
+		DEFAULT_EXTENSIONS.forEach(extensionRegistry::registerExtension);
 
 		if (configuration.isExtensionAutoDetectionEnabled()) {
 			registerAutoDetectedExtensions(extensionRegistry);
@@ -96,7 +96,7 @@ public class MutableExtensionRegistry implements ExtensionRegistry, ExtensionReg
 						.collect(toList()));
 		// @formatter:on
 
-		extensions.forEach(extensionRegistry::registerDefaultExtension);
+		extensions.forEach(extensionRegistry::registerExtension);
 	}
 
 	/**
@@ -153,6 +153,13 @@ public class MutableExtensionRegistry implements ExtensionRegistry, ExtensionReg
 		// @formatter:on
 	}
 
+	@Override
+	public void registerExtension(Class<? extends Extension> extensionType) {
+		if (!isAlreadyRegistered(extensionType)) {
+			registerExtension(ReflectionUtils.newInstance(extensionType));
+		}
+	}
+
 	/**
 	 * Determine if the supplied type is already registered in this registry or in a
 	 * parent registry.
@@ -160,27 +167,6 @@ public class MutableExtensionRegistry implements ExtensionRegistry, ExtensionReg
 	private boolean isAlreadyRegistered(Class<? extends Extension> extensionType) {
 		return (this.registeredExtensionTypes.contains(extensionType)
 				|| (this.parent != null && this.parent.isAlreadyRegistered(extensionType)));
-	}
-
-	/**
-	 * Instantiate an extension of the given type using its default constructor
-	 * and register it in this registry.
-	 *
-	 * <p>A new {@link Extension} will not be registered if an extension of the
-	 * given type already exists in this registry or a parent registry.
-	 *
-	 * @param extensionType the type of extension to register
-	 */
-	void registerExtension(Class<? extends Extension> extensionType) {
-		if (!isAlreadyRegistered(extensionType)) {
-			registerExtension(ReflectionUtils.newInstance(extensionType));
-			this.registeredExtensionTypes.add(extensionType);
-		}
-	}
-
-	private void registerDefaultExtension(Extension extension) {
-		this.registeredExtensions.add(extension);
-		this.registeredExtensionTypes.add(extension.getClass());
 	}
 
 	private void registerExtension(Extension extension) {
@@ -195,6 +181,7 @@ public class MutableExtensionRegistry implements ExtensionRegistry, ExtensionReg
 		logger.trace(() -> String.format("Registering extension [%s] from source [%s].", extension, source));
 
 		this.registeredExtensions.add(extension);
+		this.registeredExtensionTypes.add(extension.getClass());
 	}
 
 }
