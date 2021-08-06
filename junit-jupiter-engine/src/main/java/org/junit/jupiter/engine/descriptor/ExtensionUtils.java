@@ -92,26 +92,24 @@ final class ExtensionUtils {
 
 		Predicate<Field> predicate = (instance == null ? ReflectionUtils::isStatic : ReflectionUtils::isNotStatic);
 
-		// @formatter:off
-		findFields(clazz, predicate, TOP_DOWN).stream()
-			.sorted(orderComparator)
-			.forEach(field -> {
-				List<ExtendWith> extendWithAnnotations = findRepeatableAnnotations(field, ExtendWith.class);
-				boolean isExtendWithPresent = !extendWithAnnotations.isEmpty();
-				boolean isRegisterExtensionPresent = isAnnotated(field, RegisterExtension.class);
-				if (isExtendWithPresent) {
-					streamExtensionTypes(extendWithAnnotations).forEach(registrar::registerExtension);
-				}
-				if (isRegisterExtensionPresent) {
-					tryToReadFieldValue(field, instance).ifSuccess(value -> {
-						Preconditions.condition(value instanceof Extension, () -> String.format(
-							"Failed to register extension via @RegisterExtension field [%s]: field value's type [%s] must implement an [%s] API.",
-							field, (value != null ? value.getClass().getName() : null), Extension.class.getName()));
-						registrar.registerExtension((Extension) value, field);
-					});
-				}
-			});
-		// @formatter:on
+		findFields(clazz, predicate, TOP_DOWN).stream()//
+				.sorted(orderComparator)//
+				.forEach(field -> {
+					List<ExtendWith> extendWithAnnotations = findRepeatableAnnotations(field, ExtendWith.class);
+					boolean isExtendWithPresent = !extendWithAnnotations.isEmpty();
+					boolean isRegisterExtensionPresent = isAnnotated(field, RegisterExtension.class);
+					if (isExtendWithPresent) {
+						streamExtensionTypes(extendWithAnnotations).forEach(registrar::registerExtension);
+					}
+					if (isRegisterExtensionPresent) {
+						tryToReadFieldValue(field, instance).ifSuccess(value -> {
+							Preconditions.condition(value instanceof Extension, () -> String.format(
+								"Failed to register extension via @RegisterExtension field [%s]: field value's type [%s] must implement an [%s] API.",
+								field, (value != null ? value.getClass().getName() : null), Extension.class.getName()));
+							registrar.registerExtension((Extension) value, field);
+						});
+					}
+				});
 	}
 
 	/**
