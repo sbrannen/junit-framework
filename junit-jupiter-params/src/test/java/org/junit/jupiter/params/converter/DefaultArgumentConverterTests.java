@@ -12,9 +12,12 @@ package org.junit.jupiter.params.converter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.lang.Thread.State;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
@@ -43,6 +46,8 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.platform.commons.util.ReflectionUtils;
 
 /**
  * Unit tests for {@link DefaultArgumentConverter}.
@@ -280,7 +285,18 @@ class DefaultArgumentConverterTests {
 	}
 
 	private Object convert(Object input, Class<?> targetClass) {
-		return DefaultArgumentConverter.INSTANCE.convert(input, targetClass);
+		return DefaultArgumentConverter.INSTANCE.convert(input, targetClass, parameterContext());
+	}
+
+	private static ParameterContext parameterContext() {
+		Method declaringExecutable = ReflectionUtils.findMethod(DefaultArgumentConverterTests.class, "foo").get();
+		ParameterContext parameterContext = mock();
+		when(parameterContext.getDeclaringExecutable()).thenReturn(declaringExecutable);
+		return parameterContext;
+	}
+
+	@SuppressWarnings("unused")
+	private static void foo() {
 	}
 
 	private static class Enigma {
