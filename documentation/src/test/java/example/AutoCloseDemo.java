@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * All rights reserved. This program and the accompanying materials are
  * made available under the terms of the Eclipse Public License v2.0 which
@@ -10,40 +10,30 @@
 
 package example;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import example.registration.WebClient;
 
 import org.junit.jupiter.api.AutoClose;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-@Disabled
 // tag::user_guide_example[]
 class AutoCloseDemo {
 
+	// WebClient implements AutoCloseable
 	@AutoClose
-	Connection connection = getJdbcConnection("jdbc:mysql://localhost/testdb");
+	WebClient webClient = new WebClient();
+
+	String serverUrl = // specify server URL ...
+		// end::user_guide_example[]
+		"https://localhost";
+	// tag::user_guide_example[]
 
 	@Test
-	void usersTableHasEntries() throws SQLException {
-		ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM users");
-
-		assertTrue(resultSet.next());
-	}
-
-	// ...
-	// end::user_guide_example[]
-	private static Connection getJdbcConnection(String url) {
-		try {
-			return DriverManager.getConnection(url);
-		}
-		catch (SQLException ex) {
-			throw new RuntimeException(ex);
-		}
+	void getProductList() {
+		// Use WebClient to connect to web server and verify response
+		assertEquals(200, webClient.get(serverUrl + "/products").getResponseStatus());
 	}
 
 }
+// end::user_guide_example[]
