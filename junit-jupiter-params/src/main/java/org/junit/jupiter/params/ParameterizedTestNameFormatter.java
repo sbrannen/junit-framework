@@ -60,42 +60,35 @@ class ParameterizedTestNameFormatter {
 	}
 
 	private String formatSafely(int invocationIndex, Arguments arguments) {
-		Object[] namedArguments = extractNamedArguments(arguments);
-		String pattern = prepareMessageFormatPattern(invocationIndex, arguments, namedArguments);
+		if (arguments instanceof NamedArguments) {
+			return ((NamedArguments) arguments).getName();
+		}
+
+		Object[] namedArguments = extractNamedArguments(consumedArguments(arguments.get()));
+		String pattern = prepareMessageFormatPattern(invocationIndex, namedArguments);
 		MessageFormat format = new MessageFormat(pattern);
 		Object[] humanReadableArguments = makeReadable(format, namedArguments);
 		String formatted = format.format(humanReadableArguments);
-
-		String displayNameToUse = this.displayName;
-		if (arguments instanceof NamedArguments) {
-			NamedArguments named = (NamedArguments) arguments;
-			displayNameToUse = named.getName();
-		}
-
-		return formatted.replace(TEMPORARY_DISPLAY_NAME_PLACEHOLDER, displayNameToUse);
+		return formatted.replace(TEMPORARY_DISPLAY_NAME_PLACEHOLDER, this.displayName);
 	}
 
-	private Object[] extractNamedArguments(Arguments arguments) {
-		Object[] consumedArguments = consumedArguments(arguments.get());
-		return Arrays.stream(consumedArguments) //
+	private Object[] extractNamedArguments(Object[] arguments) {
+		return Arrays.stream(arguments) //
 				.map(argument -> argument instanceof Named ? ((Named<?>) argument).getName() : argument) //
 				.toArray();
 	}
 
-	private String prepareMessageFormatPattern(int invocationIndex, Arguments arguments, Object[] argumentArray) {
+	private String prepareMessageFormatPattern(int invocationIndex, Object[] arguments) {
 		String result = pattern//
 				.replace(DISPLAY_NAME_PLACEHOLDER, TEMPORARY_DISPLAY_NAME_PLACEHOLDER)//
 				.replace(INDEX_PLACEHOLDER, String.valueOf(invocationIndex));
 
 		if (result.contains(ARGUMENTS_WITH_NAMES_PLACEHOLDER)) {
-			if (arguments instanceof NamedArguments) {
-				result = TEMPORARY_DISPLAY_NAME_PLACEHOLDER + " :: " + result;
-			}
-			result = result.replace(ARGUMENTS_WITH_NAMES_PLACEHOLDER, argumentsWithNamesPattern(argumentArray));
+			result = result.replace(ARGUMENTS_WITH_NAMES_PLACEHOLDER, argumentsWithNamesPattern(arguments));
 		}
 
 		if (result.contains(ARGUMENTS_PLACEHOLDER)) {
-			result = result.replace(ARGUMENTS_PLACEHOLDER, argumentsPattern(argumentArray));
+			result = result.replace(ARGUMENTS_PLACEHOLDER, argumentsPattern(arguments));
 		}
 
 		return result;

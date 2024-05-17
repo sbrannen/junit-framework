@@ -10,9 +10,7 @@
 
 package example;
 
-import static org.junit.jupiter.api.Named.named;
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.junit.jupiter.params.provider.Arguments.namedArguments;
 
 import java.io.File;
@@ -36,8 +34,8 @@ class NamedArgumentsSetDemo {
 
 	// @formatter:off
 	static List<Arguments> namedArgumentsSet = Arrays.asList(
-		namedArguments("Important Files", named("VIP", new File("path1")), new File("path2")),
-		arguments(new File("path3"), new File("path4"))
+		namedArguments("Important Files", new File("path1"), new File("path2")),
+		namedArguments("Other Files", new File("path3"), new File("path4"))
 	);
 	// @formatter:on
 
