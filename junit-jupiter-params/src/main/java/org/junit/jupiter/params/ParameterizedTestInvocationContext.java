@@ -12,10 +12,12 @@ package org.junit.jupiter.params;
 
 import static java.util.Collections.singletonList;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.extension.Extension;
 import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
+import org.junit.jupiter.params.provider.Arguments;
 
 /**
  * @since 5.0
@@ -24,11 +26,11 @@ class ParameterizedTestInvocationContext implements TestTemplateInvocationContex
 
 	private final ParameterizedTestNameFormatter formatter;
 	private final ParameterizedTestMethodContext methodContext;
-	private final Object[] arguments;
+	private final Arguments arguments;
 	private final int invocationIndex;
 
 	ParameterizedTestInvocationContext(ParameterizedTestNameFormatter formatter,
-			ParameterizedTestMethodContext methodContext, Object[] arguments, int invocationIndex) {
+			ParameterizedTestMethodContext methodContext, Arguments arguments, int invocationIndex) {
 		this.formatter = formatter;
 		this.methodContext = methodContext;
 		this.arguments = arguments;
@@ -43,7 +45,16 @@ class ParameterizedTestInvocationContext implements TestTemplateInvocationContex
 	@Override
 	public List<Extension> getAdditionalExtensions() {
 		return singletonList(
-			new ParameterizedTestParameterResolver(this.methodContext, this.arguments, this.invocationIndex));
+			new ParameterizedTestParameterResolver(this.methodContext, consumedArguments(), this.invocationIndex));
+	}
+
+	private Object[] consumedArguments() {
+		Object[] args = this.arguments.get();
+		if (this.methodContext.hasAggregator()) {
+			return args;
+		}
+		int parameterCount = this.methodContext.getParameterCount();
+		return args.length > parameterCount ? Arrays.copyOf(args, parameterCount) : args;
 	}
 
 }

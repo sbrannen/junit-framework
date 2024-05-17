@@ -22,6 +22,8 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Named;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.Arguments.NamedArguments;
 import org.junit.platform.commons.JUnitException;
 import org.junit.platform.commons.util.StringUtils;
 
@@ -46,7 +48,7 @@ class ParameterizedTestNameFormatter {
 		this.argumentMaxLength = argumentMaxLength;
 	}
 
-	String format(int invocationIndex, Object... arguments) {
+	String format(int invocationIndex, Arguments arguments) {
 		try {
 			return formatSafely(invocationIndex, arguments);
 		}
@@ -57,32 +59,43 @@ class ParameterizedTestNameFormatter {
 		}
 	}
 
-	private String formatSafely(int invocationIndex, Object[] arguments) {
+	private String formatSafely(int invocationIndex, Arguments arguments) {
 		Object[] namedArguments = extractNamedArguments(arguments);
-		String pattern = prepareMessageFormatPattern(invocationIndex, namedArguments);
+		String pattern = prepareMessageFormatPattern(invocationIndex, arguments, namedArguments);
 		MessageFormat format = new MessageFormat(pattern);
 		Object[] humanReadableArguments = makeReadable(format, namedArguments);
 		String formatted = format.format(humanReadableArguments);
-		return formatted.replace(TEMPORARY_DISPLAY_NAME_PLACEHOLDER, this.displayName);
+
+		String displayNameToUse = this.displayName;
+		if (arguments instanceof NamedArguments) {
+			NamedArguments named = (NamedArguments) arguments;
+			displayNameToUse = named.getName();
+		}
+
+		return formatted.replace(TEMPORARY_DISPLAY_NAME_PLACEHOLDER, displayNameToUse);
 	}
 
-	private Object[] extractNamedArguments(Object[] arguments) {
-		return Arrays.stream(arguments) //
+	private Object[] extractNamedArguments(Arguments arguments) {
+		Object[] consumedArguments = consumedArguments(arguments.get());
+		return Arrays.stream(consumedArguments) //
 				.map(argument -> argument instanceof Named ? ((Named<?>) argument).getName() : argument) //
 				.toArray();
 	}
 
-	private String prepareMessageFormatPattern(int invocationIndex, Object[] arguments) {
+	private String prepareMessageFormatPattern(int invocationIndex, Arguments arguments, Object[] argumentArray) {
 		String result = pattern//
 				.replace(DISPLAY_NAME_PLACEHOLDER, TEMPORARY_DISPLAY_NAME_PLACEHOLDER)//
 				.replace(INDEX_PLACEHOLDER, String.valueOf(invocationIndex));
 
 		if (result.contains(ARGUMENTS_WITH_NAMES_PLACEHOLDER)) {
-			result = result.replace(ARGUMENTS_WITH_NAMES_PLACEHOLDER, argumentsWithNamesPattern(arguments));
+			if (arguments instanceof NamedArguments) {
+				result = TEMPORARY_DISPLAY_NAME_PLACEHOLDER + " :: " + result;
+			}
+			result = result.replace(ARGUMENTS_WITH_NAMES_PLACEHOLDER, argumentsWithNamesPattern(argumentArray));
 		}
 
 		if (result.contains(ARGUMENTS_PLACEHOLDER)) {
-			result = result.replace(ARGUMENTS_PLACEHOLDER, argumentsPattern(arguments));
+			result = result.replace(ARGUMENTS_PLACEHOLDER, argumentsPattern(argumentArray));
 		}
 
 		return result;
@@ -117,6 +130,14 @@ class ParameterizedTestNameFormatter {
 			return argument.substring(0, argumentMaxLength - 1) + ELLIPSIS;
 		}
 		return argument;
+	}
+
+	private Object[] consumedArguments(Object[] arguments) {
+		if (this.methodContext.hasAggregator()) {
+			return arguments;
+		}
+		int parameterCount = this.methodContext.getParameterCount();
+		return arguments.length > parameterCount ? Arrays.copyOf(arguments, parameterCount) : arguments;
 	}
 
 }

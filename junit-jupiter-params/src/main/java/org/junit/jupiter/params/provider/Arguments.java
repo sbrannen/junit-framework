@@ -13,6 +13,7 @@ package org.junit.jupiter.params.provider;
 import static org.apiguardian.api.API.Status.STABLE;
 
 import org.apiguardian.api.API;
+import org.junit.jupiter.api.Named;
 import org.junit.platform.commons.util.Preconditions;
 
 /**
@@ -91,6 +92,45 @@ public interface Arguments {
 	 */
 	static Arguments arguments(Object... arguments) {
 		return of(arguments);
+	}
+
+	static NamedArguments namedArguments(String name, Object... arguments) {
+		return new NamedArguments(name, arguments);
+	}
+
+	class NamedArguments implements Arguments, Named<Arguments> {
+
+		private final Object[] arguments;
+
+		private final String name;
+
+		protected NamedArguments(String name, Object[] arguments) {
+			Preconditions.notNull(arguments, "arguments array must not be null");
+			Preconditions.notBlank(name, "name must not be null or blank");
+			this.arguments = arguments;
+			this.name = name;
+		}
+
+		@Override
+		public Object[] get() {
+			return this.arguments;
+		}
+
+		@Override
+		public String getName() {
+			return this.name;
+		}
+
+		@Override
+		public final Arguments getPayload() {
+			return this;
+		}
+
+		@Override
+		public String toString() {
+			return getName();
+		}
+
 	}
 
 }
