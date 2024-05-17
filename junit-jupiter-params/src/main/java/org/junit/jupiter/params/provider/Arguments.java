@@ -13,7 +13,6 @@ package org.junit.jupiter.params.provider;
 import static org.apiguardian.api.API.Status.STABLE;
 
 import org.apiguardian.api.API;
-import org.junit.jupiter.api.Named;
 import org.junit.platform.commons.util.Preconditions;
 
 /**
@@ -98,7 +97,7 @@ public interface Arguments {
 		return new NamedArguments(name, arguments);
 	}
 
-	class NamedArguments implements Arguments, Named<Arguments> {
+	class NamedArguments implements Arguments {
 
 		private final Object[] arguments;
 
@@ -116,14 +115,8 @@ public interface Arguments {
 			return this.arguments;
 		}
 
-		@Override
 		public String getName() {
 			return this.name;
-		}
-
-		@Override
-		public final Arguments getPayload() {
-			return this;
 		}
 
 		@Override
