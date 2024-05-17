@@ -61,7 +61,7 @@ class ParameterizedTestNameFormatter {
 
 	private String formatSafely(int invocationIndex, Arguments arguments) {
 		if (arguments instanceof NamedArguments) {
-			return ((NamedArguments) arguments).getName();
+			return "[" + invocationIndex + "] " + ((NamedArguments) arguments).getName();
 		}
 
 		Object[] namedArguments = extractNamedArguments(consumedArguments(arguments.get()));
