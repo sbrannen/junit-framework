@@ -27,6 +27,7 @@ class ParameterizedTestInvocationContext implements TestTemplateInvocationContex
 	private final ParameterizedTestNameFormatter formatter;
 	private final ParameterizedTestMethodContext methodContext;
 	private final Arguments arguments;
+	private final Object[] consumedArguments;
 	private final int invocationIndex;
 
 	ParameterizedTestInvocationContext(ParameterizedTestNameFormatter formatter,
@@ -34,27 +35,27 @@ class ParameterizedTestInvocationContext implements TestTemplateInvocationContex
 		this.formatter = formatter;
 		this.methodContext = methodContext;
 		this.arguments = arguments;
+		this.consumedArguments = consumedArguments(methodContext, arguments.get());
 		this.invocationIndex = invocationIndex;
 	}
 
 	@Override
 	public String getDisplayName(int invocationIndex) {
-		return this.formatter.format(invocationIndex, this.arguments);
+		return this.formatter.format(invocationIndex, this.arguments, this.consumedArguments);
 	}
 
 	@Override
 	public List<Extension> getAdditionalExtensions() {
 		return singletonList(
-			new ParameterizedTestParameterResolver(this.methodContext, consumedArguments(), this.invocationIndex));
+			new ParameterizedTestParameterResolver(this.methodContext, this.consumedArguments, this.invocationIndex));
 	}
 
-	private Object[] consumedArguments() {
-		Object[] args = this.arguments.get();
-		if (this.methodContext.hasAggregator()) {
-			return args;
+	private static Object[] consumedArguments(ParameterizedTestMethodContext methodContext, Object[] arguments) {
+		if (methodContext.hasAggregator()) {
+			return arguments;
 		}
-		int parameterCount = this.methodContext.getParameterCount();
-		return args.length > parameterCount ? Arrays.copyOf(args, parameterCount) : args;
+		int parameterCount = methodContext.getParameterCount();
+		return arguments.length > parameterCount ? Arrays.copyOf(arguments, parameterCount) : arguments;
 	}
 
 }

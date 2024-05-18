@@ -48,9 +48,9 @@ class ParameterizedTestNameFormatter {
 		this.argumentMaxLength = argumentMaxLength;
 	}
 
-	String format(int invocationIndex, Arguments arguments) {
+	String format(int invocationIndex, Arguments arguments, Object[] consumedArguments) {
 		try {
-			return formatSafely(invocationIndex, arguments);
+			return formatSafely(invocationIndex, arguments, consumedArguments);
 		}
 		catch (Exception ex) {
 			String message = "The display name pattern defined for the parameterized test is invalid. "
@@ -59,12 +59,12 @@ class ParameterizedTestNameFormatter {
 		}
 	}
 
-	private String formatSafely(int invocationIndex, Arguments arguments) {
+	private String formatSafely(int invocationIndex, Arguments arguments, Object[] consumedArguments) {
 		if (arguments instanceof NamedArguments) {
 			return "[" + invocationIndex + "] " + ((NamedArguments) arguments).getName();
 		}
 
-		Object[] namedArguments = extractNamedArguments(consumedArguments(arguments.get()));
+		Object[] namedArguments = extractNamedArguments(consumedArguments);
 		String pattern = prepareMessageFormatPattern(invocationIndex, namedArguments);
 		MessageFormat format = new MessageFormat(pattern);
 		Object[] humanReadableArguments = makeReadable(format, namedArguments);
@@ -123,14 +123,6 @@ class ParameterizedTestNameFormatter {
 			return argument.substring(0, argumentMaxLength - 1) + ELLIPSIS;
 		}
 		return argument;
-	}
-
-	private Object[] consumedArguments(Object[] arguments) {
-		if (this.methodContext.hasAggregator()) {
-			return arguments;
-		}
-		int parameterCount = this.methodContext.getParameterCount();
-		return arguments.length > parameterCount ? Arrays.copyOf(arguments, parameterCount) : arguments;
 	}
 
 }
