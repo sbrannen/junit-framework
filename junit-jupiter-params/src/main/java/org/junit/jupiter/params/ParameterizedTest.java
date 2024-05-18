@@ -10,6 +10,7 @@
 
 package org.junit.jupiter.params;
 
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 import static org.apiguardian.api.API.Status.STABLE;
 
 import java.lang.annotation.Documented;
@@ -21,6 +22,7 @@ import java.lang.annotation.Target;
 import org.apiguardian.api.API;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.provider.Arguments;
 
 /**
  * {@code @ParameterizedTest} is used to signal that the annotated method is a
@@ -177,6 +179,19 @@ public @interface ParameterizedTest {
 	String ARGUMENTS_WITH_NAMES_PLACEHOLDER = "{argumentsWithNames}";
 
 	/**
+	 * Placeholder for the name of the set of arguments for the current invocation
+	 * of a {@code @ParameterizedTest} method when the current set of arguments
+	 * is created via {@link Arguments#namedArguments(String, Object...)}:
+	 * <code>{namedArguments}</code>.
+	 *
+	 * @since 5.11
+	 * @see #name
+	 * @see #DEFAULT_NAMED_ARGUMENTS_DISPLAY_NAME
+	 */
+	@API(status = EXPERIMENTAL, since = "5.11")
+	String NAMED_ARGUMENTS_PLACEHOLDER = "{namedArguments}";
+
+	/**
 	 * Default display name pattern for the current invocation of a
 	 * {@code @ParameterizedTest} method: {@value}
 	 *
@@ -191,6 +206,25 @@ public @interface ParameterizedTest {
 	 * @see #ARGUMENTS_WITH_NAMES_PLACEHOLDER
 	 */
 	String DEFAULT_DISPLAY_NAME = "[" + INDEX_PLACEHOLDER + "] " + ARGUMENTS_WITH_NAMES_PLACEHOLDER;
+
+	/**
+	 * Default display name pattern for the current invocation of a
+	 * {@code @ParameterizedTest} method when the current set of arguments
+	 * is created via {@link Arguments#namedArguments(String, Object...)}: {@value}
+	 *
+	 * <p>Note that the default pattern does <em>not</em> include the
+	 * {@linkplain #DISPLAY_NAME_PLACEHOLDER display name} of the
+	 * {@code @ParameterizedTest} method.
+	 *
+	 * @since 5.11
+	 * @see #name
+	 * @see #DISPLAY_NAME_PLACEHOLDER
+	 * @see #INDEX_PLACEHOLDER
+	 * @see #NAMED_ARGUMENTS_PLACEHOLDER
+	 * @see Arguments#namedArguments(String, Object...)
+	 */
+	@API(status = EXPERIMENTAL, since = "5.11")
+	String DEFAULT_NAMED_ARGUMENTS_DISPLAY_NAME = "[" + INDEX_PLACEHOLDER + "] " + NAMED_ARGUMENTS_PLACEHOLDER;
 
 	/**
 	 * The display name to be used for individual invocations of the

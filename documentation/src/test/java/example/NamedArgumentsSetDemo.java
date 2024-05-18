@@ -27,13 +27,19 @@ import org.junit.jupiter.params.provider.FieldSource;
 class NamedArgumentsSetDemo {
 
 	@ParameterizedTest
-	@FieldSource
-	void namedArgumentsSet(File file1, File file2, TestInfo testInfo) {
+	@FieldSource("namedArgumentsList")
+	void defaultNamedArgumentsDisplayName(File file1, File file2, TestInfo testInfo) {
+		System.out.println(testInfo.getDisplayName());
+	}
+
+	@ParameterizedTest(name = "{namedArguments} :: {argumentsWithNames}")
+	@FieldSource("namedArgumentsList")
+	void customNamedArgumentsDisplayName(File file1, File file2, TestInfo testInfo) {
 		System.out.println(testInfo.getDisplayName());
 	}
 
 	// @formatter:off
-	static List<Arguments> namedArgumentsSet = Arrays.asList(
+	static List<Arguments> namedArgumentsList = Arrays.asList(
 		namedArguments("Important Files", new File("path1"), new File("path2")),
 		namedArguments("Other Files", new File("path3"), new File("path4"))
 	);
