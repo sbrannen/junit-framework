@@ -15,6 +15,7 @@ import static org.junit.platform.commons.util.AnnotationUtils.findRepeatableAnno
 import static org.junit.platform.commons.util.AnnotationUtils.isAnnotated;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
@@ -125,16 +126,27 @@ class ParameterizedTestExtension implements TestTemplateInvocationContextProvide
 
 	private ParameterizedTestNameFormatter createNameFormatter(ExtensionContext extensionContext, Method templateMethod,
 			ParameterizedTestMethodContext methodContext, String displayName, int argumentMaxLength) {
+
 		ParameterizedTest parameterizedTest = findAnnotation(templateMethod, ParameterizedTest.class).get();
-		String pattern = parameterizedTest.name().equals(DEFAULT_DISPLAY_NAME)
-				? extensionContext.getConfigurationParameter(DISPLAY_NAME_PATTERN_KEY).orElse(
-					ParameterizedTest.DEFAULT_DISPLAY_NAME)
-				: parameterizedTest.name();
+		String pattern = parameterizedTest.name();
+		boolean useDefaultDisplayName = pattern.equals(DEFAULT_DISPLAY_NAME);
+		if (useDefaultDisplayName) {
+			Optional<String> globalDefaultDisplayName = //
+				extensionContext.getConfigurationParameter(DISPLAY_NAME_PATTERN_KEY);
+			if (globalDefaultDisplayName.isPresent()) {
+				pattern = globalDefaultDisplayName.get();
+				useDefaultDisplayName = false;
+			}
+			else {
+				pattern = ParameterizedTest.DEFAULT_DISPLAY_NAME;
+			}
+		}
 		pattern = Preconditions.notBlank(pattern.trim(),
 			() -> String.format(
 				"Configuration error: @ParameterizedTest on method [%s] must be declared with a non-empty name.",
 				templateMethod));
-		return new ParameterizedTestNameFormatter(pattern, displayName, methodContext, argumentMaxLength);
+		return new ParameterizedTestNameFormatter(useDefaultDisplayName, pattern, displayName, methodContext,
+			argumentMaxLength);
 	}
 
 	protected static Stream<? extends Arguments> arguments(ArgumentsProvider provider, ExtensionContext context) {

@@ -35,13 +35,16 @@ class ParameterizedTestNameFormatter {
 	private static final char ELLIPSIS = '\u2026';
 	private static final String TEMPORARY_DISPLAY_NAME_PLACEHOLDER = "~~~JUNIT_DISPLAY_NAME~~~";
 
+	private final boolean useDefaultDisplayName;
 	private final String pattern;
 	private final String displayName;
 	private final ParameterizedTestMethodContext methodContext;
 	private final int argumentMaxLength;
 
-	ParameterizedTestNameFormatter(String pattern, String displayName, ParameterizedTestMethodContext methodContext,
-			int argumentMaxLength) {
+	ParameterizedTestNameFormatter(boolean useDefaultDisplayName, String pattern, String displayName,
+			ParameterizedTestMethodContext methodContext, int argumentMaxLength) {
+
+		this.useDefaultDisplayName = useDefaultDisplayName;
 		this.pattern = pattern;
 		this.displayName = displayName;
 		this.methodContext = methodContext;
@@ -60,7 +63,7 @@ class ParameterizedTestNameFormatter {
 	}
 
 	private String formatSafely(int invocationIndex, Arguments arguments, Object[] consumedArguments) {
-		if (arguments instanceof NamedArguments) {
+		if (this.useDefaultDisplayName && arguments instanceof NamedArguments) {
 			return "[" + invocationIndex + "] " + ((NamedArguments) arguments).getName();
 		}
 
