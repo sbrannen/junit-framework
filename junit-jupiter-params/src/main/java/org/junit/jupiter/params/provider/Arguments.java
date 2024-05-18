@@ -72,7 +72,7 @@ public interface Arguments {
 	 * @see #arguments(Object...)
 	 */
 	static Arguments of(Object... arguments) {
-		Preconditions.notNull(arguments, "argument array must not be null");
+		Preconditions.notNull(arguments, "arguments array must not be null");
 		return () -> arguments;
 	}
 
@@ -97,13 +97,13 @@ public interface Arguments {
 		return new NamedArguments(name, arguments);
 	}
 
-	class NamedArguments implements Arguments {
+	final class NamedArguments implements Arguments {
 
 		private final Object[] arguments;
 
 		private final String name;
 
-		protected NamedArguments(String name, Object[] arguments) {
+		private NamedArguments(String name, Object[] arguments) {
 			Preconditions.notNull(arguments, "arguments array must not be null");
 			Preconditions.notBlank(name, "name must not be null or blank");
 			this.arguments = arguments;

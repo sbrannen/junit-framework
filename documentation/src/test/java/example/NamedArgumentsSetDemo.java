@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,16 +27,19 @@ import org.junit.jupiter.params.provider.FieldSource;
 @Execution(SAME_THREAD)
 class NamedArgumentsSetDemo {
 
+	@BeforeEach
+	void printDisplayName(TestInfo testInfo) {
+		System.out.println(testInfo.getDisplayName());
+	}
+
 	@ParameterizedTest
 	@FieldSource("namedArgumentsList")
-	void defaultNamedArgumentsDisplayName(File file1, File file2, TestInfo testInfo) {
-		System.out.println(testInfo.getDisplayName());
+	void defaultNamedArgumentsDisplayName(File file1, File file2) {
 	}
 
 	@ParameterizedTest(name = "{namedArguments} :: {argumentsWithNames}")
 	@FieldSource("namedArgumentsList")
-	void customNamedArgumentsDisplayName(File file1, File file2, TestInfo testInfo) {
-		System.out.println(testInfo.getDisplayName());
+	void customNamedArgumentsDisplayName(File file1, File file2) {
 	}
 
 	// @formatter:off
