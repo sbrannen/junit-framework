@@ -181,15 +181,15 @@ public @interface ParameterizedTest {
 	/**
 	 * Placeholder for the name of the set of arguments for the current invocation
 	 * of a {@code @ParameterizedTest} method when the current set of arguments
-	 * is created via {@link Arguments#namedArguments(String, Object...)}:
-	 * <code>{namedArguments}</code>.
+	 * was created via {@link Arguments#argumentSet(String, Object...)}:
+	 * <code>{argumentSetName}</code>.
 	 *
 	 * @since 5.11
 	 * @see #name
-	 * @see #DEFAULT_NAMED_ARGUMENTS_DISPLAY_NAME
+	 * @see #DEFAULT_ARGUMENT_SET_NAME_DISPLAY_NAME
 	 */
 	@API(status = EXPERIMENTAL, since = "5.11")
-	String NAMED_ARGUMENTS_PLACEHOLDER = "{namedArguments}";
+	String ARGUMENT_SET_NAME_PLACEHOLDER = "{argumentSetName}";
 
 	/**
 	 * Default display name pattern for the current invocation of a
@@ -210,7 +210,7 @@ public @interface ParameterizedTest {
 	/**
 	 * Default display name pattern for the current invocation of a
 	 * {@code @ParameterizedTest} method when the current set of arguments
-	 * is created via {@link Arguments#namedArguments(String, Object...)}: {@value}
+	 * is created via {@link Arguments#argumentSet(String, Object...)}: {@value}
 	 *
 	 * <p>Note that the default pattern does <em>not</em> include the
 	 * {@linkplain #DISPLAY_NAME_PLACEHOLDER display name} of the
@@ -220,11 +220,11 @@ public @interface ParameterizedTest {
 	 * @see #name
 	 * @see #DISPLAY_NAME_PLACEHOLDER
 	 * @see #INDEX_PLACEHOLDER
-	 * @see #NAMED_ARGUMENTS_PLACEHOLDER
-	 * @see Arguments#namedArguments(String, Object...)
+	 * @see #ARGUMENT_SET_NAME_PLACEHOLDER
+	 * @see Arguments#argumentSet(String, Object...)
 	 */
 	@API(status = EXPERIMENTAL, since = "5.11")
-	String DEFAULT_NAMED_ARGUMENTS_DISPLAY_NAME = "[" + INDEX_PLACEHOLDER + "] " + NAMED_ARGUMENTS_PLACEHOLDER;
+	String DEFAULT_ARGUMENT_SET_NAME_DISPLAY_NAME = "[" + INDEX_PLACEHOLDER + "] " + ARGUMENT_SET_NAME_PLACEHOLDER;
 
 	/**
 	 * The display name to be used for individual invocations of the

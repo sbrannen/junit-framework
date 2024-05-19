@@ -93,17 +93,17 @@ public interface Arguments {
 		return of(arguments);
 	}
 
-	static NamedArguments namedArguments(String name, Object... arguments) {
-		return new NamedArguments(name, arguments);
+	static ArgumentSet argumentSet(String name, Object... arguments) {
+		return new ArgumentSet(name, arguments);
 	}
 
-	final class NamedArguments implements Arguments {
+	final class ArgumentSet implements Arguments {
 
 		private final Object[] arguments;
 
 		private final String name;
 
-		private NamedArguments(String name, Object[] arguments) {
+		private ArgumentSet(String name, Object[] arguments) {
 			Preconditions.notNull(arguments, "arguments array must not be null");
 			Preconditions.notBlank(name, "name must not be null or blank");
 			this.arguments = arguments;

@@ -13,10 +13,10 @@ package org.junit.jupiter.params;
 import static java.util.stream.Collectors.joining;
 import static org.junit.jupiter.params.ParameterizedTest.ARGUMENTS_PLACEHOLDER;
 import static org.junit.jupiter.params.ParameterizedTest.ARGUMENTS_WITH_NAMES_PLACEHOLDER;
-import static org.junit.jupiter.params.ParameterizedTest.DEFAULT_NAMED_ARGUMENTS_DISPLAY_NAME;
+import static org.junit.jupiter.params.ParameterizedTest.ARGUMENT_SET_NAME_PLACEHOLDER;
+import static org.junit.jupiter.params.ParameterizedTest.DEFAULT_ARGUMENT_SET_NAME_DISPLAY_NAME;
 import static org.junit.jupiter.params.ParameterizedTest.DISPLAY_NAME_PLACEHOLDER;
 import static org.junit.jupiter.params.ParameterizedTest.INDEX_PLACEHOLDER;
-import static org.junit.jupiter.params.ParameterizedTest.NAMED_ARGUMENTS_PLACEHOLDER;
 
 import java.text.Format;
 import java.text.MessageFormat;
@@ -26,7 +26,7 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.extension.ExtensionConfigurationException;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.Arguments.NamedArguments;
+import org.junit.jupiter.params.provider.Arguments.ArgumentSet;
 import org.junit.platform.commons.JUnitException;
 import org.junit.platform.commons.util.StringUtils;
 
@@ -67,8 +67,8 @@ class ParameterizedTestNameFormatter {
 
 	private String formatSafely(int invocationIndex, Arguments arguments, Object[] consumedArguments) {
 		String pattern = this.pattern;
-		if (this.useDefaultDisplayName && arguments instanceof NamedArguments) {
-			pattern = DEFAULT_NAMED_ARGUMENTS_DISPLAY_NAME;
+		if (this.useDefaultDisplayName && arguments instanceof ArgumentSet) {
+			pattern = DEFAULT_ARGUMENT_SET_NAME_DISPLAY_NAME;
 		}
 		Object[] namedArguments = extractNamedArguments(consumedArguments);
 		pattern = prepareMessageFormatPattern(pattern, invocationIndex, arguments, namedArguments);
@@ -91,14 +91,14 @@ class ParameterizedTestNameFormatter {
 				.replace(DISPLAY_NAME_PLACEHOLDER, TEMPORARY_DISPLAY_NAME_PLACEHOLDER)//
 				.replace(INDEX_PLACEHOLDER, String.valueOf(invocationIndex));
 
-		if (result.contains(NAMED_ARGUMENTS_PLACEHOLDER)) {
-			if (!(arguments instanceof NamedArguments)) {
+		if (result.contains(ARGUMENT_SET_NAME_PLACEHOLDER)) {
+			if (!(arguments instanceof ArgumentSet)) {
 				throw new ExtensionConfigurationException(
 					String.format("When the display name pattern for a @ParameterizedTest contains %s, "
-							+ "the arguments must be supplied as NamedArguments.",
-						NAMED_ARGUMENTS_PLACEHOLDER));
+							+ "the arguments must be supplied as an ArgumentSet.",
+						ARGUMENT_SET_NAME_PLACEHOLDER));
 			}
-			result = result.replace(NAMED_ARGUMENTS_PLACEHOLDER, ((NamedArguments) arguments).getName());
+			result = result.replace(ARGUMENT_SET_NAME_PLACEHOLDER, ((ArgumentSet) arguments).getName());
 		}
 
 		if (result.contains(ARGUMENTS_WITH_NAMES_PLACEHOLDER)) {

@@ -11,7 +11,7 @@
 package example;
 
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
-import static org.junit.jupiter.params.provider.Arguments.namedArguments;
+import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 
 import java.io.File;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.FieldSource;
 
 @Execution(SAME_THREAD)
-class NamedArgumentsSetDemo {
+class ArgumentSetDemo {
 
 	@BeforeEach
 	void printDisplayName(TestInfo testInfo) {
@@ -33,19 +33,19 @@ class NamedArgumentsSetDemo {
 	}
 
 	@ParameterizedTest
-	@FieldSource("namedArgumentsList")
-	void defaultNamedArgumentsDisplayName(File file1, File file2) {
+	@FieldSource("argumentSets")
+	void defaultArgumentSetDisplayName(File file1, File file2) {
 	}
 
-	@ParameterizedTest(name = "{namedArguments} :: {argumentsWithNames}")
-	@FieldSource("namedArgumentsList")
-	void customNamedArgumentsDisplayName(File file1, File file2) {
+	@ParameterizedTest(name = "{argumentSetName} :: {arguments}")
+	@FieldSource("argumentSets")
+	void customArgumentSetDisplayName(File file1, File file2) {
 	}
 
 	// @formatter:off
-	static List<Arguments> namedArgumentsList = Arrays.asList(
-		namedArguments("Important Files", new File("path1"), new File("path2")),
-		namedArguments("Other Files", new File("path3"), new File("path4"))
+	static List<Arguments> argumentSets = Arrays.asList(
+		argumentSet("Important Files", new File("path1"), new File("path2")),
+		argumentSet("Other Files", new File("path3"), new File("path4"))
 	);
 	// @formatter:on
 
