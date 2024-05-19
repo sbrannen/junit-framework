@@ -22,7 +22,6 @@ import java.lang.annotation.Target;
 import org.apiguardian.api.API;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.provider.Arguments;
 
 /**
  * {@code @ParameterizedTest} is used to signal that the annotated method is a
@@ -181,12 +180,14 @@ public @interface ParameterizedTest {
 	/**
 	 * Placeholder for the name of the set of arguments for the current invocation
 	 * of a {@code @ParameterizedTest} method when the current set of arguments
-	 * was created via {@link Arguments#argumentSet(String, Object...)}:
-	 * <code>{argumentSetName}</code>.
+	 * was created via
+	 * {@link org.junit.jupiter.params.provider.Arguments#argumentSet(String, Object...)
+	 * argumentSet()}: <code>{argumentSetName}</code>.
 	 *
 	 * @since 5.11
 	 * @see #name
 	 * @see #DEFAULT_ARGUMENT_SET_NAME_DISPLAY_NAME
+	 * @see org.junit.jupiter.params.provider.Arguments#argumentSet(String, Object...)
 	 */
 	@API(status = EXPERIMENTAL, since = "5.11")
 	String ARGUMENT_SET_NAME_PLACEHOLDER = "{argumentSetName}";
@@ -195,13 +196,14 @@ public @interface ParameterizedTest {
 	 * Placeholder for either {@link #ARGUMENT_SET_NAME_PLACEHOLDER} or
 	 * {@link #ARGUMENTS_WITH_NAMES_PLACEHOLDER}, depending on whether the
 	 * current set of arguments was created via
-	 * {@link Arguments#argumentSet(String, Object...)}:
-	 * <code>{argumentSetNameOrArgumentsWithNames}</code>.
+	 * {@link org.junit.jupiter.params.provider.Arguments#argumentSet(String, Object...)
+	 * argumentSet()}: <code>{argumentSetNameOrArgumentsWithNames}</code>.
 	 *
 	 * @since 5.11
 	 * @see #name
 	 * @see #ARGUMENT_SET_NAME_PLACEHOLDER
 	 * @see #ARGUMENTS_WITH_NAMES_PLACEHOLDER
+	 * @see org.junit.jupiter.params.provider.Arguments#argumentSet(String, Object...)
 	 */
 	@API(status = EXPERIMENTAL, since = "5.11")
 	String ARGUMENT_SET_NAME_OR_ARGUMENTS_WITH_NAMES_PLACEHOLDER = "{argumentSetNameOrArgumentsWithNames}";
