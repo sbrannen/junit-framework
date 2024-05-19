@@ -13,8 +13,8 @@ package org.junit.jupiter.params;
 import static java.util.stream.Collectors.joining;
 import static org.junit.jupiter.params.ParameterizedTest.ARGUMENTS_PLACEHOLDER;
 import static org.junit.jupiter.params.ParameterizedTest.ARGUMENTS_WITH_NAMES_PLACEHOLDER;
+import static org.junit.jupiter.params.ParameterizedTest.ARGUMENT_SET_NAME_OR_ARGUMENTS_WITH_NAMES_PLACEHOLDER;
 import static org.junit.jupiter.params.ParameterizedTest.ARGUMENT_SET_NAME_PLACEHOLDER;
-import static org.junit.jupiter.params.ParameterizedTest.DEFAULT_ARGUMENT_SET_NAME_DISPLAY_NAME;
 import static org.junit.jupiter.params.ParameterizedTest.DISPLAY_NAME_PLACEHOLDER;
 import static org.junit.jupiter.params.ParameterizedTest.INDEX_PLACEHOLDER;
 
@@ -38,16 +38,14 @@ class ParameterizedTestNameFormatter {
 	private static final char ELLIPSIS = '\u2026';
 	private static final String TEMPORARY_DISPLAY_NAME_PLACEHOLDER = "~~~JUNIT_DISPLAY_NAME~~~";
 
-	private final boolean useDefaultDisplayName;
 	private final String pattern;
 	private final String displayName;
 	private final ParameterizedTestMethodContext methodContext;
 	private final int argumentMaxLength;
 
-	ParameterizedTestNameFormatter(boolean useDefaultDisplayName, String pattern, String displayName,
-			ParameterizedTestMethodContext methodContext, int argumentMaxLength) {
+	ParameterizedTestNameFormatter(String pattern, String displayName, ParameterizedTestMethodContext methodContext,
+			int argumentMaxLength) {
 
-		this.useDefaultDisplayName = useDefaultDisplayName;
 		this.pattern = pattern;
 		this.displayName = displayName;
 		this.methodContext = methodContext;
@@ -66,12 +64,8 @@ class ParameterizedTestNameFormatter {
 	}
 
 	private String formatSafely(int invocationIndex, Arguments arguments, Object[] consumedArguments) {
-		String pattern = this.pattern;
-		if (this.useDefaultDisplayName && arguments instanceof ArgumentSet) {
-			pattern = DEFAULT_ARGUMENT_SET_NAME_DISPLAY_NAME;
-		}
 		Object[] namedArguments = extractNamedArguments(consumedArguments);
-		pattern = prepareMessageFormatPattern(pattern, invocationIndex, arguments, namedArguments);
+		String pattern = prepareMessageFormatPattern(invocationIndex, arguments, namedArguments);
 		MessageFormat format = new MessageFormat(pattern);
 		Object[] humanReadableArguments = makeReadable(format, namedArguments);
 		String formatted = format.format(humanReadableArguments);
@@ -84,12 +78,17 @@ class ParameterizedTestNameFormatter {
 				.toArray();
 	}
 
-	private String prepareMessageFormatPattern(String pattern, int invocationIndex, Arguments arguments,
-			Object[] argumentsArray) {
-
+	private String prepareMessageFormatPattern(int invocationIndex, Arguments arguments, Object[] argumentsArray) {
 		String result = pattern//
 				.replace(DISPLAY_NAME_PLACEHOLDER, TEMPORARY_DISPLAY_NAME_PLACEHOLDER)//
 				.replace(INDEX_PLACEHOLDER, String.valueOf(invocationIndex));
+
+		if (result.contains(ARGUMENT_SET_NAME_OR_ARGUMENTS_WITH_NAMES_PLACEHOLDER)) {
+			String placeholderToUse = (arguments instanceof ArgumentSet //
+					? ARGUMENT_SET_NAME_PLACEHOLDER
+					: ARGUMENTS_WITH_NAMES_PLACEHOLDER);
+			result = result.replace(ARGUMENT_SET_NAME_OR_ARGUMENTS_WITH_NAMES_PLACEHOLDER, placeholderToUse);
+		}
 
 		if (result.contains(ARGUMENT_SET_NAME_PLACEHOLDER)) {
 			if (!(arguments instanceof ArgumentSet)) {

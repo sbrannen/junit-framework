@@ -262,18 +262,18 @@ class ParameterizedTestNameFormatterTests {
 	private static ParameterizedTestNameFormatter formatter(String pattern, String displayName, int parameterCount) {
 		ParameterizedTestMethodContext mockMethodContext = mock();
 		when(mockMethodContext.getParameterCount()).thenReturn(parameterCount);
-		return new ParameterizedTestNameFormatter(false, pattern, displayName, mockMethodContext, 512);
+		return new ParameterizedTestNameFormatter(pattern, displayName, mockMethodContext, 512);
 	}
 
 	private static ParameterizedTestNameFormatter formatter(String pattern, int parameterCount, int argumentMaxLength) {
 		ParameterizedTestMethodContext mockMethodContext = mock();
 		when(mockMethodContext.getParameterCount()).thenReturn(parameterCount);
-		return new ParameterizedTestNameFormatter(false, pattern, "display name", mockMethodContext, argumentMaxLength);
+		return new ParameterizedTestNameFormatter(pattern, "display name", mockMethodContext, argumentMaxLength);
 	}
 
 	private static ParameterizedTestNameFormatter formatter(String pattern, String displayName, Method method) {
-		return new ParameterizedTestNameFormatter(false, pattern, displayName,
-			new ParameterizedTestMethodContext(method), 512);
+		return new ParameterizedTestNameFormatter(pattern, displayName, new ParameterizedTestMethodContext(method),
+			512);
 	}
 
 	private static String format(ParameterizedTestNameFormatter formatter, int invocationIndex, Arguments arguments) {

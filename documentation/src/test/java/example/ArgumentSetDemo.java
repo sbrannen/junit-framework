@@ -12,12 +12,14 @@ package example;
 
 import static org.junit.jupiter.api.parallel.ExecutionMode.SAME_THREAD;
 import static org.junit.jupiter.params.provider.Arguments.argumentSet;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,13 +41,26 @@ class ArgumentSetDemo {
 
 	@ParameterizedTest(name = "{argumentSetName} :: {arguments}")
 	@FieldSource("argumentSets")
-	void customArgumentSetDisplayName(File file1, File file2) {
+	void customArgumentSetNameAndArgumentsDisplayName(File file1, File file2) {
+	}
+
+	@DisplayName("Mixed Arguments Types")
+	@ParameterizedTest(name = "[{index}] {displayName} :: {argumentSetNameOrArgumentsWithNames}")
+	@FieldSource("mixedArgumentsTypes")
+	void mixedArgumentsTypesDisplayName(File file1, File file2) {
 	}
 
 	// @formatter:off
 	static List<Arguments> argumentSets = Arrays.asList(
 		argumentSet("Important Files", new File("path1"), new File("path2")),
 		argumentSet("Other Files", new File("path3"), new File("path4"))
+	);
+	// @formatter:on
+
+	// @formatter:off
+	static List<Arguments> mixedArgumentsTypes = Arrays.asList(
+		argumentSet("Important Files", new File("path1"), new File("path2")),
+		arguments(new File("path3"), new File("path4"))
 	);
 	// @formatter:on
 
