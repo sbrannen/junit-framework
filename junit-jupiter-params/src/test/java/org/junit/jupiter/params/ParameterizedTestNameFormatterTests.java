@@ -21,7 +21,6 @@ import static org.junit.jupiter.params.ParameterizedTest.DISPLAY_NAME_PLACEHOLDE
 import static org.junit.jupiter.params.ParameterizedTest.INDEX_PLACEHOLDER;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -91,13 +90,15 @@ class ParameterizedTestNameFormatterTests {
 
 	@Test
 	void formatsIndividualArguments() {
-		var formatter = formatter("{0} -> {1}", "enigma", 2);
+		var formatter = formatter("{0} -> {1}", "enigma");
 
 		assertEquals("foo -> 42", format(formatter, 1, arguments("foo", 42)));
 	}
 
 	@Test
 	void formatsCompleteArgumentsList() {
+		var formatter = formatter(ARGUMENTS_PLACEHOLDER, "enigma");
+
 		// @formatter:off
 		Arguments args = arguments(
 			42,
@@ -108,12 +109,9 @@ class ParameterizedTestNameFormatterTests {
 			new String[] { "foo", "bar" },
 			new Integer[][] { { 2, 4 }, { 3, 9 } }
 		);
-
-		var formatter = formatter(ARGUMENTS_PLACEHOLDER, "enigma", args.get().length);
-
-		assertEquals("42, 99, enigma, null, [1, 2, 3], [foo, bar], [[2, 4], [3, 9]]",
-			format(formatter, 1, args));
 		// @formatter:on
+
+		assertEquals("42, 99, enigma, null, [1, 2, 3], [foo, bar], [[2, 4], [3, 9]]", format(formatter, 1, args));
 	}
 
 	@Test
@@ -136,7 +134,7 @@ class ParameterizedTestNameFormatterTests {
 
 	@Test
 	void formatsCompleteArgumentsListWithArrays() {
-		var formatter = formatter(ARGUMENTS_PLACEHOLDER, "enigma", 3);
+		var formatter = formatter(ARGUMENTS_PLACEHOLDER, "enigma");
 
 		// Explicit test for https://github.com/junit-team/junit5/issues/814
 		assertEquals("[foo, bar]", format(formatter, 1, arguments((Object) new String[] { "foo", "bar" })));
@@ -147,7 +145,7 @@ class ParameterizedTestNameFormatterTests {
 	@Test
 	void formatsEverythingUsingCustomPattern() {
 		var pattern = DISPLAY_NAME_PLACEHOLDER + " " + INDEX_PLACEHOLDER + " :: " + ARGUMENTS_PLACEHOLDER + " :: {1}";
-		var formatter = formatter(pattern, "enigma", 2);
+		var formatter = formatter(pattern, "enigma");
 
 		assertEquals("enigma 1 :: foo, bar :: bar", format(formatter, 1, arguments("foo", "bar")));
 		assertEquals("enigma 2 :: foo, 42 :: 42", format(formatter, 2, arguments("foo", 42)));
@@ -156,7 +154,7 @@ class ParameterizedTestNameFormatterTests {
 	@Test
 	void formatDoesNotAlterArgumentsArray() {
 		Object[] actual = { 1, "two", Byte.valueOf("-128"), new Integer[][] { { 2, 4 }, { 3, 9 } } };
-		var formatter = formatter(ARGUMENTS_PLACEHOLDER, "enigma", actual.length);
+		var formatter = formatter(ARGUMENTS_PLACEHOLDER, "enigma");
 		var expected = Arrays.copyOf(actual, actual.length);
 		assertEquals("1, two, -128, [[2, 4], [3, 9]]", format(formatter, 1, arguments(actual)));
 		assertArrayEquals(expected, actual);
@@ -164,7 +162,7 @@ class ParameterizedTestNameFormatterTests {
 
 	@Test
 	void formatDoesNotRaiseAnArrayStoreException() {
-		var formatter = formatter("{0} -> {1}", "enigma", 2);
+		var formatter = formatter("{0} -> {1}", "enigma");
 
 		Object[] arguments = new Number[] { 1, 2 };
 		assertEquals("1 -> 2", format(formatter, 1, arguments(arguments)));
@@ -181,7 +179,7 @@ class ParameterizedTestNameFormatterTests {
 
 	@Test
 	void formattingDoesNotFailIfArgumentToStringImplementationReturnsNull() {
-		var formatter = formatter(ARGUMENTS_PLACEHOLDER, "enigma", 2);
+		var formatter = formatter(ARGUMENTS_PLACEHOLDER, "enigma");
 
 		var formattedName = format(formatter, 1, arguments(new ToStringReturnsNull(), "foo"));
 
@@ -190,7 +188,7 @@ class ParameterizedTestNameFormatterTests {
 
 	@Test
 	void formattingDoesNotFailIfArgumentToStringImplementationThrowsAnException() {
-		var formatter = formatter(ARGUMENTS_PLACEHOLDER, "enigma", 2);
+		var formatter = formatter(ARGUMENTS_PLACEHOLDER, "enigma");
 
 		var formattedName = format(formatter, 1, arguments(new ToStringThrowsException(), "foo"));
 
@@ -205,7 +203,7 @@ class ParameterizedTestNameFormatterTests {
 			""")
 	void customFormattingExpressionsAreSupported(Locale locale, String expectedValue) {
 		var pattern = "[{index}] {1,number,#.##} is {1,choice,0<positive} on {0,date} at {0,time} even though {2}";
-		var formatter = formatter(pattern, "enigma", 3);
+		var formatter = formatter(pattern, "enigma");
 		Locale.setDefault(Locale.US);
 
 		var date = Date.from(
@@ -239,7 +237,7 @@ class ParameterizedTestNameFormatterTests {
 
 	@Test
 	void placeholdersCanBeSkipped() {
-		var formatter = formatter("{0}, {2}", "enigma", 3);
+		var formatter = formatter("{0}, {2}", "enigma");
 
 		var formattedName = format(formatter, 1, arguments("foo", "bar", "baz"));
 
@@ -248,7 +246,7 @@ class ParameterizedTestNameFormatterTests {
 
 	@Test
 	void truncatesArgumentsThatExceedMaxLength() {
-		var formatter = formatter("{arguments}", 3, 3);
+		var formatter = formatter("{arguments}", "display name", 3);
 
 		var formattedName = format(formatter, 1, arguments("fo", "foo", "fooo"));
 
@@ -256,19 +254,11 @@ class ParameterizedTestNameFormatterTests {
 	}
 
 	private static ParameterizedTestNameFormatter formatter(String pattern, String displayName) {
-		return formatter(pattern, displayName, 1);
+		return formatter(pattern, displayName, 512);
 	}
 
-	private static ParameterizedTestNameFormatter formatter(String pattern, String displayName, int parameterCount) {
-		ParameterizedTestMethodContext mockMethodContext = mock();
-		when(mockMethodContext.getParameterCount()).thenReturn(parameterCount);
-		return new ParameterizedTestNameFormatter(pattern, displayName, mockMethodContext, 512);
-	}
-
-	private static ParameterizedTestNameFormatter formatter(String pattern, int parameterCount, int argumentMaxLength) {
-		ParameterizedTestMethodContext mockMethodContext = mock();
-		when(mockMethodContext.getParameterCount()).thenReturn(parameterCount);
-		return new ParameterizedTestNameFormatter(pattern, "display name", mockMethodContext, argumentMaxLength);
+	private static ParameterizedTestNameFormatter formatter(String pattern, String displayName, int argumentMaxLength) {
+		return new ParameterizedTestNameFormatter(pattern, displayName, mock(), argumentMaxLength);
 	}
 
 	private static ParameterizedTestNameFormatter formatter(String pattern, String displayName, Method method) {
