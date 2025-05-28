@@ -16,5 +16,4 @@ dependencies {
 	implementation(libs.plugins.jreleaser.markerCoordinates)
 	implementation(libs.plugins.shadow.markerCoordinates)
 	implementation(libs.plugins.spotless.markerCoordinates)
-	implementation(libs.plugins.versions.markerCoordinates)
 }
