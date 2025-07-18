@@ -255,10 +255,30 @@ class ParameterizedInvocationNameFormatter {
 			Object[] result = Arrays.copyOf(arguments, Math.min(arguments.length, formats.length), Object[].class);
 			for (int i = 0; i < result.length; i++) {
 				if (formats[i] == null) {
-					result[i] = truncateIfExceedsMaxLength(StringUtils.nullSafeToString(arguments[i]));
+					String text;
+					Object argument = arguments[i];
+					if (argument instanceof CharSequence charSequence) {
+						text = replaceNonPrintableCharacters(charSequence.toString());
+					}
+					else {
+						text = StringUtils.nullSafeToString(argument);
+					}
+					result[i] = truncateIfExceedsMaxLength(text);
 				}
 			}
 			return result;
+		}
+
+		private String replaceNonPrintableCharacters(String string) {
+			return "\"" + string//
+					.replace("\n", "\\n")//
+					.replace("\r", "\\r")//
+					.replace("\t", "\\t")//
+					.replace("\b", "\\b")//
+					.replace("\f", "\\f")//
+					.replace("\"", "\\\"")//
+					.replaceAll("[\\p{Cc}\\p{Cf}\\p{Co}\\p{Cn}]", "?")//
+					+ "\"";
 		}
 
 		private @Nullable String truncateIfExceedsMaxLength(@Nullable String argument) {

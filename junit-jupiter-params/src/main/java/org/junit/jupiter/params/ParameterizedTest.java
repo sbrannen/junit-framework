@@ -11,6 +11,7 @@
 package org.junit.jupiter.params;
 
 import static org.apiguardian.api.API.Status.DEPRECATED;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 import static org.apiguardian.api.API.Status.STABLE;
 
@@ -283,6 +284,14 @@ public @interface ParameterizedTest {
 	 * @see java.text.MessageFormat
 	 */
 	String name() default ParameterizedInvocationNameFormatter.DEFAULT_DISPLAY_NAME;
+
+	/**
+	 * Whether to enclose argument values in quotes.
+	 *
+	 * @since 6.0
+	 */
+	@API(status = EXPERIMENTAL, since = "6.0")
+	boolean quoteArguments() default true;
 
 	/**
 	 * Configure whether all arguments of the parameterized test that implement

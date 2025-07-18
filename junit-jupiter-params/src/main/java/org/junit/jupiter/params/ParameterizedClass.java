@@ -202,6 +202,14 @@ public @interface ParameterizedClass {
 	String name() default ParameterizedInvocationNameFormatter.DEFAULT_DISPLAY_NAME;
 
 	/**
+	 * Whether to enclose argument values in quotes.
+	 *
+	 * @since 6.0
+	 */
+	@API(status = EXPERIMENTAL, since = "6.0")
+	boolean quoteArguments() default true;
+
+	/**
 	 * Configure whether all arguments of the parameterized class that implement
 	 * {@link AutoCloseable} will be closed after their corresponding
 	 * invocation.
