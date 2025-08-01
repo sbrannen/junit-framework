@@ -144,7 +144,7 @@ public class ParameterResolutionUtils {
 
 			logger.trace(() -> String.format(
 				"ParameterResolver [%s] resolved a value of type [%s] for parameter [%s] in %s [%s].",
-				resolver.getClass().getName(), (value != null ? value.getClass().getName() : null),
+				resolver.getClass().getName(), (value != null ? value.getClass().getTypeName() : null),
 				parameterContext.getParameter(), asLabel(executable), executable.toGenericString()));
 
 			return value;
@@ -185,8 +185,8 @@ public class ParameterResolutionUtils {
 				message = String.format(
 					"ParameterResolver [%s] resolved a value of type [%s] for parameter [%s] "
 							+ "in %s [%s], but a value assignment compatible with [%s] is required.",
-					resolver.getClass().getName(), (value != null ? value.getClass().getName() : null), parameter,
-					asLabel(executable), executable.toGenericString(), type.getName());
+					resolver.getClass().getName(), (value != null ? value.getClass().getTypeName() : null), parameter,
+					asLabel(executable), executable.toGenericString(), type.getTypeName());
 			}
 
 			throw new ParameterResolutionException(message);

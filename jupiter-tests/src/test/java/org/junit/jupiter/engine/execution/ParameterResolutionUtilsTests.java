@@ -11,6 +11,7 @@
 package org.junit.jupiter.engine.execution;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -242,6 +243,20 @@ class ParameterResolutionUtilsTests {
 	}
 
 	@Test
+	void reportTypeMismatchBetweenParameterAndResolvedParameterWithArrayTypes() {
+		testMethodWithASingleStringArrayParameter();
+		thereIsAParameterResolverThatResolvesTheParameterTo(new int[][] {});
+
+		assertThatExceptionOfType(ParameterResolutionException.class)//
+				.isThrownBy(this::resolveMethodParameters)//
+				.withMessageContaining(//
+					"resolved a value of type [int[][]] for parameter [java.lang.String[]", //
+					"in method", //
+					"but a value assignment compatible with [java.lang.String[]] is required." //
+				);
+	}
+
+	@Test
 	void wrapAllExceptionsThrownDuringParameterResolutionIntoAParameterResolutionException() {
 		anyTestMethodWithAtLeastOneParameter();
 		IllegalArgumentException cause = anyExceptionButParameterResolutionException();
@@ -307,6 +322,10 @@ class ParameterResolutionUtilsTests {
 
 	private void testMethodWithASingleStringParameter() {
 		testMethodWith("singleStringParameter", String.class);
+	}
+
+	private void testMethodWithASingleStringArrayParameter() {
+		testMethodWith("singleStringArrayParameter", String[].class);
 	}
 
 	private void testMethodWithASinglePrimitiveIntParameter() {
@@ -411,6 +430,8 @@ class ParameterResolutionUtilsTests {
 		void noParameter();
 
 		void singleStringParameter(String parameter);
+
+		void singleStringArrayParameter(String[] parameter);
 
 		void primitiveParameterInt(int parameter);
 
