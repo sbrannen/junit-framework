@@ -62,6 +62,7 @@ import org.junit.platform.suite.engine.testcases.MultipleTestsTestCase;
 import org.junit.platform.suite.engine.testcases.SingleTestTestCase;
 import org.junit.platform.suite.engine.testcases.TaggedTestTestCase;
 import org.junit.platform.suite.engine.testsuites.AbstractSuite;
+import org.junit.platform.suite.engine.testsuites.BlankSuiteDisplayNameSuite;
 import org.junit.platform.suite.engine.testsuites.ConfigurationSuite;
 import org.junit.platform.suite.engine.testsuites.CyclicSuite;
 import org.junit.platform.suite.engine.testsuites.DynamicSuite;
@@ -82,6 +83,7 @@ import org.junit.platform.suite.engine.testsuites.SuiteDisplayNameSuite;
 import org.junit.platform.suite.engine.testsuites.SuiteSuite;
 import org.junit.platform.suite.engine.testsuites.SuiteWithErroneousTestSuite;
 import org.junit.platform.suite.engine.testsuites.ThreePartCyclicSuite;
+import org.junit.platform.suite.engine.testsuites.WhitespaceSuiteDisplayNameSuite;
 import org.junit.platform.testkit.engine.EngineTestKit;
 
 /**
@@ -651,6 +653,38 @@ class SuiteEngineTests {
 		new SuiteTestEngine().execute(request);
 
 		verify(mockDescriptor).execute(same(listener), same(requestLevelStore));
+	}
+
+	@Test
+	void blankSuiteDisplayNameGeneratesWarning() {
+		var expectedMessage = "@SuiteDisplayName on %s must be declared with a non-blank value.".formatted(
+			BlankSuiteDisplayNameSuite.class.getName());
+		var expectedIssue = DiscoveryIssue.builder(Severity.WARNING, expectedMessage).source(
+			ClassSource.from(BlankSuiteDisplayNameSuite.class)).build();
+
+		var testKit = EngineTestKit.engine(ENGINE_ID).selectors(selectClass(BlankSuiteDisplayNameSuite.class));
+
+		assertThat(testKit.discover().getDiscoveryIssues()).contains(expectedIssue);
+	}
+
+	@Test
+	void whitespaceSuiteDisplayNameGeneratesWarning() {
+		var expectedMessage = "@SuiteDisplayName on %s must be declared with a non-blank value.".formatted(
+			WhitespaceSuiteDisplayNameSuite.class.getName());
+		var expectedIssue = DiscoveryIssue.builder(Severity.WARNING, expectedMessage).source(
+			ClassSource.from(WhitespaceSuiteDisplayNameSuite.class)).build();
+
+		var testKit = EngineTestKit.engine(ENGINE_ID).selectors(selectClass(WhitespaceSuiteDisplayNameSuite.class));
+
+		assertThat(testKit.discover().getDiscoveryIssues()).contains(expectedIssue);
+	}
+
+	@Test
+	void validSuiteDisplayNameGeneratesNoWarning() {
+		var testKit = EngineTestKit.engine(ENGINE_ID).selectors(selectClass(SuiteDisplayNameSuite.class));
+
+		assertThat(testKit.discover().getDiscoveryIssues()) //
+				.noneMatch(issue -> issue.message().contains("@SuiteDisplayName"));
 	}
 
 	@Suite
