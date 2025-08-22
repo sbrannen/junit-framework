@@ -11,7 +11,6 @@
 package org.junit.platform.launcher.core;
 
 import static java.util.Collections.unmodifiableMap;
-import static java.util.stream.Collectors.toMap;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 import java.util.Collection;
@@ -95,12 +94,9 @@ public class LauncherDiscoveryResult {
 	}
 
 	private Map<TestEngine, EngineResultInfo> retainEngines(Predicate<? super TestDescriptor> predicate) {
-		// @formatter:off
-		return this.testEngineResults.entrySet()
-				.stream()
-				.filter(entry -> predicate.test(entry.getValue().getRootDescriptor()))
-				.collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
-		// @formatter:on
+		Map<TestEngine, EngineResultInfo> retainedEngines = new LinkedHashMap<>(this.testEngineResults);
+		retainedEngines.entrySet().removeIf(entry -> !predicate.test(entry.getValue().getRootDescriptor()));
+		return retainedEngines;
 	}
 
 	static class EngineResultInfo {
