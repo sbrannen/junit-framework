@@ -373,6 +373,27 @@ public final class DiscoverySelectors {
 		return new ClasspathResourceSelector(classpathResources);
 	}
 
+	@API(status = EXPERIMENTAL, since = "6.0")
+	public static List<ClasspathResourceSelector> selectClasspathResources(Resource... classpathResources) {
+		Preconditions.notEmpty(classpathResources, "classpath resources must not be null or empty");
+		return selectClasspathResources(List.of(classpathResources));
+	}
+
+	@API(status = EXPERIMENTAL, since = "6.0")
+	public static List<ClasspathResourceSelector> selectClasspathResources(List<Resource> classpathResources) {
+		Preconditions.notEmpty(classpathResources, "classpath resources must not be null or empty");
+		Preconditions.containsNoNullElements(classpathResources, "individual classpath resources must not be null");
+
+		// @formatter:off
+		return classpathResources.stream()
+				.distinct()
+				.peek(resource -> Preconditions.notBlank(resource.getName(),
+					"classpath resource names must not be null or blank"))
+				.map(ClasspathResourceSelector::new)
+				.toList();
+		// @formatter:on
+	}
+
 	/**
 	 * Create a {@code ModuleSelector} for the supplied module name.
 	 *

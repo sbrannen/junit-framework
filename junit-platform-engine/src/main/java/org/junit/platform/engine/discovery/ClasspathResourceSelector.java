@@ -70,6 +70,11 @@ public final class ClasspathResourceSelector implements DiscoverySelector {
 		this.position = position;
 	}
 
+	ClasspathResourceSelector(Resource classpathResource) {
+		this(classpathResource.getName(), null);
+		this.classpathResources = Set.of(classpathResource);
+	}
+
 	ClasspathResourceSelector(Set<Resource> classpathResources) {
 		this(classpathResources.iterator().next().getName(), null);
 		this.classpathResources = unmodifiableSet(new LinkedHashSet<>(classpathResources));
