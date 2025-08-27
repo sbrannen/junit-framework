@@ -10,26 +10,18 @@
 
 package org.junit.platform.commons.support;
 
-import static org.apiguardian.api.API.Status.INTERNAL;
-
 import java.net.URI;
 import java.util.Objects;
 
-import org.apiguardian.api.API;
 import org.junit.platform.commons.util.Preconditions;
 import org.junit.platform.commons.util.ToStringBuilder;
 
 /**
- * <h2>DISCLAIMER</h2>
- *
- * <p>These utilities are intended solely for usage within the JUnit framework
- * itself. <strong>Any usage by external parties is not supported.</strong>
- * Use at your own risk!
+ * Default implementation of {@link Resource}.
  *
  * @since 1.11
  */
-@API(status = INTERNAL, since = "1.12")
-public class DefaultResource implements Resource {
+class DefaultResource implements Resource {
 
 	private final String name;
 	private final URI uri;
