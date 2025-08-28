@@ -8,7 +8,7 @@
  * https://www.eclipse.org/legal/epl-v20.html
  */
 
-package org.junit.platform.commons.support;
+package org.junit.platform.commons.io;
 
 import java.net.URI;
 
@@ -18,11 +18,8 @@ import org.junit.platform.commons.util.ToStringBuilder;
 /**
  * Default implementation of {@link Resource}.
  *
- * @since 1.11
- * @deprecated Use {@link org.junit.platform.commons.io.Resource} instead.
+ * @since 6.0
  */
-@Deprecated(since = "6.0", forRemoval = true)
-@SuppressWarnings("removal")
 record DefaultResource(String name, URI uri) implements Resource {
 
 	DefaultResource {
@@ -32,19 +29,19 @@ record DefaultResource(String name, URI uri) implements Resource {
 
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	@Override
 	public URI getUri() {
-		return uri;
+		return this.uri;
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this) //
-				.append("name", name) //
-				.append("uri", uri) //
+				.append("name", this.name) //
+				.append("uri", this.uri) //
 				.toString();
 	}
 

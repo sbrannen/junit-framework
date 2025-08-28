@@ -93,8 +93,8 @@ public final class ReflectionSupport {
 	}
 
 	/**
-	 * Try to get the {@linkplain Resource resources} for the supplied classpath
-	 * resource name.
+	 * Try to get the {@linkplain org.junit.platform.commons.io.Resource resources}
+	 * for the supplied classpath resource name.
 	 *
 	 * <p>The name of a <em>classpath resource</em> must follow the semantics
 	 * for resource paths as defined in {@link ClassLoader#getResource(String)}.
@@ -112,13 +112,13 @@ public final class ReflectionSupport {
 	 * @see #tryToGetResources(String, ClassLoader)
 	 */
 	@API(status = MAINTAINED, since = "1.13.3")
-	public static Try<Set<Resource>> tryToGetResources(String classpathResourceName) {
+	public static Try<Set<org.junit.platform.commons.io.Resource>> tryToGetResources(String classpathResourceName) {
 		return ReflectionUtils.tryToGetResources(classpathResourceName);
 	}
 
 	/**
-	 * Try to load the {@linkplain Resource resources} for the supplied classpath
-	 * resource name, using the supplied {@link ClassLoader}.
+	 * Try to load the {@linkplain org.junit.platform.commons.io.Resource resources}
+	 * for the supplied classpath resource name, using the supplied {@link ClassLoader}.
 	 *
 	 * <p>The name of a <em>classpath resource</em> must follow the semantics
 	 * for resource paths as defined in {@link ClassLoader#getResource(String)}.
@@ -137,7 +137,8 @@ public final class ReflectionSupport {
 	 * @see #tryToGetResources(String)
 	 */
 	@API(status = MAINTAINED, since = "1.13.3")
-	public static Try<Set<Resource>> tryToGetResources(String classpathResourceName, ClassLoader classLoader) {
+	public static Try<Set<org.junit.platform.commons.io.Resource>> tryToGetResources(String classpathResourceName,
+			ClassLoader classLoader) {
 		return ReflectionUtils.tryToGetResources(classpathResourceName, classLoader);
 	}
 
@@ -165,8 +166,9 @@ public final class ReflectionSupport {
 	}
 
 	/**
-	 * Find all {@linkplain Resource resources} in the supplied classpath {@code root}
-	 * that match the specified {@code resourceFilter} predicate.
+	 * Find all {@linkplain org.junit.platform.commons.io.Resource resources} in
+	 * the supplied classpath {@code root} that match the specified
+	 * {@code resourceFilter} predicate.
 	 *
 	 * <p>The classpath scanning algorithm searches recursively in subpackages
 	 * beginning with the root of the classpath.
@@ -181,7 +183,8 @@ public final class ReflectionSupport {
 	 * @see #findAllResourcesInModule(String, Predicate)
 	 */
 	@API(status = MAINTAINED, since = "1.13.3")
-	public static List<Resource> findAllResourcesInClasspathRoot(URI root, Predicate<Resource> resourceFilter) {
+	public static List<org.junit.platform.commons.io.Resource> findAllResourcesInClasspathRoot(URI root,
+			Predicate<org.junit.platform.commons.io.Resource> resourceFilter) {
 		return ReflectionUtils.findAllResourcesInClasspathRoot(root, resourceFilter);
 	}
 
@@ -211,8 +214,9 @@ public final class ReflectionSupport {
 	}
 
 	/**
-	 * Find all {@linkplain Resource resources} in the supplied classpath {@code root}
-	 * that match the specified {@code resourceFilter} predicate.
+	 * Find all {@linkplain org.junit.platform.commons.io.Resource resources} in
+	 * the supplied classpath {@code root} that match the specified
+	 * {@code resourceFilter} predicate.
 	 *
 	 * <p>The classpath scanning algorithm searches recursively in subpackages
 	 * beginning with the root of the classpath.
@@ -227,14 +231,15 @@ public final class ReflectionSupport {
 	 * @see #streamAllResourcesInModule(String, Predicate)
 	 */
 	@API(status = MAINTAINED, since = "1.13.3")
-	public static Stream<Resource> streamAllResourcesInClasspathRoot(URI root, Predicate<Resource> resourceFilter) {
+	public static Stream<org.junit.platform.commons.io.Resource> streamAllResourcesInClasspathRoot(URI root,
+			Predicate<org.junit.platform.commons.io.Resource> resourceFilter) {
 		return ReflectionUtils.streamAllResourcesInClasspathRoot(root, resourceFilter);
 	}
 
 	/**
-	 * Find all {@linkplain Class classes} in the supplied {@code basePackageName}
-	 * that match the specified {@code classFilter} and {@code classNameFilter}
-	 * predicates.
+	 * Find all {@linkplain Class classes} in the package with the supplied
+	 * {@code basePackageName} that match the specified {@code classFilter} and
+	 * {@code classNameFilter} predicates.
 	 *
 	 * <p>The classpath scanning algorithm searches recursively in subpackages
 	 * beginning within the supplied base package.
@@ -256,8 +261,9 @@ public final class ReflectionSupport {
 	}
 
 	/**
-	 * Find all {@linkplain Resource resources} in the supplied {@code basePackageName}
-	 * that match the specified {@code resourceFilter} predicate.
+	 * Find all {@linkplain org.junit.platform.commons.io.Resource resources} in
+	 * the package with the supplied {@code basePackageName} that match the specified
+	 * {@code resourceFilter} predicate.
 	 *
 	 * <p>The classpath scanning algorithm searches recursively in subpackages
 	 * beginning within the supplied base package. The resulting list may include
@@ -274,14 +280,15 @@ public final class ReflectionSupport {
 	 * @see #findAllResourcesInModule(String, Predicate)
 	 */
 	@API(status = MAINTAINED, since = "1.13.3")
-	public static List<Resource> findAllResourcesInPackage(String basePackageName, Predicate<Resource> resourceFilter) {
+	public static List<org.junit.platform.commons.io.Resource> findAllResourcesInPackage(String basePackageName,
+			Predicate<org.junit.platform.commons.io.Resource> resourceFilter) {
 		return ReflectionUtils.findAllResourcesInPackage(basePackageName, resourceFilter);
 	}
 
 	/**
-	 * Find all {@linkplain Class classes} in the supplied {@code basePackageName}
-	 * that match the specified {@code classFilter} and {@code classNameFilter}
-	 * predicates.
+	 * Find all {@linkplain Class classes} in the package with the supplied
+	 * {@code basePackageName} that match the specified {@code classFilter} and
+	 * {@code classNameFilter} predicates.
 	 *
 	 * <p>The classpath scanning algorithm searches recursively in subpackages
 	 * beginning within the supplied base package. The resulting stream may
@@ -306,8 +313,9 @@ public final class ReflectionSupport {
 	}
 
 	/**
-	 * Find all {@linkplain Resource resources} in the supplied {@code basePackageName}
-	 * that match the specified {@code resourceFilter} predicate.
+	 * Find all {@linkplain org.junit.platform.commons.io.Resource resources} in
+	 * the package with the supplied {@code basePackageName} that match the specified
+	 * {@code resourceFilter} predicate.
 	 *
 	 * <p>The classpath scanning algorithm searches recursively in subpackages
 	 * beginning within the supplied base package. The resulting stream may
@@ -324,16 +332,16 @@ public final class ReflectionSupport {
 	 * @see #streamAllResourcesInModule(String, Predicate)
 	 */
 	@API(status = MAINTAINED, since = "1.13.3")
-	public static Stream<Resource> streamAllResourcesInPackage(String basePackageName,
-			Predicate<Resource> resourceFilter) {
+	public static Stream<org.junit.platform.commons.io.Resource> streamAllResourcesInPackage(String basePackageName,
+			Predicate<org.junit.platform.commons.io.Resource> resourceFilter) {
 
 		return ReflectionUtils.streamAllResourcesInPackage(basePackageName, resourceFilter);
 	}
 
 	/**
-	 * Find all {@linkplain Class classes} in the supplied {@code moduleName}
-	 * that match the specified {@code classFilter} and {@code classNameFilter}
-	 * predicates.
+	 * Find all {@linkplain Class classes} in the {@link Module} with the supplied
+	 * {@code moduleName} that match the specified {@code classFilter} and
+	 * {@code classNameFilter} predicates.
 	 *
 	 * <p>The module-path scanning algorithm searches recursively in all
 	 * packages contained in the module.
@@ -356,8 +364,9 @@ public final class ReflectionSupport {
 	}
 
 	/**
-	 * Find all {@linkplain Resource resources} in the supplied {@code moduleName}
-	 * that match the specified {@code resourceFilter} predicate.
+	 * Find all {@linkplain org.junit.platform.commons.io.Resource resources} in
+	 * the {@link Module} with the supplied {@code moduleName} that match the
+	 * specified {@code resourceFilter} predicate.
 	 *
 	 * <p>The module-path scanning algorithm searches recursively in all
 	 * packages contained in the module.
@@ -372,14 +381,15 @@ public final class ReflectionSupport {
 	 * @see #findAllResourcesInPackage(String, Predicate)
 	 */
 	@API(status = MAINTAINED, since = "1.13.3")
-	public static List<Resource> findAllResourcesInModule(String moduleName, Predicate<Resource> resourceFilter) {
+	public static List<org.junit.platform.commons.io.Resource> findAllResourcesInModule(String moduleName,
+			Predicate<org.junit.platform.commons.io.Resource> resourceFilter) {
 		return ReflectionUtils.findAllResourcesInModule(moduleName, resourceFilter);
 	}
 
 	/**
-	 * Find all {@linkplain Class classes} in the supplied {@code moduleName}
-	 * that match the specified {@code classFilter} and {@code classNameFilter}
-	 * predicates.
+	 * Find all {@linkplain Class classes} in the {@link Module} with the supplied
+	 * {@code moduleName} that match the specified {@code classFilter} and
+	 * {@code classNameFilter} predicates.
 	 *
 	 * <p>The module-path scanning algorithm searches recursively in all
 	 * packages contained in the module.
@@ -402,8 +412,9 @@ public final class ReflectionSupport {
 	}
 
 	/**
-	 * Find all {@linkplain Resource resources} in the supplied {@code moduleName}
-	 * that match the specified {@code resourceFilter} predicate.
+	 * Find all {@linkplain org.junit.platform.commons.io.Resource resources} in
+	 * the {@link Module} with the supplied {@code moduleName} that match the
+	 * specified {@code resourceFilter} predicate.
 	 *
 	 * <p>The module-path scanning algorithm searches recursively in all
 	 * packages contained in the module.
@@ -418,7 +429,8 @@ public final class ReflectionSupport {
 	 * @see #streamAllResourcesInPackage(String, Predicate)
 	 */
 	@API(status = MAINTAINED, since = "1.13.3")
-	public static Stream<Resource> streamAllResourcesInModule(String moduleName, Predicate<Resource> resourceFilter) {
+	public static Stream<org.junit.platform.commons.io.Resource> streamAllResourcesInModule(String moduleName,
+			Predicate<org.junit.platform.commons.io.Resource> resourceFilter) {
 		return ReflectionUtils.streamAllResourcesInModule(moduleName, resourceFilter);
 	}
 

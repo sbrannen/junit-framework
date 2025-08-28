@@ -10,14 +10,13 @@
 
 package org.junit.platform.commons.support.scanning;
 
-import static org.apiguardian.api.API.Status;
-
 import java.net.URI;
 import java.util.List;
 import java.util.function.Predicate;
 
 import org.apiguardian.api.API;
-import org.junit.platform.commons.support.Resource;
+import org.apiguardian.api.API.Status;
+import org.junit.platform.commons.io.Resource;
 
 /**
  * {@code ClasspathScanner} allows to scan the classpath for classes and

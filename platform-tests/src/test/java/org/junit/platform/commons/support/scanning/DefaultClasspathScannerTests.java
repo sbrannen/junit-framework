@@ -47,8 +47,8 @@ import org.junit.jupiter.api.fixtures.TrackLogRecords;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.commons.function.Try;
+import org.junit.platform.commons.io.Resource;
 import org.junit.platform.commons.logging.LogRecordListener;
-import org.junit.platform.commons.support.Resource;
 import org.junit.platform.commons.util.ClassLoaderUtils;
 import org.junit.platform.commons.util.ReflectionUtils;
 

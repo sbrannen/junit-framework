@@ -38,7 +38,7 @@ import org.junit.platform.commons.util.ReflectionUtils;
 class ReflectionSupportTests {
 
 	private static final Predicate<Class<?>> allTypes = type -> true;
-	private static final Predicate<Resource> allResources = type -> true;
+	private static final Predicate<org.junit.platform.commons.io.Resource> allResources = type -> true;
 	private static final Predicate<String> allNames = name -> true;
 	private static final Predicate<Method> allMethods = name -> true;
 	private static final Predicate<Field> allFields = name -> true;

@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.support.Resource;
+import org.junit.platform.commons.io.Resource;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.discovery.ClasspathResourceSelector;
