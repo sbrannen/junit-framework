@@ -62,7 +62,6 @@ import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.TestReporter;
-import org.junit.jupiter.api.extension.MediaType;
 import org.junit.platform.commons.support.Resource;
 import org.junit.platform.commons.support.scanning.ClasspathScanner;
 import org.junit.platform.commons.util.ModuleUtils;
@@ -155,13 +154,13 @@ class ArchUnitTests {
 		slices().matching("org.junit.(*)..").should().beFreeOfCycles().check(classes);
 	}
 
-	@SuppressWarnings("removal")
 	@ArchTest
+	@SuppressWarnings("removal")
 	void freeOfPackageCycles(JavaClasses classes) throws Exception {
 		slices().matching("org.junit.(**)").should().beFreeOfCycles() //
 
 				// https://github.com/junit-team/junit-framework/issues/4886
-				.ignoreDependency(TestReporter.class, MediaType.class) //
+				.ignoreDependency(TestReporter.class, org.junit.jupiter.api.extension.MediaType.class) //
 
 				// https://github.com/junit-team/junit-framework/issues/4885
 				.ignoreDependency(ModuleUtils.class, Resource.class) //
