@@ -12,10 +12,14 @@ package org.junit.platform.engine.support.store;
 
 import static java.util.Comparator.comparing;
 import static org.apiguardian.api.API.Status.MAINTAINED;
+import static org.junit.platform.commons.util.ExceptionUtils.throwAsUncheckedException;
 import static org.junit.platform.commons.util.ReflectionUtils.getWrapperType;
 import static org.junit.platform.commons.util.ReflectionUtils.isAssignableTo;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,10 +29,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apiguardian.api.API;
-import org.junit.platform.commons.util.ExceptionUtils;
 import org.junit.platform.commons.util.Preconditions;
 import org.junit.platform.commons.util.UnrecoverableExceptions;
-import org.junit.platform.engine.support.hierarchical.ThrowableCollector;
 
 /**
  * {@code NamespacedHierarchicalStore} is a hierarchical, namespaced key-value store.
@@ -127,13 +129,26 @@ public final class NamespacedHierarchicalStore<N> implements AutoCloseable {
 		if (!this.closed) {
 			try {
 				if (this.closeAction != null) {
-					ThrowableCollector throwableCollector = new ThrowableCollector(__ -> false);
+					List<Throwable> failures = new ArrayList<>();
 					this.storedValues.entrySet().stream() //
 							.map(e -> e.getValue().evaluateSafely(e.getKey())) //
 							.filter(it -> it != null && it.value != null) //
 							.sorted(EvaluatedValue.REVERSE_INSERT_ORDER) //
-							.forEach(it -> throwableCollector.execute(() -> it.close(this.closeAction)));
-					throwableCollector.assertEmpty();
+							.forEach(it -> {
+								try {
+									it.close(this.closeAction);
+								}
+								catch (Throwable t) {
+									UnrecoverableExceptions.rethrowIfUnrecoverable(t);
+									failures.add(t);
+								}
+							});
+					if (!failures.isEmpty()) {
+						Iterator<Throwable> iterator = failures.iterator();
+						Throwable throwable = iterator.next();
+						iterator.forEachRemaining(throwable::addSuppressed);
+						throw throwAsUncheckedException(throwable);
+					}
 				}
 			}
 			finally {
@@ -425,7 +440,7 @@ public final class NamespacedHierarchicalStore<N> implements AutoCloseable {
 				computeValue();
 			}
 			if (this.value instanceof Failure) {
-				throw ExceptionUtils.throwAsUncheckedException(((Failure) this.value).throwable);
+				throw throwAsUncheckedException(((Failure) this.value).throwable);
 			}
 			return this.value;
 		}
