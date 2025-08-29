@@ -28,7 +28,6 @@ import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.extension.ExecutableInvoker;
 import org.junit.jupiter.api.extension.Extension;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.MediaType;
 import org.junit.jupiter.api.function.ThrowingConsumer;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.engine.config.JupiterConfiguration;
@@ -143,20 +142,36 @@ abstract class AbstractExtensionContext<T extends TestDescriptor> implements Ext
 	}
 
 	@Override
-	public void publishFile(String name, MediaType mediaType, ThrowingConsumer<Path> action) {
-		Preconditions.notNull(name, "name must not be null");
+	@SuppressWarnings("removal")
+	public void publishFile(String name, org.junit.jupiter.api.extension.MediaType mediaType,
+			ThrowingConsumer<Path> action) {
+
 		Preconditions.notNull(mediaType, "mediaType must not be null");
+
+		publishFile(name, mediaType.toString(), action);
+	}
+
+	@Override
+	public void publishFile(String name, org.junit.jupiter.api.MediaType mediaType, ThrowingConsumer<Path> action) {
+		Preconditions.notNull(mediaType, "mediaType must not be null");
+
+		publishFile(name, mediaType.toString(), action);
+	}
+
+	private void publishFile(String name, String mediaType, ThrowingConsumer<Path> action) {
+		Preconditions.notBlank(name, "name must not be null or blank");
+		Preconditions.notBlank(mediaType, "mediaType must not be null or blank");
 		Preconditions.notNull(action, "action must not be null");
 
 		publishFileEntry(name, action, file -> {
 			Preconditions.condition(Files.isRegularFile(file), () -> "Published path must be a regular file: " + file);
-			return FileEntry.from(file, mediaType.toString());
+			return FileEntry.from(file, mediaType);
 		});
 	}
 
 	@Override
 	public void publishDirectory(String name, ThrowingConsumer<Path> action) {
-		Preconditions.notNull(name, "name must not be null");
+		Preconditions.notBlank(name, "name must not be null or blank");
 		Preconditions.notNull(action, "action must not be null");
 
 		ThrowingConsumer<Path> enhancedAction = path -> {
