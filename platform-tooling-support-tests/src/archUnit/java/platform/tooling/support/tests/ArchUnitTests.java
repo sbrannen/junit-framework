@@ -45,6 +45,28 @@ import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.library.GeneralCodingRules;
 
 import org.apiguardian.api.API;
+import org.junit.jupiter.api.TestReporter;
+import org.junit.jupiter.api.extension.MediaType;
+import org.junit.jupiter.engine.descriptor.LauncherStoreFacade;
+import org.junit.jupiter.engine.execution.JupiterEngineExecutionContext;
+import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
+import org.junit.jupiter.params.support.ParameterInfo;
+import org.junit.platform.commons.PreconditionViolationException;
+import org.junit.platform.commons.support.ReflectionSupport;
+import org.junit.platform.commons.support.Resource;
+import org.junit.platform.commons.support.scanning.ClassFilter;
+import org.junit.platform.commons.support.scanning.ClasspathScanner;
+import org.junit.platform.commons.support.scanning.DefaultClasspathScanner;
+import org.junit.platform.commons.util.CollectionUtils;
+import org.junit.platform.commons.util.ModuleUtils;
+import org.junit.platform.commons.util.Preconditions;
+import org.junit.platform.commons.util.ReflectionUtils;
+import org.junit.platform.commons.util.StringUtils;
+import org.junit.platform.commons.util.UnrecoverableExceptions;
+import org.junit.platform.engine.TestDescriptor;
+import org.junit.platform.engine.reporting.OutputDirectoryProvider;
+import org.junit.platform.engine.support.hierarchical.ThrowableCollector;
+import org.junit.platform.engine.support.store.NamespacedHierarchicalStore;
 
 @AnalyzeClasses(packages = { "org.junit.platform", "org.junit.jupiter", "org.junit.vintage" })
 class ArchUnitTests {
@@ -80,8 +102,65 @@ class ArchUnitTests {
 	}
 
 	@ArchTest
-	void freeOfCycles(JavaClasses classes) {
+	void freeOfGroupCycles(JavaClasses classes) {
 		slices().matching("org.junit.(*)..").should().beFreeOfCycles().check(classes);
+	}
+
+	@ArchTest
+	@SuppressWarnings("deprecation")
+	void freeOfPackageCycles(JavaClasses classes) throws Exception {
+		slices().matching("org.junit.(**)").should().beFreeOfCycles() //
+
+				// Ignore shadowed packages
+				.ignoreDependency(nameContaining(".shadow."), nameContaining(".shadow.")) //
+
+				// https://github.com/junit-team/junit-framework/issues/1863
+				.ignoreDependency(PreconditionViolationException.class,
+					org.junit.platform.commons.util.PreconditionViolationException.class) //
+
+				// https://github.com/junit-team/junit-framework/issues/4886
+				.ignoreDependency(TestReporter.class, MediaType.class) //
+
+				// https://github.com/junit-team/junit-framework/issues/4885
+				.ignoreDependency(ModuleUtils.class, Resource.class) //
+				.ignoreDependency(
+					Class.forName("org.junit.platform.commons.util.ModuleUtils$ModuleReferenceResourceScanner"),
+					Resource.class) //
+				.ignoreDependency(ReflectionUtils.class, Resource.class) //
+				.ignoreDependency(ClasspathScanner.class, Resource.class) //
+				.ignoreDependency(DefaultClasspathScanner.class, Resource.class) //
+
+				// Should call ReflectionUtils instead
+				.ignoreDependency(CollectionUtils.class, ReflectionSupport.class) //
+
+				// Avoid using Preconditions
+				.ignoreDependency(ClassFilter.class, Preconditions.class) //
+
+				// Move DefaultClasspathScanner to org.junit.platform.commons.util?
+				.ignoreDependency(DefaultClasspathScanner.class, Preconditions.class) //
+				.ignoreDependency(DefaultClasspathScanner.class, StringUtils.class) //
+				.ignoreDependency(DefaultClasspathScanner.class, UnrecoverableExceptions.class) //
+
+				// LauncherStoreFacade should be in org.junit.jupiter.engine.execution
+				.ignoreDependency(JupiterEngineExecutionContext.class, LauncherStoreFacade.class) //
+				.ignoreDependency(
+					Class.forName("org.junit.jupiter.engine.execution.JupiterEngineExecutionContext$State"),
+					LauncherStoreFacade.class) //
+
+				// Needs more investigation
+				.ignoreDependency(resideInAPackage("org.junit.platform.console.options"),
+					resideInAPackage("org.junit.platform.console.tasks"))
+
+				// Needs more investigation
+				.ignoreDependency(ParameterInfo.class, ArgumentsAccessor.class)
+
+				// Needs more investigation
+				.ignoreDependency(OutputDirectoryProvider.class, TestDescriptor.class) //
+
+				// Needs more investigation
+				.ignoreDependency(NamespacedHierarchicalStore.class, ThrowableCollector.class) //
+
+				.check(classes);
 	}
 
 	@ArchTest

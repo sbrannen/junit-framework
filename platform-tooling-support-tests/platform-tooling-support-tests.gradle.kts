@@ -122,7 +122,7 @@ val archUnit by testing.suites.registering(JvmTestSuite::class) {
 		runtimeOnly.bundle(libs.bundles.log4j)
 		val modularProjects: List<Project> by rootProject
 		modularProjects.forEach {
-			runtimeOnly(project(it.path))
+			implementation(project(it.path))
 		}
 	}
 
