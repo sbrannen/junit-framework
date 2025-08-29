@@ -53,6 +53,7 @@ val initializeAtBuildTime = mapOf(
 	),
 	// These need to be added to native-build-tools
 	"6.0" to listOf(
+		"org.junit.platform.commons.util.DefaultClasspathScanner",
 		"org.junit.platform.commons.util.KotlinReflectionUtils",
 	)
 )
