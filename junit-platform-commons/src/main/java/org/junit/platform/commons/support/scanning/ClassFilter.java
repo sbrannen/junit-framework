@@ -15,7 +15,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 import java.util.function.Predicate;
 
 import org.apiguardian.api.API;
-import org.junit.platform.commons.util.Preconditions;
+import org.junit.platform.commons.PreconditionViolationException;
 
 /**
  * Class-related predicate used by reflection utilities.
@@ -50,8 +50,16 @@ public class ClassFilter {
 	private final Predicate<Class<?>> classPredicate;
 
 	private ClassFilter(Predicate<String> namePredicate, Predicate<Class<?>> classPredicate) {
-		this.namePredicate = Preconditions.notNull(namePredicate, "name predicate must not be null");
-		this.classPredicate = Preconditions.notNull(classPredicate, "class predicate must not be null");
+		this.namePredicate = checkNotNull(namePredicate, "name predicate");
+		this.classPredicate = checkNotNull(classPredicate, "class predicate");
+	}
+
+	// Cannot use Preconditions due to package cycle
+	private static <T> T checkNotNull(T input, String title) {
+		if (input == null) {
+			throw new PreconditionViolationException(title + " must not be null");
+		}
+		return input;
 	}
 
 	/**
