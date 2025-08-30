@@ -12,6 +12,8 @@ dependencies {
 	api(platform(projects.junitBom))
 
 	compileOnlyApi(libs.apiguardian)
+
+	testFixturesImplementation(libs.assertj)
 }
 
 tasks.jar {

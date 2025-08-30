@@ -14,8 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.platform.commons.support.PreconditionAssertions.assertPreconditionViolationException;
-import static org.junit.platform.commons.support.PreconditionAssertions.assertPreconditionViolationExceptionForString;
+import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationNotNullFor;
+import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationNotNullOrBlankFor;
 import static org.junit.platform.commons.util.ClassLoaderUtils.getDefaultClassLoader;
 
 import java.lang.reflect.Field;
@@ -57,8 +57,8 @@ class ReflectionSupportTests {
 	@Test
 	@SuppressWarnings("deprecation")
 	void loadClassPreconditions() {
-		assertPreconditionViolationExceptionForString("Class name", () -> ReflectionSupport.loadClass(null));
-		assertPreconditionViolationExceptionForString("Class name", () -> ReflectionSupport.loadClass(""));
+		assertPreconditionViolationNotNullOrBlankFor("Class name", () -> ReflectionSupport.loadClass(null));
+		assertPreconditionViolationNotNullOrBlankFor("Class name", () -> ReflectionSupport.loadClass(""));
 	}
 
 	@Test
@@ -73,8 +73,8 @@ class ReflectionSupportTests {
 
 	@Test
 	void tryToLoadClassPreconditions() {
-		assertPreconditionViolationExceptionForString("Class name", () -> ReflectionSupport.tryToLoadClass(null));
-		assertPreconditionViolationExceptionForString("Class name", () -> ReflectionSupport.tryToLoadClass(""));
+		assertPreconditionViolationNotNullOrBlankFor("Class name", () -> ReflectionSupport.tryToLoadClass(null));
+		assertPreconditionViolationNotNullOrBlankFor("Class name", () -> ReflectionSupport.tryToLoadClass(""));
 	}
 
 	/**
@@ -99,10 +99,10 @@ class ReflectionSupportTests {
 	void tryToLoadClassWithExplicitClassLoaderPreconditions() {
 		var cl = getClass().getClassLoader();
 
-		assertPreconditionViolationExceptionForString("Class name", () -> ReflectionSupport.tryToLoadClass(null, cl));
-		assertPreconditionViolationExceptionForString("Class name", () -> ReflectionSupport.tryToLoadClass("", cl));
+		assertPreconditionViolationNotNullOrBlankFor("Class name", () -> ReflectionSupport.tryToLoadClass(null, cl));
+		assertPreconditionViolationNotNullOrBlankFor("Class name", () -> ReflectionSupport.tryToLoadClass("", cl));
 
-		assertPreconditionViolationException("ClassLoader", () -> ReflectionSupport.tryToLoadClass("int", null));
+		assertPreconditionViolationNotNullFor("ClassLoader", () -> ReflectionSupport.tryToLoadClass("int", null));
 	}
 
 	@TestFactory
@@ -125,11 +125,11 @@ class ReflectionSupportTests {
 	 */
 	@Test
 	void tryToGetResourcesPreconditions() {
-		assertPreconditionViolationExceptionForString("Resource name", () -> ReflectionSupport.tryToGetResources(null));
-		assertPreconditionViolationExceptionForString("Resource name", () -> ReflectionSupport.tryToGetResources(""));
-		assertPreconditionViolationException("Class loader",
+		assertPreconditionViolationNotNullOrBlankFor("Resource name", () -> ReflectionSupport.tryToGetResources(null));
+		assertPreconditionViolationNotNullOrBlankFor("Resource name", () -> ReflectionSupport.tryToGetResources(""));
+		assertPreconditionViolationNotNullFor("Class loader",
 			() -> ReflectionSupport.tryToGetResources("default-package.resource", null));
-		assertPreconditionViolationException("Class loader",
+		assertPreconditionViolationNotNullFor("Class loader",
 			() -> ReflectionSupport.tryToGetResources("default-package.resource", null));
 	}
 
@@ -148,11 +148,11 @@ class ReflectionSupportTests {
 	@Test
 	void findAllClassesInClasspathRootPreconditions() {
 		var path = Path.of(".").toUri();
-		assertPreconditionViolationException("root",
+		assertPreconditionViolationNotNullFor("root",
 			() -> ReflectionSupport.findAllClassesInClasspathRoot(null, allTypes, allNames));
-		assertPreconditionViolationException("class predicate",
+		assertPreconditionViolationNotNullFor("class predicate",
 			() -> ReflectionSupport.findAllClassesInClasspathRoot(path, null, allNames));
-		assertPreconditionViolationException("name predicate",
+		assertPreconditionViolationNotNullFor("name predicate",
 			() -> ReflectionSupport.findAllClassesInClasspathRoot(path, allTypes, null));
 	}
 
@@ -181,9 +181,9 @@ class ReflectionSupportTests {
 	@Test
 	void findAllResourcesInClasspathRootPreconditions() {
 		var path = Path.of(".").toUri();
-		assertPreconditionViolationException("root",
+		assertPreconditionViolationNotNullFor("root",
 			() -> ReflectionSupport.findAllResourcesInClasspathRoot(null, allResources));
-		assertPreconditionViolationException("resourceFilter",
+		assertPreconditionViolationNotNullFor("resourceFilter",
 			() -> ReflectionSupport.findAllResourcesInClasspathRoot(path, null));
 	}
 
@@ -212,9 +212,9 @@ class ReflectionSupportTests {
 	@Test
 	void streamAllResourcesInClasspathRootPreconditions() {
 		var path = Path.of(".").toUri();
-		assertPreconditionViolationException("root",
+		assertPreconditionViolationNotNullFor("root",
 			() -> ReflectionSupport.streamAllResourcesInClasspathRoot(null, allResources));
-		assertPreconditionViolationException("resourceFilter",
+		assertPreconditionViolationNotNullFor("resourceFilter",
 			() -> ReflectionSupport.streamAllResourcesInClasspathRoot(path, null));
 	}
 
@@ -227,11 +227,11 @@ class ReflectionSupportTests {
 
 	@Test
 	void findAllClassesInPackagePreconditions() {
-		assertPreconditionViolationExceptionForString("basePackageName",
+		assertPreconditionViolationNotNullOrBlankFor("basePackageName",
 			() -> ReflectionSupport.findAllClassesInPackage(null, allTypes, allNames));
-		assertPreconditionViolationException("class predicate",
+		assertPreconditionViolationNotNullFor("class predicate",
 			() -> ReflectionSupport.findAllClassesInPackage("org.junit", null, allNames));
-		assertPreconditionViolationException("name predicate",
+		assertPreconditionViolationNotNullFor("name predicate",
 			() -> ReflectionSupport.findAllClassesInPackage("org.junit", allTypes, null));
 	}
 
@@ -251,9 +251,9 @@ class ReflectionSupportTests {
 	 */
 	@Test
 	void findAllResourcesInPackagePreconditions() {
-		assertPreconditionViolationExceptionForString("basePackageName",
+		assertPreconditionViolationNotNullOrBlankFor("basePackageName",
 			() -> ReflectionSupport.findAllResourcesInPackage(null, allResources));
-		assertPreconditionViolationException("resourceFilter",
+		assertPreconditionViolationNotNullFor("resourceFilter",
 			() -> ReflectionSupport.findAllResourcesInPackage("org.junit", null));
 	}
 
@@ -273,9 +273,9 @@ class ReflectionSupportTests {
 	 */
 	@Test
 	void streamAllResourcesInPackagePreconditions() {
-		assertPreconditionViolationExceptionForString("basePackageName",
+		assertPreconditionViolationNotNullOrBlankFor("basePackageName",
 			() -> ReflectionSupport.streamAllResourcesInPackage(null, allResources));
-		assertPreconditionViolationException("resourceFilter",
+		assertPreconditionViolationNotNullFor("resourceFilter",
 			() -> ReflectionSupport.streamAllResourcesInPackage("org.junit", null));
 	}
 
@@ -290,9 +290,9 @@ class ReflectionSupportTests {
 		var exception = assertThrows(PreconditionViolationException.class,
 			() -> ReflectionSupport.findAllClassesInModule(null, allTypes, allNames));
 		assertEquals("Module name must not be null or empty", exception.getMessage());
-		assertPreconditionViolationException("class predicate",
+		assertPreconditionViolationNotNullFor("class predicate",
 			() -> ReflectionSupport.findAllClassesInModule("org.junit.platform.commons", null, allNames));
-		assertPreconditionViolationException("name predicate",
+		assertPreconditionViolationNotNullFor("name predicate",
 			() -> ReflectionSupport.findAllClassesInModule("org.junit.platform.commons", allTypes, null));
 	}
 
@@ -313,7 +313,7 @@ class ReflectionSupportTests {
 		var exception = assertThrows(PreconditionViolationException.class,
 			() -> ReflectionSupport.findAllResourcesInModule(null, allResources));
 		assertEquals("Module name must not be null or empty", exception.getMessage());
-		assertPreconditionViolationException("Resource filter",
+		assertPreconditionViolationNotNullFor("Resource filter",
 			() -> ReflectionSupport.findAllResourcesInModule("org.junit.platform.commons", null));
 	}
 
@@ -334,7 +334,7 @@ class ReflectionSupportTests {
 		var exception = assertThrows(PreconditionViolationException.class,
 			() -> ReflectionSupport.streamAllResourcesInModule(null, allResources));
 		assertEquals("Module name must not be null or empty", exception.getMessage());
-		assertPreconditionViolationException("Resource filter",
+		assertPreconditionViolationNotNullFor("Resource filter",
 			() -> ReflectionSupport.streamAllResourcesInModule("org.junit.platform.commons", null));
 	}
 
@@ -346,10 +346,10 @@ class ReflectionSupportTests {
 
 	@Test
 	void newInstancePreconditions() {
-		assertPreconditionViolationException("Class", () -> ReflectionSupport.newInstance(null));
-		assertPreconditionViolationException("Argument array",
+		assertPreconditionViolationNotNullFor("Class", () -> ReflectionSupport.newInstance(null));
+		assertPreconditionViolationNotNullFor("Argument array",
 			() -> ReflectionSupport.newInstance(String.class, (Object[]) null));
-		assertPreconditionViolationException("Individual arguments",
+		assertPreconditionViolationNotNullFor("Individual arguments",
 			() -> ReflectionSupport.newInstance(String.class, new Object[] { null }));
 	}
 
@@ -362,7 +362,7 @@ class ReflectionSupportTests {
 
 	@Test
 	void invokeMethodPreconditions() throws Exception {
-		assertPreconditionViolationException("Method", () -> ReflectionSupport.invokeMethod(null, null, "true"));
+		assertPreconditionViolationNotNullFor("Method", () -> ReflectionSupport.invokeMethod(null, null, "true"));
 
 		var method = Boolean.class.getMethod("toString");
 		var exception = assertThrows(PreconditionViolationException.class,
@@ -385,15 +385,15 @@ class ReflectionSupportTests {
 
 	@Test
 	void findFieldsPreconditions() {
-		assertPreconditionViolationException("Class",
+		assertPreconditionViolationNotNullFor("Class",
 			() -> ReflectionSupport.findFields(null, allFields, HierarchyTraversalMode.BOTTOM_UP));
-		assertPreconditionViolationException("Class",
+		assertPreconditionViolationNotNullFor("Class",
 			() -> ReflectionSupport.findFields(null, allFields, HierarchyTraversalMode.TOP_DOWN));
-		assertPreconditionViolationException("Predicate",
+		assertPreconditionViolationNotNullFor("Predicate",
 			() -> ReflectionSupport.findFields(ReflectionSupportTests.class, null, HierarchyTraversalMode.BOTTOM_UP));
-		assertPreconditionViolationException("Predicate",
+		assertPreconditionViolationNotNullFor("Predicate",
 			() -> ReflectionSupport.findFields(ReflectionSupportTests.class, null, HierarchyTraversalMode.TOP_DOWN));
-		assertPreconditionViolationException("HierarchyTraversalMode",
+		assertPreconditionViolationNotNullFor("HierarchyTraversalMode",
 			() -> ReflectionSupport.findFields(ReflectionSupportTests.class, allFields, null));
 	}
 
@@ -410,7 +410,7 @@ class ReflectionSupportTests {
 
 	@Test
 	void tryToReadFieldValuePreconditions() throws Exception {
-		assertPreconditionViolationException("Field", () -> ReflectionSupport.tryToReadFieldValue(null, this));
+		assertPreconditionViolationNotNullFor("Field", () -> ReflectionSupport.tryToReadFieldValue(null, this));
 
 		var instanceField = getClass().getDeclaredField("instanceField");
 		Exception exception = assertThrows(PreconditionViolationException.class,
@@ -431,22 +431,22 @@ class ReflectionSupportTests {
 
 	@Test
 	void findMethodPreconditions() {
-		assertPreconditionViolationException("Class",
+		assertPreconditionViolationNotNullFor("Class",
 			() -> ReflectionSupport.findMethod(null, "valueOf", String.class.getName()));
-		assertPreconditionViolationExceptionForString("Method name",
+		assertPreconditionViolationNotNullOrBlankFor("Method name",
 			() -> ReflectionSupport.findMethod(Boolean.class, "", String.class.getName()));
-		assertPreconditionViolationExceptionForString("Method name",
+		assertPreconditionViolationNotNullOrBlankFor("Method name",
 			() -> ReflectionSupport.findMethod(Boolean.class, "   ", String.class.getName()));
 
-		assertPreconditionViolationException("Class",
+		assertPreconditionViolationNotNullFor("Class",
 			() -> ReflectionSupport.findMethod(null, "valueOf", String.class));
-		assertPreconditionViolationExceptionForString("Method name",
+		assertPreconditionViolationNotNullOrBlankFor("Method name",
 			() -> ReflectionSupport.findMethod(Boolean.class, "", String.class));
-		assertPreconditionViolationExceptionForString("Method name",
+		assertPreconditionViolationNotNullOrBlankFor("Method name",
 			() -> ReflectionSupport.findMethod(Boolean.class, "   ", String.class));
-		assertPreconditionViolationException("Parameter types array",
+		assertPreconditionViolationNotNullFor("Parameter types array",
 			() -> ReflectionSupport.findMethod(Boolean.class, "valueOf", (Class<?>[]) null));
-		assertPreconditionViolationException("Individual parameter types",
+		assertPreconditionViolationNotNullFor("Individual parameter types",
 			() -> ReflectionSupport.findMethod(Boolean.class, "valueOf", new Class<?>[] { null }));
 	}
 
@@ -464,15 +464,15 @@ class ReflectionSupportTests {
 
 	@Test
 	void findMethodsPreconditions() {
-		assertPreconditionViolationException("Class",
+		assertPreconditionViolationNotNullFor("Class",
 			() -> ReflectionSupport.findMethods(null, allMethods, HierarchyTraversalMode.BOTTOM_UP));
-		assertPreconditionViolationException("Class",
+		assertPreconditionViolationNotNullFor("Class",
 			() -> ReflectionSupport.findMethods(null, allMethods, HierarchyTraversalMode.TOP_DOWN));
-		assertPreconditionViolationException("Predicate",
+		assertPreconditionViolationNotNullFor("Predicate",
 			() -> ReflectionSupport.findMethods(ReflectionSupportTests.class, null, HierarchyTraversalMode.BOTTOM_UP));
-		assertPreconditionViolationException("Predicate",
+		assertPreconditionViolationNotNullFor("Predicate",
 			() -> ReflectionSupport.findMethods(ReflectionSupportTests.class, null, HierarchyTraversalMode.TOP_DOWN));
-		assertPreconditionViolationException("HierarchyTraversalMode",
+		assertPreconditionViolationNotNullFor("HierarchyTraversalMode",
 			() -> ReflectionSupport.findMethods(ReflectionSupportTests.class, allMethods, null));
 	}
 
@@ -484,9 +484,9 @@ class ReflectionSupportTests {
 
 	@Test
 	void findNestedClassesPreconditions() {
-		assertPreconditionViolationException("Class",
+		assertPreconditionViolationNotNullFor("Class",
 			() -> ReflectionSupport.findNestedClasses(null, ReflectionUtils::isStatic));
-		assertPreconditionViolationException("Predicate",
+		assertPreconditionViolationNotNullFor("Predicate",
 			() -> ReflectionSupport.findNestedClasses(ClassWithNestedClasses.class, null));
 	}
 

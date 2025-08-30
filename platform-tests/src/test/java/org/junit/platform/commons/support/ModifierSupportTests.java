@@ -11,7 +11,7 @@
 package org.junit.platform.commons.support;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.platform.commons.support.PreconditionAssertions.assertPreconditionViolationException;
+import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationNotNullFor;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -36,8 +36,8 @@ class ModifierSupportTests {
 
 	@Test
 	void isPublicPreconditions() {
-		assertPreconditionViolationException("Class", () -> ModifierSupport.isPublic((Class<?>) null));
-		assertPreconditionViolationException("Member", () -> ModifierSupport.isPublic((Member) null));
+		assertPreconditionViolationNotNullFor("Class", () -> ModifierSupport.isPublic((Class<?>) null));
+		assertPreconditionViolationNotNullFor("Member", () -> ModifierSupport.isPublic((Member) null));
 	}
 
 	@Classes
@@ -53,8 +53,8 @@ class ModifierSupportTests {
 
 	@Test
 	void isPrivatePreconditions() {
-		assertPreconditionViolationException("Class", () -> ModifierSupport.isPrivate((Class<?>) null));
-		assertPreconditionViolationException("Member", () -> ModifierSupport.isPrivate((Member) null));
+		assertPreconditionViolationNotNullFor("Class", () -> ModifierSupport.isPrivate((Class<?>) null));
+		assertPreconditionViolationNotNullFor("Member", () -> ModifierSupport.isPrivate((Member) null));
 	}
 
 	@Classes
@@ -70,8 +70,8 @@ class ModifierSupportTests {
 
 	@Test
 	void isNotPrivatePreconditions() {
-		assertPreconditionViolationException("Class", () -> ModifierSupport.isNotPrivate((Class<?>) null));
-		assertPreconditionViolationException("Member", () -> ModifierSupport.isNotPrivate((Member) null));
+		assertPreconditionViolationNotNullFor("Class", () -> ModifierSupport.isNotPrivate((Class<?>) null));
+		assertPreconditionViolationNotNullFor("Member", () -> ModifierSupport.isNotPrivate((Member) null));
 	}
 
 	@Classes
@@ -87,8 +87,8 @@ class ModifierSupportTests {
 
 	@Test
 	void isAbstractPreconditions() {
-		assertPreconditionViolationException("Class", () -> ModifierSupport.isAbstract((Class<?>) null));
-		assertPreconditionViolationException("Member", () -> ModifierSupport.isAbstract((Member) null));
+		assertPreconditionViolationNotNullFor("Class", () -> ModifierSupport.isAbstract((Class<?>) null));
+		assertPreconditionViolationNotNullFor("Member", () -> ModifierSupport.isAbstract((Member) null));
 	}
 
 	@Classes
@@ -104,8 +104,8 @@ class ModifierSupportTests {
 
 	@Test
 	void isNotAbstractPreconditions() {
-		assertPreconditionViolationException("Class", () -> ModifierSupport.isNotAbstract((Class<?>) null));
-		assertPreconditionViolationException("Member", () -> ModifierSupport.isNotAbstract((Member) null));
+		assertPreconditionViolationNotNullFor("Class", () -> ModifierSupport.isNotAbstract((Class<?>) null));
+		assertPreconditionViolationNotNullFor("Member", () -> ModifierSupport.isNotAbstract((Member) null));
 	}
 
 	@Classes
@@ -121,8 +121,8 @@ class ModifierSupportTests {
 
 	@Test
 	void isStaticPreconditions() {
-		assertPreconditionViolationException("Class", () -> ModifierSupport.isStatic((Class<?>) null));
-		assertPreconditionViolationException("Member", () -> ModifierSupport.isStatic((Member) null));
+		assertPreconditionViolationNotNullFor("Class", () -> ModifierSupport.isStatic((Class<?>) null));
+		assertPreconditionViolationNotNullFor("Member", () -> ModifierSupport.isStatic((Member) null));
 	}
 
 	@Classes
@@ -138,8 +138,8 @@ class ModifierSupportTests {
 
 	@Test
 	void isNotStaticPreconditions() {
-		assertPreconditionViolationException("Class", () -> ModifierSupport.isNotStatic((Class<?>) null));
-		assertPreconditionViolationException("Member", () -> ModifierSupport.isNotStatic((Member) null));
+		assertPreconditionViolationNotNullFor("Class", () -> ModifierSupport.isNotStatic((Class<?>) null));
+		assertPreconditionViolationNotNullFor("Member", () -> ModifierSupport.isNotStatic((Member) null));
 	}
 
 	@Classes
@@ -155,8 +155,8 @@ class ModifierSupportTests {
 
 	@Test
 	void isFinalPreconditions() {
-		assertPreconditionViolationException("Class", () -> ModifierSupport.isFinal((Class<?>) null));
-		assertPreconditionViolationException("Member", () -> ModifierSupport.isFinal((Member) null));
+		assertPreconditionViolationNotNullFor("Class", () -> ModifierSupport.isFinal((Class<?>) null));
+		assertPreconditionViolationNotNullFor("Member", () -> ModifierSupport.isFinal((Member) null));
 	}
 
 	@Classes
@@ -172,8 +172,8 @@ class ModifierSupportTests {
 
 	@Test
 	void isNotFinalPreconditions() {
-		assertPreconditionViolationException("Class", () -> ModifierSupport.isNotFinal((Class<?>) null));
-		assertPreconditionViolationException("Member", () -> ModifierSupport.isNotFinal((Member) null));
+		assertPreconditionViolationNotNullFor("Class", () -> ModifierSupport.isNotFinal((Class<?>) null));
+		assertPreconditionViolationNotNullFor("Member", () -> ModifierSupport.isNotFinal((Member) null));
 	}
 
 	@Classes

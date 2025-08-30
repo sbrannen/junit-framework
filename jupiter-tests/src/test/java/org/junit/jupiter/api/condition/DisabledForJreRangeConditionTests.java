@@ -10,7 +10,6 @@
 
 package org.junit.jupiter.api.condition;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava10;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava11;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava12;
@@ -24,10 +23,10 @@ import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava19;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava8;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava9;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onKnownVersion;
+import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationFor;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExecutionCondition;
-import org.junit.platform.commons.PreconditionViolationException;
 
 /**
  * Unit tests for {@link DisabledForJreRange}.
@@ -66,8 +65,7 @@ class DisabledForJreRangeConditionTests extends AbstractExecutionConditionTests 
 	 */
 	@Test
 	void defaultValues() {
-		assertThatExceptionOfType(PreconditionViolationException.class)//
-				.isThrownBy(this::evaluateCondition)//
+		assertPreconditionViolationFor(this::evaluateCondition)//
 				.withMessage(
 					"You must declare a non-default value for the minimum or maximum value in @DisabledForJreRange");
 	}
@@ -125,8 +123,7 @@ class DisabledForJreRangeConditionTests extends AbstractExecutionConditionTests 
 	 */
 	@Test
 	void minVersion7() {
-		assertThatExceptionOfType(PreconditionViolationException.class)//
-				.isThrownBy(this::evaluateCondition)//
+		assertPreconditionViolationFor(this::evaluateCondition)//
 				.withMessage("@DisabledForJreRange's minVersion [7] must be greater than or equal to 8");
 	}
 
@@ -135,8 +132,7 @@ class DisabledForJreRangeConditionTests extends AbstractExecutionConditionTests 
 	 */
 	@Test
 	void maxVersion7() {
-		assertThatExceptionOfType(PreconditionViolationException.class)//
-				.isThrownBy(this::evaluateCondition)//
+		assertPreconditionViolationFor(this::evaluateCondition)//
 				.withMessage("@DisabledForJreRange's maxVersion [7] must be greater than or equal to 8");
 	}
 
@@ -145,8 +141,7 @@ class DisabledForJreRangeConditionTests extends AbstractExecutionConditionTests 
 	 */
 	@Test
 	void minAndMinVersion() {
-		assertThatExceptionOfType(PreconditionViolationException.class)//
-				.isThrownBy(this::evaluateCondition)//
+		assertPreconditionViolationFor(this::evaluateCondition)//
 				.withMessage(
 					"@DisabledForJreRange's minimum value must be configured with either a JRE enum constant or numeric version, but not both");
 	}
@@ -156,8 +151,7 @@ class DisabledForJreRangeConditionTests extends AbstractExecutionConditionTests 
 	 */
 	@Test
 	void maxAndMaxVersion() {
-		assertThatExceptionOfType(PreconditionViolationException.class)//
-				.isThrownBy(this::evaluateCondition)//
+		assertPreconditionViolationFor(this::evaluateCondition)//
 				.withMessage(
 					"@DisabledForJreRange's maximum value must be configured with either a JRE enum constant or numeric version, but not both");
 	}
@@ -167,8 +161,7 @@ class DisabledForJreRangeConditionTests extends AbstractExecutionConditionTests 
 	 */
 	@Test
 	void minGreaterThanMax() {
-		assertThatExceptionOfType(PreconditionViolationException.class)//
-				.isThrownBy(this::evaluateCondition)//
+		assertPreconditionViolationFor(this::evaluateCondition)//
 				.withMessage(
 					"@DisabledForJreRange's minimum value [21] must be less than or equal to its maximum value [11]");
 	}

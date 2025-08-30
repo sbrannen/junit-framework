@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationFor;
 import static org.junit.platform.commons.util.ReflectionUtils.HierarchyTraversalMode.BOTTOM_UP;
 import static org.junit.platform.commons.util.ReflectionUtils.HierarchyTraversalMode.TOP_DOWN;
 import static org.junit.platform.commons.util.ReflectionUtils.findFields;
@@ -535,22 +536,19 @@ class ReflectionUtilsTests {
 
 		@Test
 		void isAssignableToForNullSourceType() {
-			assertThatExceptionOfType(PreconditionViolationException.class)//
-					.isThrownBy(() -> ReflectionUtils.isAssignableTo(null, getClass()))//
+			assertPreconditionViolationFor(() -> ReflectionUtils.isAssignableTo(null, getClass()))//
 					.withMessage("source type must not be null");
 		}
 
 		@Test
 		void isAssignableToForPrimitiveSourceType() {
-			assertThatExceptionOfType(PreconditionViolationException.class)//
-					.isThrownBy(() -> ReflectionUtils.isAssignableTo(int.class, Integer.class))//
+			assertPreconditionViolationFor(() -> ReflectionUtils.isAssignableTo(int.class, Integer.class))//
 					.withMessage("source type must not be a primitive type");
 		}
 
 		@Test
 		void isAssignableToForNullTargetType() {
-			assertThatExceptionOfType(PreconditionViolationException.class)//
-					.isThrownBy(() -> ReflectionUtils.isAssignableTo(getClass(), null))//
+			assertPreconditionViolationFor(() -> ReflectionUtils.isAssignableTo(getClass(), null))//
 					.withMessage("target type must not be null");
 		}
 
