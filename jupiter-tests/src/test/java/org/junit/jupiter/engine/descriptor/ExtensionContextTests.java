@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_METHOD;
 import static org.junit.jupiter.api.extension.MediaType.TEXT_PLAIN;
 import static org.junit.jupiter.api.extension.MediaType.TEXT_PLAIN_UTF_8;
 import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationFor;
+import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationNotNullOrBlankFor;
 import static org.junit.platform.launcher.core.OutputDirectoryCreators.dummyOutputDirectoryCreator;
 import static org.junit.platform.launcher.core.OutputDirectoryCreators.hierarchicalOutputDirectoryCreator;
 import static org.mockito.ArgumentMatchers.eq;
@@ -59,6 +60,8 @@ import org.junit.jupiter.engine.execution.LauncherStoreFacade;
 import org.junit.jupiter.engine.extension.ExtensionRegistry;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.platform.commons.support.ReflectionSupport;
 import org.junit.platform.engine.ConfigurationParameters;
 import org.junit.platform.engine.EngineExecutionListener;
@@ -314,6 +317,26 @@ public class ExtensionContextTests {
 		assertThat(fileEntry2.getMediaType()).isEmpty();
 		assertThat(fileEntry2.getPath().resolve("nested1.txt")).usingCharset(UTF_8).hasContent("Nested content 1");
 		assertThat(fileEntry2.getPath().resolve("nested2.txt")).usingCharset(UTF_8).hasContent("Nested content 2");
+	}
+
+	@ParameterizedTest
+	@NullAndEmptySource
+	@ValueSource(strings = { " ", " \t " })
+	void failsWhenAttemptingToPublishFileWithNullOrBlankName(String name, @TempDir Path tempDir) {
+		var extensionContext = createExtensionContextForFilePublishing(tempDir);
+
+		assertPreconditionViolationNotNullOrBlankFor("name",
+			() -> extensionContext.publishFile(name, TEXT_PLAIN, failingAction));
+	}
+
+	@ParameterizedTest
+	@NullAndEmptySource
+	@ValueSource(strings = { " ", " \t " })
+	void failsWhenAttemptingToPublishDirectoryWithNullOrBlankName(String name, @TempDir Path tempDir) {
+		var extensionContext = createExtensionContextForFilePublishing(tempDir);
+
+		assertPreconditionViolationNotNullOrBlankFor("name",
+			() -> extensionContext.publishDirectory(name, failingAction));
 	}
 
 	@Test
