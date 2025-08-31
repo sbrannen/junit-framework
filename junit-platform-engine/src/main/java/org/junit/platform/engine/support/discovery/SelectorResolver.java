@@ -469,7 +469,7 @@ public interface SelectorResolver {
 		 * {@link Match Match}.
 		 *
 		 * @param match the resolved {@code Match}; never {@code null}
-		 * @return an resolution that contains the supplied {@code Match}; never
+		 * @return a resolution that contains the supplied {@code Match}; never
 		 * {@code null}
 		 */
 		public static Resolution match(Match match) {
@@ -482,7 +482,7 @@ public interface SelectorResolver {
 		 *
 		 * @param matches the resolved {@code Matches}; never {@code null} or
 		 * empty
-		 * @return an resolution that contains the supplied {@code Matches};
+		 * @return a resolution that contains the supplied {@code Matches};
 		 * never {@code null}
 		 */
 		public static Resolution matches(Set<Match> matches) {
@@ -497,7 +497,7 @@ public interface SelectorResolver {
 		 *
 		 * @param selectors the resolved {@code DiscoverySelectors}; never
 		 * {@code null} or empty
-		 * @return an resolution that contains the supplied
+		 * @return a resolution that contains the supplied
 		 * {@code DiscoverySelectors}; never {@code null}
 		 */
 		public static Resolution selectors(Set<? extends DiscoverySelector> selectors) {
