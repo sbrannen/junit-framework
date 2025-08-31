@@ -94,13 +94,15 @@ public interface TestReporter {
 	 * <p>The file will be copied to the report output directory replacing any
 	 * potentially existing file with the same name.
 	 *
-	 * @param file the file to be published; never {@code null} or blank
+	 * @param file the file to be published; never {@code null}
 	 * @param mediaType the media type of the file; never {@code null}; use
 	 * {@link MediaType#APPLICATION_OCTET_STREAM} if unknown
 	 * @since 5.12
 	 */
 	@API(status = MAINTAINED, since = "5.13.3")
 	default void publishFile(Path file, MediaType mediaType) {
+		Preconditions.notNull(file, "file must not be null");
+		Preconditions.notNull(mediaType, "mediaType must not be null");
 		Preconditions.condition(Files.exists(file), () -> "file must exist: " + file);
 		Preconditions.condition(Files.isRegularFile(file), () -> "file must be a regular file: " + file);
 		publishFile(file.getFileName().toString(), mediaType, path -> Files.copy(file, path, REPLACE_EXISTING));
@@ -113,11 +115,12 @@ public interface TestReporter {
 	 * <p>The entire directory will be copied to the report output directory
 	 * replacing any potentially existing files with the same name.
 	 *
-	 * @param directory the directory to be published; never {@code null} or blank
+	 * @param directory the directory to be published; never {@code null}
 	 * @since 5.12
 	 */
 	@API(status = MAINTAINED, since = "5.13.3")
 	default void publishDirectory(Path directory) {
+		Preconditions.notNull(directory, "directory must not be null");
 		Preconditions.condition(Files.exists(directory), () -> "directory must exist: " + directory);
 		Preconditions.condition(Files.isDirectory(directory), () -> "path must represent a directory: " + directory);
 		publishDirectory(directory.getFileName().toString(), path -> {
