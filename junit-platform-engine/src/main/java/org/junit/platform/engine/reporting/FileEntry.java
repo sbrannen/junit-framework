@@ -34,9 +34,11 @@ public final class FileEntry {
 	 * Factory for creating a new {@code FileEntry} from the supplied path and
 	 * media type.
 	 *
+	 * <p>The {@link Path} may represent a file or a directory.
+	 *
 	 * @param path the path to publish; never {@code null}
 	 * @param mediaType the media type of the path to publish; may be
-	 * {@code null}
+	 * {@code null} &mdash; for example, if the path represents a directory
 	 */
 	public static FileEntry from(Path path, String mediaType) {
 		return new FileEntry(path, mediaType);
@@ -61,7 +63,7 @@ public final class FileEntry {
 	}
 
 	/**
-	 * Get the path to be published.
+	 * Get the path for the file or directory to be published.
 	 *
 	 * @return the path to publish; never {@code null}
 	 */
@@ -72,7 +74,8 @@ public final class FileEntry {
 	/**
 	 * Get the media type of the path to be published.
 	 *
-	 * @return the media type of the path to publish; never {@code null}
+	 * @return the media type of the path to publish; never {@code null} but
+	 * potentially empty &mdash; for example, if the path represents a directory
 	 */
 	public Optional<String> getMediaType() {
 		return Optional.ofNullable(mediaType);

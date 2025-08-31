@@ -404,7 +404,7 @@ public interface ExtensionContext {
 	 * <p>The file will be resolved in the report output directory prior to
 	 * invoking the supplied action.
 	 *
-	 * @param name the name of the file to be attached; never {@code null} or
+	 * @param name the name of the file to be published; never {@code null} or
 	 * blank and must not contain any path separators
 	 * @param mediaType the media type of the file; never {@code null}; use
 	 * {@link MediaType#APPLICATION_OCTET_STREAM} if unknown
@@ -420,11 +420,12 @@ public interface ExtensionContext {
 	 * and attach it to the current test or container.
 	 *
 	 * <p>The directory will be resolved and created in the report output directory
-	 * prior to invoking the supplied action, if it doesn't already exist.
+	 * prior to invoking the supplied action, if it does not already exist.
 	 *
-	 * @param name the name of the directory to be attached; never {@code null}
+	 * @param name the name of the directory to be published; never {@code null}
 	 * or blank and must not contain any path separators
-	 * @param action the action to be executed to write the file; never {@code null}
+	 * @param action the action to be executed to write to the directory; never
+	 * {@code null}
 	 * @since 5.12
 	 * @see org.junit.platform.engine.EngineExecutionListener#fileEntryPublished
 	 */
