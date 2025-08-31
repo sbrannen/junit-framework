@@ -13,6 +13,7 @@ package org.junit.jupiter.engine.extension;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationNotNullFor;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
@@ -105,6 +106,18 @@ public class DefaultTestReporterTests {
 	}
 
 	@Test
+	@SuppressWarnings("DataFlowIssue") // publishFile() parameters are not @Nullable
+	void failsWhenPublishingNullFile() {
+		assertPreconditionViolationNotNullFor("file", () -> testReporter.publishFile(null, MediaType.TEXT_PLAIN));
+	}
+
+	@Test
+	@SuppressWarnings("DataFlowIssue") // publishFile() parameters are not @Nullable
+	void failsWhenPublishingFileWithNullMediaType() {
+		assertPreconditionViolationNotNullFor("mediaType", () -> testReporter.publishFile(Path.of("test"), null));
+	}
+
+	@Test
 	void failsWhenPublishingMissingFile() {
 		var missingFile = tempDir.resolve("missingFile");
 
@@ -118,6 +131,12 @@ public class DefaultTestReporterTests {
 		assertThatThrownBy(() -> testReporter.publishFile(tempDir, MediaType.APPLICATION_OCTET_STREAM)) //
 				.isInstanceOf(PreconditionViolationException.class) //
 				.hasMessage("file must be a regular file: " + tempDir);
+	}
+
+	@Test
+	@SuppressWarnings("DataFlowIssue") // publishDirectory() parameters are not @Nullable
+	void failsWhenPublishingNullDirectory() {
+		assertPreconditionViolationNotNullFor("directory", () -> testReporter.publishDirectory(null));
 	}
 
 	@Test
