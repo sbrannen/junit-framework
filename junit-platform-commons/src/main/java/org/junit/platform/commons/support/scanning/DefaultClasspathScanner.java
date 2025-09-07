@@ -217,7 +217,7 @@ public class DefaultClasspathScanner implements ClasspathScanner {
 		try {
 			String fullyQualifiedResourceName = determineFullyQualifiedResourceName(baseDir, basePackageName,
 				resourceFile);
-			Resource resource = Resource.from(fullyQualifiedResourceName, resourceFile.toUri());
+			Resource resource = Resource.of(fullyQualifiedResourceName, resourceFile.toUri());
 			if (resourceFilter.test(resource)) {
 				resourceConsumer.accept(resource);
 			}

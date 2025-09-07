@@ -298,7 +298,7 @@ public class ModuleUtils {
 		private Resource loadResourceUnchecked(String binaryName) {
 			try {
 				URI uri = classLoader.getResource(binaryName).toURI();
-				return Resource.from(binaryName, uri);
+				return Resource.of(binaryName, uri);
 			}
 			catch (URISyntaxException e) {
 				throw new JUnitException("Failed to load resource with name '" + binaryName + "'.", e);
