@@ -28,7 +28,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.FieldSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.platform.console.options.StdStreamTestCase;
+import org.junit.platform.console.command.StdStreamTestCase;
 
 /**
  * @since 1.0

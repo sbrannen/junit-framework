@@ -10,21 +10,26 @@
 
 package org.junit.platform.console.options;
 
+import static org.apiguardian.api.API.Status.INTERNAL;
 import static org.junit.platform.console.options.TestConsoleOutputOptions.DEFAULT_DETAILS;
 import static org.junit.platform.console.options.TestConsoleOutputOptions.DEFAULT_DETAILS_NAME;
 import static org.junit.platform.console.options.TestConsoleOutputOptions.DEFAULT_THEME;
 
 import java.nio.file.Path;
 
+import org.apiguardian.api.API;
+import org.junit.platform.console.output.Theme;
+
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Option;
 
-class TestConsoleOutputOptionsMixin {
+@API(status = INTERNAL, since = "6.0")
+public class TestConsoleOutputOptionsMixin {
 
 	@ArgGroup(validate = false, order = 5, heading = "%n@|bold CONSOLE OUTPUT|@%n%n")
 	ConsoleOutputOptions consoleOutputOptions = new ConsoleOutputOptions();
 
-	static class ConsoleOutputOptions {
+	public static class ConsoleOutputOptions {
 
 		@Option(names = "--color-palette", paramLabel = "FILE", description = "Specify a path to a properties file to customize ANSI style of output (not supported by all terminals).")
 		private Path colorPalette;
@@ -67,7 +72,7 @@ class TestConsoleOutputOptionsMixin {
 		}
 	}
 
-	TestConsoleOutputOptions toTestConsoleOutputOptions() {
+	public TestConsoleOutputOptions toTestConsoleOutputOptions() {
 		TestConsoleOutputOptions result = new TestConsoleOutputOptions();
 		if (this.consoleOutputOptions != null) {
 			this.consoleOutputOptions.applyTo(result);
