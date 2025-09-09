@@ -47,8 +47,6 @@ import com.tngtech.archunit.library.GeneralCodingRules;
 import org.apiguardian.api.API;
 import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.api.extension.MediaType;
-import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
-import org.junit.jupiter.params.support.ParameterInfo;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.commons.support.Resource;
 import org.junit.platform.commons.support.scanning.ClasspathScanner;
@@ -120,8 +118,9 @@ class ArchUnitTests {
 				.ignoreDependency(Class.forName("org.junit.platform.commons.util.DefaultClasspathScanner"),
 					Resource.class) //
 
-				// Needs more investigation
-				.ignoreDependency(ParameterInfo.class, ArgumentsAccessor.class)
+				// https://github.com/junit-team/junit-framework/issues/4919
+				.ignoreDependency(org.junit.jupiter.params.support.ParameterInfo.class,
+					org.junit.jupiter.params.ParameterInfo.class)
 
 				// Needs more investigation
 				.ignoreDependency(OutputDirectoryProvider.class, TestDescriptor.class) //

@@ -13,12 +13,12 @@ package org.junit.jupiter.params;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.support.ParameterDeclarations;
-import org.junit.jupiter.params.support.ParameterInfo;
 
 /**
  * @since 5.13
  */
-class DefaultParameterInfo implements ParameterInfo {
+@SuppressWarnings("deprecation")
+class DefaultParameterInfo implements org.junit.jupiter.params.support.ParameterInfo {
 
 	private final ParameterDeclarations declarations;
 	private final ArgumentsAccessor arguments;
@@ -39,6 +39,10 @@ class DefaultParameterInfo implements ParameterInfo {
 	}
 
 	void store(ExtensionContext context) {
-		context.getStore(NAMESPACE).put(KEY, this);
+		context.getStore(org.junit.jupiter.params.ParameterInfo.NAMESPACE) //
+				.put(org.junit.jupiter.params.ParameterInfo.KEY, this);
+		context.getStore(org.junit.jupiter.params.support.ParameterInfo.NAMESPACE) //
+				.put(org.junit.jupiter.params.support.ParameterInfo.KEY, this);
 	}
+
 }

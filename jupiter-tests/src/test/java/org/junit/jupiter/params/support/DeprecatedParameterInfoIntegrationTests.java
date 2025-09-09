@@ -11,6 +11,7 @@
 package org.junit.jupiter.params.support;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Nested;
@@ -28,13 +29,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 /**
  * @since 5.13
  */
-class ParameterInfoIntegrationTests extends AbstractJupiterTestEngineTests {
+class DeprecatedParameterInfoIntegrationTests extends AbstractJupiterTestEngineTests {
 
 	@Test
 	void storesParameterInfoInExtensionContextStoreOnDifferentLevels() {
 		var results = executeTestsForClass(TestCase.class);
 
-		results.allEvents().assertStatistics(stats -> stats.started(7).succeeded(7));
+		results.allEvents().debug().assertStatistics(stats -> stats.started(7).succeeded(7));
 	}
 
 	@ParameterizedClass
@@ -60,6 +61,7 @@ class ParameterInfoIntegrationTests extends AbstractJupiterTestEngineTests {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private static class ParameterInfoConsumingExtension
 			implements BeforeClassTemplateInvocationCallback, BeforeEachCallback {
 
@@ -102,6 +104,7 @@ class ParameterInfoIntegrationTests extends AbstractJupiterTestEngineTests {
 
 		private static void assertParameterInfo(ExtensionContext context, String parameterName, int argumentValue) {
 			var parameterInfo = ParameterInfo.get(context);
+			assertNotNull(parameterInfo);
 			var declaration = parameterInfo.getDeclarations().get(0).orElseThrow();
 			assertEquals(parameterName, declaration.getParameterName().orElseThrow());
 			assertEquals(int.class, declaration.getParameterType());
