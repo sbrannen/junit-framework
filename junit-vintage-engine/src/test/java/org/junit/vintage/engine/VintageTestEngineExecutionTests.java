@@ -17,7 +17,7 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectMethod;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectUniqueId;
 import static org.junit.platform.launcher.core.NamespacedHierarchicalStoreProviders.dummyNamespacedHierarchicalStore;
-import static org.junit.platform.launcher.core.OutputDirectoryProviders.dummyOutputDirectoryProvider;
+import static org.junit.platform.launcher.core.OutputDirectoryCreators.dummyOutputDirectoryCreator;
 import static org.junit.platform.testkit.engine.EventConditions.abortedWithReason;
 import static org.junit.platform.testkit.engine.EventConditions.container;
 import static org.junit.platform.testkit.engine.EventConditions.displayName;
@@ -930,7 +930,7 @@ class VintageTestEngineExecutionTests {
 		var engineTestDescriptor = testEngine.discover(discoveryRequest, UniqueId.forEngine(testEngine.getId()));
 		testEngine.execute(
 			ExecutionRequest.create(engineTestDescriptor, listener, discoveryRequest.getConfigurationParameters(),
-				dummyOutputDirectoryProvider(), dummyNamespacedHierarchicalStore()));
+				dummyOutputDirectoryCreator(), dummyNamespacedHierarchicalStore()));
 	}
 
 	private static LauncherDiscoveryRequest request(Class<?> testClass) {

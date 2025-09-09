@@ -29,7 +29,7 @@ import org.junit.platform.engine.ConfigurationParameters;
 import org.junit.platform.engine.DiscoveryFilter;
 import org.junit.platform.engine.DiscoverySelector;
 import org.junit.platform.engine.Filter;
-import org.junit.platform.engine.reporting.OutputDirectoryProvider;
+import org.junit.platform.engine.OutputDirectoryCreator;
 import org.junit.platform.launcher.EngineFilter;
 import org.junit.platform.launcher.LauncherConstants;
 import org.junit.platform.launcher.LauncherDiscoveryListener;
@@ -111,7 +111,7 @@ public final class LauncherDiscoveryRequestBuilder {
 	private final List<LauncherDiscoveryListener> discoveryListeners = new ArrayList<>();
 	private boolean implicitConfigurationParametersEnabled = true;
 	private ConfigurationParameters parentConfigurationParameters;
-	private OutputDirectoryProvider outputDirectoryProvider;
+	private OutputDirectoryCreator outputDirectoryCreator;
 
 	/**
 	 * Create a new {@code LauncherDiscoveryRequestBuilder}.
@@ -289,7 +289,8 @@ public final class LauncherDiscoveryRequestBuilder {
 	}
 
 	/**
-	 * Set the {@link OutputDirectoryProvider} to use for the request.
+	 * Set the
+	 * {@link org.junit.platform.engine.reporting.OutputDirectoryProvider} to use for the request.
 	 *
 	 * <p>If not specified, a default provider will be used that can be
 	 * configured via the {@value LauncherConstants#OUTPUT_DIR_PROPERTY_NAME}
@@ -299,13 +300,36 @@ public final class LauncherDiscoveryRequestBuilder {
 	 *                                never {@code null}
 	 * @return this builder for method chaining
 	 * @since 1.12
-	 * @see OutputDirectoryProvider
+	 * @see org.junit.platform.engine.reporting.OutputDirectoryProvider
+	 * @see LauncherConstants#OUTPUT_DIR_PROPERTY_NAME
+	 * @deprecated Please use
+	 * {@link #outputDirectoryCreator(OutputDirectoryCreator)} instead
+	 */
+	@API(status = DEPRECATED, since = "6.0")
+	@Deprecated
+	public LauncherDiscoveryRequestBuilder outputDirectoryProvider(
+			org.junit.platform.engine.reporting.OutputDirectoryProvider outputDirectoryProvider) {
+		return outputDirectoryCreator(outputDirectoryProvider);
+	}
+
+	/**
+	 * Set the {@link OutputDirectoryCreator} to use for the request.
+	 *
+	 * <p>If not specified, a default implementation will be used that can be
+	 * configured via the {@value LauncherConstants#OUTPUT_DIR_PROPERTY_NAME}
+	 * configuration parameter.
+	 *
+	 * @param outputDirectoryCreator the output directory creator to use;
+	 *                                never {@code null}
+	 * @return this builder for method chaining
+	 * @since 6.0
+	 * @see OutputDirectoryCreator
 	 * @see LauncherConstants#OUTPUT_DIR_PROPERTY_NAME
 	 */
-	@API(status = MAINTAINED, since = "1.13.3")
-	public LauncherDiscoveryRequestBuilder outputDirectoryProvider(OutputDirectoryProvider outputDirectoryProvider) {
-		this.outputDirectoryProvider = Preconditions.notNull(outputDirectoryProvider,
-			"outputDirectoryProvider must not be null");
+	@API(status = MAINTAINED, since = "6.0")
+	public LauncherDiscoveryRequestBuilder outputDirectoryCreator(OutputDirectoryCreator outputDirectoryCreator) {
+		this.outputDirectoryCreator = Preconditions.notNull(outputDirectoryCreator,
+			"outputDirectoryCreator must not be null");
 		return this;
 	}
 
@@ -333,17 +357,16 @@ public final class LauncherDiscoveryRequestBuilder {
 	public LauncherDiscoveryRequest build() {
 		LauncherConfigurationParameters launcherConfigurationParameters = buildLauncherConfigurationParameters();
 		LauncherDiscoveryListener discoveryListener = getLauncherDiscoveryListener(launcherConfigurationParameters);
-		OutputDirectoryProvider outputDirectoryProvider = getOutputDirectoryProvider(launcherConfigurationParameters);
+		OutputDirectoryCreator outputDirectoryCreator = getOutputDirectoryCreator(launcherConfigurationParameters);
 		return new DefaultDiscoveryRequest(this.selectors, this.engineFilters, this.discoveryFilters,
-			this.postDiscoveryFilters, launcherConfigurationParameters, discoveryListener, outputDirectoryProvider);
+			this.postDiscoveryFilters, launcherConfigurationParameters, discoveryListener, outputDirectoryCreator);
 	}
 
-	private OutputDirectoryProvider getOutputDirectoryProvider(
-			LauncherConfigurationParameters configurationParameters) {
-		if (this.outputDirectoryProvider != null) {
-			return this.outputDirectoryProvider;
+	private OutputDirectoryCreator getOutputDirectoryCreator(LauncherConfigurationParameters configurationParameters) {
+		if (this.outputDirectoryCreator != null) {
+			return this.outputDirectoryCreator;
 		}
-		return new HierarchicalOutputDirectoryProvider(
+		return new HierarchicalOutputDirectoryCreator(
 			() -> OutputDir.create(configurationParameters.get(OUTPUT_DIR_PROPERTY_NAME)).toPath());
 	}
 

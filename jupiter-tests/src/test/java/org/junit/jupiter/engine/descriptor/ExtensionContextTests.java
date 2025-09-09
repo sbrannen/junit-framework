@@ -19,8 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Named.named;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_METHOD;
-import static org.junit.platform.launcher.core.OutputDirectoryProviders.dummyOutputDirectoryProvider;
-import static org.junit.platform.launcher.core.OutputDirectoryProviders.hierarchicalOutputDirectoryProvider;
+import static org.junit.platform.launcher.core.OutputDirectoryCreators.dummyOutputDirectoryCreator;
+import static org.junit.platform.launcher.core.OutputDirectoryCreators.hierarchicalOutputDirectoryCreator;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -88,7 +88,7 @@ public class ExtensionContextTests {
 		when(configuration.getDefaultDisplayNameGenerator()).thenReturn(new DisplayNameGenerator.Standard());
 		when(configuration.getDefaultExecutionMode()).thenReturn(ExecutionMode.SAME_THREAD);
 		when(configuration.getDefaultClassesExecutionMode()).thenReturn(ExecutionMode.SAME_THREAD);
-		when(configuration.getOutputDirectoryProvider()).thenReturn(dummyOutputDirectoryProvider());
+		when(configuration.getOutputDirectoryCreator()).thenReturn(dummyOutputDirectoryCreator());
 	}
 
 	@Test
@@ -395,8 +395,8 @@ public class ExtensionContextTests {
 
 	private ExtensionContext createExtensionContextForFilePublishing(Path tempDir,
 			EngineExecutionListener engineExecutionListener, ClassTestDescriptor classTestDescriptor) {
-		when(configuration.getOutputDirectoryProvider()) //
-				.thenReturn(hierarchicalOutputDirectoryProvider(tempDir));
+		when(configuration.getOutputDirectoryCreator()) //
+				.thenReturn(hierarchicalOutputDirectoryCreator(tempDir));
 		return new ClassExtensionContext(null, engineExecutionListener, classTestDescriptor, PER_METHOD, configuration,
 			extensionRegistry, launcherStoreFacade, null);
 	}
@@ -445,7 +445,7 @@ public class ExtensionContextTests {
 	@MethodSource("extensionContextFactories")
 	void configurationParameter(Function<JupiterConfiguration, ? extends ExtensionContext> extensionContextFactory) {
 		JupiterConfiguration echo = new DefaultJupiterConfiguration(new EchoParameters(),
-			dummyOutputDirectoryProvider());
+			dummyOutputDirectoryCreator());
 		var key = "123";
 		var expected = Optional.of(key);
 

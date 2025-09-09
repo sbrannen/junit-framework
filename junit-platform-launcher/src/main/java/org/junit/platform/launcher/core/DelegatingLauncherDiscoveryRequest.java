@@ -15,14 +15,14 @@ import java.util.List;
 import org.junit.platform.engine.ConfigurationParameters;
 import org.junit.platform.engine.DiscoveryFilter;
 import org.junit.platform.engine.DiscoverySelector;
-import org.junit.platform.engine.reporting.OutputDirectoryProvider;
+import org.junit.platform.engine.OutputDirectoryCreator;
 import org.junit.platform.launcher.EngineFilter;
 import org.junit.platform.launcher.LauncherDiscoveryListener;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.PostDiscoveryFilter;
 
 /**
- * @since 5.13
+ * @since 1.13
  */
 class DelegatingLauncherDiscoveryRequest implements LauncherDiscoveryRequest {
 
@@ -56,7 +56,14 @@ class DelegatingLauncherDiscoveryRequest implements LauncherDiscoveryRequest {
 		return this.request.getConfigurationParameters();
 	}
 
-	public OutputDirectoryProvider getOutputDirectoryProvider() {
+	@SuppressWarnings("deprecation")
+	@Override
+	public org.junit.platform.engine.reporting.OutputDirectoryProvider getOutputDirectoryProvider() {
 		return this.request.getOutputDirectoryProvider();
+	}
+
+	@Override
+	public OutputDirectoryCreator getOutputDirectoryCreator() {
+		return this.request.getOutputDirectoryCreator();
 	}
 }

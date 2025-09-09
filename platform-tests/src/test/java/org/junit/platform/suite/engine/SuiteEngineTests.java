@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectUniqueId;
 import static org.junit.platform.launcher.TagFilter.excludeTags;
-import static org.junit.platform.launcher.core.OutputDirectoryProviders.hierarchicalOutputDirectoryProvider;
+import static org.junit.platform.launcher.core.OutputDirectoryCreators.hierarchicalOutputDirectoryCreator;
 import static org.junit.platform.suite.engine.SuiteEngineDescriptor.ENGINE_ID;
 import static org.junit.platform.testkit.engine.EventConditions.container;
 import static org.junit.platform.testkit.engine.EventConditions.displayName;
@@ -44,8 +44,8 @@ import org.junit.platform.engine.DiscoveryIssue.Severity;
 import org.junit.platform.engine.EngineExecutionListener;
 import org.junit.platform.engine.ExecutionRequest;
 import org.junit.platform.engine.FilterResult;
+import org.junit.platform.engine.OutputDirectoryCreator;
 import org.junit.platform.engine.UniqueId;
-import org.junit.platform.engine.reporting.OutputDirectoryProvider;
 import org.junit.platform.engine.support.descriptor.ClassSource;
 import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.engine.support.store.Namespace;
@@ -98,9 +98,9 @@ class SuiteEngineTests {
 	@ValueSource(classes = { SelectClassesSuite.class, InheritedSuite.class })
 	void selectClasses(Class<?> suiteClass) {
 		// @formatter:off
-		var testKit = EngineTestKit.engine(ENGINE_ID)
-				.selectors(selectClass(suiteClass))
-				.outputDirectoryProvider(hierarchicalOutputDirectoryProvider(outputDir));
+		EngineTestKit.Builder builder = EngineTestKit.engine(ENGINE_ID)
+				.selectors(selectClass(suiteClass));
+			var testKit = builder.outputDirectoryCreator(hierarchicalOutputDirectoryCreator(outputDir));
 
 		assertThat(testKit.discover().getDiscoveryIssues())
 				.isEmpty();
@@ -298,9 +298,9 @@ class SuiteEngineTests {
 	@Test
 	void suiteSuite() {
 		// @formatter:off
-		EngineTestKit.engine(ENGINE_ID)
-				.selectors(selectClass(SuiteSuite.class))
-				.outputDirectoryProvider(hierarchicalOutputDirectoryProvider(outputDir))
+		EngineTestKit.Builder builder = EngineTestKit.engine(ENGINE_ID)
+				.selectors(selectClass(SuiteSuite.class));
+			builder.outputDirectoryCreator(hierarchicalOutputDirectoryCreator(outputDir))
 				.execute()
 				.testEvents()
 				.assertThatEvents()
@@ -315,9 +315,9 @@ class SuiteEngineTests {
 		// @formatter:off
 		UniqueId uniqId = UniqueId.forEngine(ENGINE_ID)
 				.append(SuiteTestDescriptor.SEGMENT_TYPE, SelectClassesSuite.class.getName());
-		EngineTestKit.engine(ENGINE_ID)
-				.selectors(selectUniqueId(uniqId))
-				.outputDirectoryProvider(hierarchicalOutputDirectoryProvider(outputDir))
+		EngineTestKit.Builder builder = EngineTestKit.engine(ENGINE_ID)
+				.selectors(selectUniqueId(uniqId));
+			builder.outputDirectoryCreator(hierarchicalOutputDirectoryCreator(outputDir))
 				.execute()
 				.testEvents()
 				.assertThatEvents()
@@ -370,10 +370,10 @@ class SuiteEngineTests {
 				.append(ClassTestDescriptor.SEGMENT_TYPE, MultipleTestsTestCase.class.getName())
 				.append(TestMethodTestDescriptor.SEGMENT_TYPE, "test()");
 
-		EngineTestKit.engine(ENGINE_ID)
+		EngineTestKit.Builder builder = EngineTestKit.engine(ENGINE_ID)
 				.selectors(selectUniqueId(uniqueId))
-				.selectors(selectClass(SelectClassesSuite.class))
-				.outputDirectoryProvider(hierarchicalOutputDirectoryProvider(outputDir))
+				.selectors(selectClass(SelectClassesSuite.class));
+			builder.outputDirectoryCreator(hierarchicalOutputDirectoryCreator(outputDir))
 				.execute()
 				.testEvents()
 				.assertThatEvents()
@@ -534,9 +534,9 @@ class SuiteEngineTests {
 				.source(ClassSource.from(CyclicSuite.class))
 				.build();
 
-		var testKit = EngineTestKit.engine(ENGINE_ID)
-				.selectors(selectClass(CyclicSuite.class))
-				.outputDirectoryProvider(hierarchicalOutputDirectoryProvider(outputDir));
+		EngineTestKit.Builder builder = EngineTestKit.engine(ENGINE_ID)
+				.selectors(selectClass(CyclicSuite.class));
+			var testKit = builder.outputDirectoryCreator(hierarchicalOutputDirectoryCreator(outputDir));
 
 		assertThat(testKit.discover().getDiscoveryIssues())
 				.containsExactly(issue);
@@ -566,9 +566,9 @@ class SuiteEngineTests {
 	@Test
 	void threePartCyclicSuite() {
 		// @formatter:off
-		EngineTestKit.engine(ENGINE_ID)
-				.selectors(selectClass(ThreePartCyclicSuite.PartA.class))
-				.outputDirectoryProvider(hierarchicalOutputDirectoryProvider(outputDir))
+		EngineTestKit.Builder builder = EngineTestKit.engine(ENGINE_ID)
+				.selectors(selectClass(ThreePartCyclicSuite.PartA.class));
+			builder.outputDirectoryCreator(hierarchicalOutputDirectoryCreator(outputDir))
 				.execute()
 				.allEvents()
 				.assertThatEvents()
@@ -579,9 +579,9 @@ class SuiteEngineTests {
 	@Test
 	void selectByIdentifier() {
 		// @formatter:off
-		EngineTestKit.engine(ENGINE_ID)
-				.selectors(selectClass(SelectByIdentifierSuite.class))
-				.outputDirectoryProvider(hierarchicalOutputDirectoryProvider(outputDir))
+		EngineTestKit.Builder builder = EngineTestKit.engine(ENGINE_ID)
+				.selectors(selectClass(SelectByIdentifierSuite.class));
+			builder.outputDirectoryCreator(hierarchicalOutputDirectoryCreator(outputDir))
 				.execute()
 				.testEvents()
 				.assertThatEvents()
@@ -593,9 +593,9 @@ class SuiteEngineTests {
 	@Test
 	void passesOutputDirectoryProviderToEnginesInSuite() {
 		// @formatter:off
-		EngineTestKit.engine(ENGINE_ID)
-				.selectors(selectClass(SelectClassesSuite.class))
-				.outputDirectoryProvider(hierarchicalOutputDirectoryProvider(outputDir))
+		EngineTestKit.Builder builder = EngineTestKit.engine(ENGINE_ID)
+				.selectors(selectClass(SelectClassesSuite.class));
+			builder.outputDirectoryCreator(hierarchicalOutputDirectoryCreator(outputDir))
 				.execute()
 				.testEvents()
 				.assertThatEvents()
@@ -648,7 +648,7 @@ class SuiteEngineTests {
 		NamespacedHierarchicalStore<Namespace> requestLevelStore = NamespacedHierarchicalStoreProviders.dummyNamespacedHierarchicalStore();
 
 		ExecutionRequest request = ExecutionRequest.create(engineDescriptor, listener,
-			mock(ConfigurationParameters.class), mock(OutputDirectoryProvider.class), requestLevelStore);
+			mock(ConfigurationParameters.class), mock(OutputDirectoryCreator.class), requestLevelStore);
 
 		new SuiteTestEngine().execute(request);
 

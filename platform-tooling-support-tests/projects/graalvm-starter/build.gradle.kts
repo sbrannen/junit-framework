@@ -52,9 +52,11 @@ val initializeAtBuildTime = mapOf(
 		"org.junit.platform.suite.engine.SuiteTestDescriptor\$LifecycleMethods",
 	),
 	// These need to be added to native-build-tools
-	"6.0" to listOf(
+	"5.14" to listOf(
 		"org.junit.platform.commons.util.DefaultClasspathScanner",
 		"org.junit.platform.commons.util.KotlinReflectionUtils",
+		"org.junit.platform.launcher.core.DiscoveryIssueNotifier\$1",
+		"org.junit.platform.launcher.core.HierarchicalOutputDirectoryCreator",
 	)
 )
 

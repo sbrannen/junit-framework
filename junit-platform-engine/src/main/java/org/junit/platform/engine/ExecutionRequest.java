@@ -18,7 +18,6 @@ import static org.apiguardian.api.API.Status.STABLE;
 import org.apiguardian.api.API;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.commons.util.Preconditions;
-import org.junit.platform.engine.reporting.OutputDirectoryProvider;
 import org.junit.platform.engine.support.store.Namespace;
 import org.junit.platform.engine.support.store.NamespacedHierarchicalStore;
 
@@ -29,7 +28,7 @@ import org.junit.platform.engine.support.store.NamespacedHierarchicalStore;
  * <p>A request contains an engine's root {@link TestDescriptor}, the
  * {@link EngineExecutionListener} to be notified of test execution events, the
  * {@link ConfigurationParameters} that the engine may use to influence test
- * execution, and an {@link OutputDirectoryProvider} for writing reports and
+ * execution, and an {@link OutputDirectoryCreator} for writing reports and
  * other output files.
  *
  * @since 1.0
@@ -41,9 +40,12 @@ public class ExecutionRequest {
 	private final TestDescriptor rootTestDescriptor;
 	private final EngineExecutionListener engineExecutionListener;
 	private final ConfigurationParameters configurationParameters;
-	private final OutputDirectoryProvider outputDirectoryProvider;
+	private final OutputDirectoryCreator outputDirectoryCreator;
 	private final NamespacedHierarchicalStore<Namespace> requestLevelStore;
 
+	/**
+	 * @deprecated without replacement because it's an internal API.
+	 */
 	@Deprecated
 	@API(status = DEPRECATED, since = "1.11")
 	public ExecutionRequest(TestDescriptor rootTestDescriptor, EngineExecutionListener engineExecutionListener,
@@ -52,14 +54,15 @@ public class ExecutionRequest {
 	}
 
 	private ExecutionRequest(TestDescriptor rootTestDescriptor, EngineExecutionListener engineExecutionListener,
-			ConfigurationParameters configurationParameters, OutputDirectoryProvider outputDirectoryProvider,
+			ConfigurationParameters configurationParameters, OutputDirectoryCreator outputDirectoryCreator,
 			NamespacedHierarchicalStore<Namespace> requestLevelStore) {
+
 		this.rootTestDescriptor = Preconditions.notNull(rootTestDescriptor, "rootTestDescriptor must not be null");
 		this.engineExecutionListener = Preconditions.notNull(engineExecutionListener,
 			"engineExecutionListener must not be null");
 		this.configurationParameters = Preconditions.notNull(configurationParameters,
 			"configurationParameters must not be null");
-		this.outputDirectoryProvider = outputDirectoryProvider;
+		this.outputDirectoryCreator = outputDirectoryCreator;
 		this.requestLevelStore = requestLevelStore;
 	}
 
@@ -91,7 +94,7 @@ public class ExecutionRequest {
 	 * notified of test execution events; never {@code null}
 	 * @param configurationParameters {@link ConfigurationParameters} that the
 	 * engine may use to influence test execution; never {@code null}
-	 * @param outputDirectoryProvider {@link OutputDirectoryProvider} for
+	 * @param outputDirectoryCreator {@link OutputDirectoryCreator} for
 	 * writing reports and other output files; never {@code null}
 	 * @param requestLevelStore {@link NamespacedHierarchicalStore} for storing
 	 * request-scoped data; never {@code null}
@@ -101,10 +104,10 @@ public class ExecutionRequest {
 	@API(status = INTERNAL, since = "1.13")
 	public static ExecutionRequest create(TestDescriptor rootTestDescriptor,
 			EngineExecutionListener engineExecutionListener, ConfigurationParameters configurationParameters,
-			OutputDirectoryProvider outputDirectoryProvider, NamespacedHierarchicalStore<Namespace> requestLevelStore) {
+			OutputDirectoryCreator outputDirectoryCreator, NamespacedHierarchicalStore<Namespace> requestLevelStore) {
 
 		return new ExecutionRequest(rootTestDescriptor, engineExecutionListener, configurationParameters,
-			Preconditions.notNull(outputDirectoryProvider, "outputDirectoryProvider must not be null"),
+			Preconditions.notNull(outputDirectoryCreator, "outputDirectoryCreator must not be null"),
 			Preconditions.notNull(requestLevelStore, "requestLevelStore must not be null"));
 	}
 
@@ -137,17 +140,34 @@ public class ExecutionRequest {
 	}
 
 	/**
-	 * {@return the {@link OutputDirectoryProvider} for this request for writing
-	 * reports and other output files}
+	 * {@return the
+	 * {@link org.junit.platform.engine.reporting.OutputDirectoryProvider} for
+	 * this request for writing reports and other output files}
 	 *
 	 * @throws PreconditionViolationException if the output directory provider
 	 * is not available
 	 * @since 1.12
+	 * @deprecated Please use {@link #getOutputDirectoryCreator()} instead
 	 */
-	@API(status = MAINTAINED, since = "1.13.3")
-	public OutputDirectoryProvider getOutputDirectoryProvider() {
-		return Preconditions.notNull(this.outputDirectoryProvider,
-			"No OutputDirectoryProvider was configured for this request");
+	@Deprecated
+	@API(status = DEPRECATED, since = "6.0")
+	@SuppressWarnings("removal")
+	public org.junit.platform.engine.reporting.OutputDirectoryProvider getOutputDirectoryProvider() {
+		return org.junit.platform.engine.reporting.OutputDirectoryProvider.castOrAdapt(getOutputDirectoryCreator());
+	}
+
+	/**
+	 * {@return the {@link OutputDirectoryCreator} for this request for writing
+	 * reports and other output files}
+	 *
+	 * @throws PreconditionViolationException if the output directory creator is
+	 * not available
+	 * @since 6.0
+	 */
+	@API(status = MAINTAINED, since = "6.0")
+	public OutputDirectoryCreator getOutputDirectoryCreator() {
+		return Preconditions.notNull(this.outputDirectoryCreator,
+			"No OutputDirectoryCreator was configured for this request");
 	}
 
 	/**

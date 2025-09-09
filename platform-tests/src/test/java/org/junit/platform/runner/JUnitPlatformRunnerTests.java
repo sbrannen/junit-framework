@@ -22,7 +22,7 @@ import static org.junit.platform.commons.util.CollectionUtils.getOnlyElement;
 import static org.junit.platform.engine.TestExecutionResult.successful;
 import static org.junit.platform.engine.discovery.ClassNameFilter.STANDARD_INCLUDE_PATTERN;
 import static org.junit.platform.launcher.core.LauncherFactoryForTestingPurposesOnly.createLauncher;
-import static org.junit.platform.launcher.core.OutputDirectoryProviders.dummyOutputDirectoryProvider;
+import static org.junit.platform.launcher.core.OutputDirectoryCreators.dummyOutputDirectoryCreator;
 import static org.junit.runner.Description.createSuiteDescription;
 import static org.junit.runner.Description.createTestDescription;
 import static org.junit.runner.manipulation.Filter.matchMethodDescription;
@@ -466,7 +466,7 @@ class JUnitPlatformRunnerTests {
 			TestDescriptor container2 = new TestDescriptorStub(UniqueId.root("root", "container2"), "container2");
 			container2.addChild(new TestDescriptorStub(UniqueId.root("root", "test2a"), "test2a"));
 			container2.addChild(new TestDescriptorStub(UniqueId.root("root", "test2b"), "test2b"));
-			var testPlan = TestPlan.from(true, List.of(container1, container2), mock(), dummyOutputDirectoryProvider());
+			var testPlan = TestPlan.from(true, List.of(container1, container2), mock(), dummyOutputDirectoryCreator());
 
 			var launcher = mock(Launcher.class);
 			when(launcher.discover(any())).thenReturn(testPlan);
@@ -514,12 +514,12 @@ class JUnitPlatformRunnerTests {
 			originalParent2.addChild(new TestDescriptorStub(UniqueId.root("root", "leaf2a"), "leaf2a"));
 			originalParent2.addChild(new TestDescriptorStub(UniqueId.root("root", "leaf2b"), "leaf2b"));
 			var fullTestPlan = TestPlan.from(true, List.of(originalParent1, originalParent2), configParams,
-				dummyOutputDirectoryProvider());
+				dummyOutputDirectoryCreator());
 
 			TestDescriptor filteredParent = new TestDescriptorStub(UniqueId.root("root", "parent2"), "parent2");
 			filteredParent.addChild(new TestDescriptorStub(UniqueId.root("root", "leaf2b"), "leaf2b"));
 			var filteredTestPlan = TestPlan.from(true, Set.of(filteredParent), configParams,
-				dummyOutputDirectoryProvider());
+				dummyOutputDirectoryCreator());
 
 			var launcher = mock(Launcher.class);
 			var captor = ArgumentCaptor.forClass(LauncherDiscoveryRequest.class);
@@ -542,7 +542,7 @@ class JUnitPlatformRunnerTests {
 		@Test
 		void throwsNoTestsRemainExceptionWhenNoTestIdentifierMatchesFilter() {
 			var testPlan = TestPlan.from(true, Set.of(new TestDescriptorStub(UniqueId.root("root", "test"), "test")),
-				configParams, dummyOutputDirectoryProvider());
+				configParams, dummyOutputDirectoryCreator());
 
 			var launcher = mock(Launcher.class);
 			when(launcher.discover(any())).thenReturn(testPlan);
@@ -781,7 +781,7 @@ class JUnitPlatformRunnerTests {
 		var launcher = mock(Launcher.class);
 		var captor = ArgumentCaptor.forClass(LauncherDiscoveryRequest.class);
 		when(launcher.discover(captor.capture())).thenReturn(
-			TestPlan.from(true, Set.of(), mock(), dummyOutputDirectoryProvider()));
+			TestPlan.from(true, Set.of(), mock(), dummyOutputDirectoryCreator()));
 
 		new JUnitPlatform(testClass, launcher);
 

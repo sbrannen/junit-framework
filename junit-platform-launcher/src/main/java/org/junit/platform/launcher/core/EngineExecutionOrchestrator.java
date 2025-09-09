@@ -26,10 +26,10 @@ import org.junit.platform.commons.util.UnrecoverableExceptions;
 import org.junit.platform.engine.ConfigurationParameters;
 import org.junit.platform.engine.EngineExecutionListener;
 import org.junit.platform.engine.ExecutionRequest;
+import org.junit.platform.engine.OutputDirectoryCreator;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.TestEngine;
 import org.junit.platform.engine.TestExecutionResult;
-import org.junit.platform.engine.reporting.OutputDirectoryProvider;
 import org.junit.platform.engine.support.store.Namespace;
 import org.junit.platform.engine.support.store.NamespacedHierarchicalStore;
 import org.junit.platform.launcher.TestExecutionListener;
@@ -202,7 +202,7 @@ public class EngineExecutionOrchestrator {
 		}
 		else {
 			executeEngine(engineDescriptor, listener, discoveryResult.getConfigurationParameters(), testEngine,
-				discoveryResult.getOutputDirectoryProvider(), discoveryIssueNotifier, requestLevelStore);
+				discoveryResult.getOutputDirectoryCreator(), discoveryIssueNotifier, requestLevelStore);
 		}
 	}
 
@@ -222,13 +222,13 @@ public class EngineExecutionOrchestrator {
 
 	private void executeEngine(TestDescriptor engineDescriptor, EngineExecutionListener listener,
 			ConfigurationParameters configurationParameters, TestEngine testEngine,
-			OutputDirectoryProvider outputDirectoryProvider, DiscoveryIssueNotifier discoveryIssueNotifier,
+			OutputDirectoryCreator outputDirectoryCreator, DiscoveryIssueNotifier discoveryIssueNotifier,
 			NamespacedHierarchicalStore<Namespace> requestLevelStore) {
 		OutcomeDelayingEngineExecutionListener delayingListener = new OutcomeDelayingEngineExecutionListener(listener,
 			engineDescriptor);
 		try {
 			testEngine.execute(ExecutionRequest.create(engineDescriptor, delayingListener, configurationParameters,
-				outputDirectoryProvider, requestLevelStore));
+				outputDirectoryCreator, requestLevelStore));
 			discoveryIssueNotifier.logNonCriticalIssues(testEngine);
 			delayingListener.reportEngineOutcome();
 		}

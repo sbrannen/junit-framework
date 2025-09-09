@@ -34,7 +34,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.platform.commons.util.ClassNamePatternFilterUtils;
 import org.junit.platform.commons.util.Preconditions;
 import org.junit.platform.engine.ConfigurationParameters;
-import org.junit.platform.engine.reporting.OutputDirectoryProvider;
+import org.junit.platform.engine.OutputDirectoryCreator;
 
 /**
  * Default implementation of the {@link JupiterConfiguration} API.
@@ -69,13 +69,13 @@ public class DefaultJupiterConfiguration implements JupiterConfiguration {
 		new EnumConfigurationParameterConverter<>(ExtensionContextScope.class, "extension context scope");
 
 	private final ConfigurationParameters configurationParameters;
-	private final OutputDirectoryProvider outputDirectoryProvider;
+	private final OutputDirectoryCreator outputDirectoryCreator;
 
 	public DefaultJupiterConfiguration(ConfigurationParameters configurationParameters,
-			OutputDirectoryProvider outputDirectoryProvider) {
+			OutputDirectoryCreator outputDirectoryCreator) {
 		this.configurationParameters = Preconditions.notNull(configurationParameters,
 			"ConfigurationParameters must not be null");
-		this.outputDirectoryProvider = outputDirectoryProvider;
+		this.outputDirectoryCreator = outputDirectoryCreator;
 	}
 
 	@Override
@@ -187,7 +187,7 @@ public class DefaultJupiterConfiguration implements JupiterConfiguration {
 	}
 
 	@Override
-	public OutputDirectoryProvider getOutputDirectoryProvider() {
-		return outputDirectoryProvider;
+	public OutputDirectoryCreator getOutputDirectoryCreator() {
+		return outputDirectoryCreator;
 	}
 }

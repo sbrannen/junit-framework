@@ -11,7 +11,7 @@
 package org.junit.platform.launcher.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.platform.launcher.core.OutputDirectoryProviders.dummyOutputDirectoryProvider;
+import static org.junit.platform.launcher.core.OutputDirectoryCreators.dummyOutputDirectoryCreator;
 import static org.mockito.Mockito.mock;
 
 import java.util.Map;
@@ -38,7 +38,7 @@ class ExecutionListenerAdapterTests {
 
 		var discoveryResult = new LauncherDiscoveryResult(
 			Map.of(mock(), EngineResultInfo.completed(testDescriptor, DiscoveryIssueNotifier.NO_ISSUES)), mock(),
-			dummyOutputDirectoryProvider());
+			dummyOutputDirectoryCreator());
 		var testPlan = InternalTestPlan.from(discoveryResult);
 		var testIdentifier = testPlan.getTestIdentifier(testDescriptor.getUniqueId());
 
