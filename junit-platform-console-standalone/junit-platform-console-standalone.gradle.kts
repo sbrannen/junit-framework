@@ -32,6 +32,9 @@ tasks {
 			attributes("Main-Class" to "org.junit.platform.console.ConsoleLauncher")
 		}
 	}
+	checkBackwardCompatibility {
+		enabled = false // already checked by individual projects
+	}
 	val shadowedArtifactsFile by registering(WriteArtifactsFile::class) {
 		from(configurations.shadowedClasspath)
 		outputFile = layout.buildDirectory.file("shadowed-artifacts")

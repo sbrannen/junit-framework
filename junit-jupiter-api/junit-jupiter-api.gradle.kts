@@ -23,6 +23,9 @@ dependencies {
 }
 
 tasks {
+	checkBackwardCompatibility {
+		classExcludes.addAll("*.AssertionsKt\$assert*", "*.AssertionsKt\$evaluate*")
+	}
 	jar {
 		bundle {
 			val version = project.version
