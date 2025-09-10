@@ -52,6 +52,12 @@ tasks {
 				"-C", release17ClassesDir.absolutePath, "."
 			)
 		})
+		bundle {
+			// Ignore warning for package that is only exported as "INTERNAL"
+			bnd("""
+				-fixupmessages.picocli.export: "Export org.junit.platform.console.options";is:=ignore
+			""")
+		}
 	}
 	codeCoverageClassesJar {
 		exclude("org/junit/platform/console/options/ConsoleUtils.class")
