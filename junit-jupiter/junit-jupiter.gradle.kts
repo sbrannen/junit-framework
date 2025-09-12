@@ -15,6 +15,6 @@ dependencies {
 	osgiVerification(projects.junitPlatformLauncher)
 }
 
-tasks.checkBackwardCompatibility {
+japicmp {
 	enabled = false // already checked by individual projects
 }

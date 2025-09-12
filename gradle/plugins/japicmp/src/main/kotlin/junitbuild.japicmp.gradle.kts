@@ -14,6 +14,7 @@ plugins {
 }
 
 val extension = extensions.create<JApiCmpExtension>("japicmp").apply {
+	enabled.convention(true)
 	acceptedIncompatibilities.apply {
 		val acceptedBreakingChangesFile = rootProject.layout.projectDirectory.file("gradle/config/japicmp/accepted-breaking-changes.txt")
 		if (acceptedBreakingChangesFile.asFile.exists()) {
@@ -32,6 +33,7 @@ val extension = extensions.create<JApiCmpExtension>("japicmp").apply {
 }
 
 val downloadPreviousReleaseJar by tasks.registering(Download::class) {
+	onlyIf { extension.enabled.get() }
 	val previousVersion = extension.previousVersion.get()
 	src("https://repo1.maven.org/maven2/${project.group.toString().replace(".", "/")}/${project.name}/$previousVersion/${project.name}-$previousVersion.jar")
 	dest(layout.buildDirectory.dir("japicmp"))
@@ -42,6 +44,7 @@ val downloadPreviousReleaseJar by tasks.registering(Download::class) {
 }
 
 val checkBackwardCompatibility by tasks.registering(JapicmpTask::class) {
+	onlyIf { extension.enabled.get() }
 	oldClasspath.from(downloadPreviousReleaseJar.map { it.outputFiles })
 	newClasspath.from(tasks.jar)
 	onlyModified = true
