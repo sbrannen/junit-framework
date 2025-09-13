@@ -17,12 +17,12 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import org.apiguardian.api.API;
+import org.junit.platform.commons.io.Resource;
+import org.junit.platform.commons.io.ResourceFilter;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
-import org.junit.platform.commons.support.Resource;
 import org.junit.platform.commons.support.scanning.ClassFilter;
 
 /**
@@ -111,7 +111,7 @@ public class ModuleUtils {
 	 * @since 1.11
 	 */
 	@API(status = INTERNAL, since = "1.11")
-	public static List<Resource> findAllResourcesInModule(String moduleName, Predicate<Resource> filter) {
+	public static List<Resource> findAllResourcesInModule(String moduleName, ResourceFilter filter) {
 		Preconditions.notBlank(moduleName, "Module name must not be null or empty");
 		Preconditions.notNull(filter, "Resource filter must not be null");
 

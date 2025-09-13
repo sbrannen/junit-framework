@@ -8,38 +8,36 @@
  * https://www.eclipse.org/legal/epl-v20.html
  */
 
-package org.junit.platform.commons.support;
+package org.junit.platform.commons.io;
 
 import java.net.URI;
 import java.util.Objects;
 
-import org.junit.platform.commons.util.Preconditions;
-import org.junit.platform.commons.util.ToStringBuilder;
+import org.junit.platform.commons.PreconditionViolationException;
 
 /**
  * Default implementation of {@link Resource}.
  *
- * @since 1.11
+ * @since 6.0
  */
-@SuppressWarnings("deprecation")
 class DefaultResource implements Resource {
 
 	private final String name;
 	private final URI uri;
 
 	DefaultResource(String name, URI uri) {
-		this.name = Preconditions.notNull(name, "name must not be null");
-		this.uri = Preconditions.notNull(uri, "uri must not be null");
+		this.name = checkNotNull(name, "name");
+		this.uri = checkNotNull(uri, "uri");
 	}
 
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	@Override
 	public URI getUri() {
-		return uri;
+		return this.uri;
 	}
 
 	@Override
@@ -47,8 +45,8 @@ class DefaultResource implements Resource {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof org.junit.platform.commons.io.Resource) {
-			org.junit.platform.commons.io.Resource that = (org.junit.platform.commons.io.Resource) obj;
+		if (obj instanceof Resource) {
+			Resource that = (Resource) obj;
 			return this.name.equals(that.getName()) //
 					&& this.uri.equals(that.getUri());
 		}
@@ -60,11 +58,12 @@ class DefaultResource implements Resource {
 		return Objects.hash(name, uri);
 	}
 
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this) //
-				.append("name", name) //
-				.append("uri", uri) //
-				.toString();
+	// Cannot use Preconditions due to package cycle
+	private static <T> T checkNotNull(T input, String title) {
+		if (input == null) {
+			throw new PreconditionViolationException(title + " must not be null");
+		}
+		return input;
 	}
+
 }

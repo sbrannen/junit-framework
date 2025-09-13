@@ -49,8 +49,9 @@ import org.junit.jupiter.api.fixtures.TrackLogRecords;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.commons.function.Try;
+import org.junit.platform.commons.io.Resource;
+import org.junit.platform.commons.io.ResourceFilter;
 import org.junit.platform.commons.logging.LogRecordListener;
-import org.junit.platform.commons.support.Resource;
 import org.junit.platform.commons.support.scanning.ClassFilter;
 
 /**
@@ -61,8 +62,8 @@ import org.junit.platform.commons.support.scanning.ClassFilter;
 @TrackLogRecords
 class DefaultClasspathScannerTests {
 
-	private static final ClassFilter allClasses = ClassFilter.of(type -> true);
-	private static final Predicate<Resource> allResources = type -> true;
+	private static final ClassFilter allClasses = ClassFilter.of(__ -> true);
+	private static final ResourceFilter allResources = ResourceFilter.of(__ -> true);
 
 	private final List<Class<?>> loadedClasses = new ArrayList<>();
 
@@ -148,7 +149,8 @@ class DefaultClasspathScannerTests {
 	}
 
 	private void assertResourcesScannedWhenExceptionIsThrown(Predicate<Resource> filter) {
-		var resources = this.classpathScanner.scanForResourcesInClasspathRoot(getTestClasspathResourceRoot(), filter);
+		var resources = this.classpathScanner.scanForResourcesInClasspathRoot(getTestClasspathResourceRoot(),
+			ResourceFilter.of(filter));
 		assertThat(resources).hasSizeGreaterThanOrEqualTo(150);
 	}
 
@@ -403,7 +405,7 @@ class DefaultClasspathScannerTests {
 
 	@Test
 	void scanForResourcesInDefaultPackage() {
-		Predicate<Resource> resourceFilter = this::inDefaultPackage;
+		var resourceFilter = ResourceFilter.of(this::inDefaultPackage);
 		var resources = classpathScanner.scanForResourcesInPackage("", resourceFilter);
 
 		assertThat(resources).as("number of resources found in default package").isNotEmpty();
@@ -420,8 +422,8 @@ class DefaultClasspathScannerTests {
 
 	@Test
 	void scanForResourcesInPackageWithFilter() {
-		Predicate<Resource> thisResourceOnly = resource -> "org/junit/platform/commons/example.resource".equals(
-			resource.getName());
+		var thisResourceOnly = ResourceFilter.of(
+			resource -> "org/junit/platform/commons/example.resource".equals(resource.getName()));
 		var resources = classpathScanner.scanForResourcesInPackage("org.junit.platform.commons", thisResourceOnly);
 		assertThat(resources).extracting(Resource::getName).containsExactly(
 			"org/junit/platform/commons/example.resource");
@@ -429,8 +431,8 @@ class DefaultClasspathScannerTests {
 
 	@Test
 	void resourcesCanBeRead() throws IOException {
-		Predicate<Resource> thisResourceOnly = resource -> "org/junit/platform/commons/example.resource".equals(
-			resource.getName());
+		var thisResourceOnly = ResourceFilter.of(
+			resource -> "org/junit/platform/commons/example.resource".equals(resource.getName()));
 		var resources = classpathScanner.scanForResourcesInPackage("org.junit.platform.commons", thisResourceOnly);
 		Resource resource = resources.getFirst();
 

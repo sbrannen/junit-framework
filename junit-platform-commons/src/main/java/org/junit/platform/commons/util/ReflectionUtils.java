@@ -61,9 +61,10 @@ import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import org.junit.platform.commons.JUnitException;
 import org.junit.platform.commons.function.Try;
+import org.junit.platform.commons.io.Resource;
+import org.junit.platform.commons.io.ResourceFilter;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
-import org.junit.platform.commons.support.Resource;
 import org.junit.platform.commons.support.scanning.ClassFilter;
 import org.junit.platform.commons.support.scanning.ClasspathScanner;
 
@@ -894,7 +895,7 @@ public final class ReflectionUtils {
 	 *
 	 * @param classpathResourceName the name of the resources to load; never {@code null} or blank
 	 * @since 1.12
-	 * @see org.junit.platform.commons.support.ReflectionSupport#tryToGetResources(String, ClassLoader)
+	 * @see org.junit.platform.commons.support.ResourceSupport#tryToGetResources(String, ClassLoader)
 	 */
 	@API(status = INTERNAL, since = "1.12")
 	public static Try<Set<Resource>> tryToGetResources(String classpathResourceName) {
@@ -905,7 +906,7 @@ public final class ReflectionUtils {
 	 * Try to get {@linkplain Resource resources} by their name, using the
 	 * supplied {@link ClassLoader}.
 	 *
-	 * <p>See {@link org.junit.platform.commons.support.ReflectionSupport#tryToGetResources(String, ClassLoader)}
+	 * <p>See {@link org.junit.platform.commons.support.ResourceSupport#tryToGetResources(String, ClassLoader)}
 	 * for details.
 	 *
 	 * @param classpathResourceName the name of the resources to load; never {@code null} or blank
@@ -1115,7 +1116,7 @@ public final class ReflectionUtils {
 	/**
 	 * @since 1.11
 	 */
-	public static List<Resource> findAllResourcesInClasspathRoot(URI root, Predicate<Resource> resourceFilter) {
+	public static List<Resource> findAllResourcesInClasspathRoot(URI root, ResourceFilter resourceFilter) {
 		return Collections.unmodifiableList(classpathScanner.scanForResourcesInClasspathRoot(root, resourceFilter));
 	}
 
@@ -1129,7 +1130,7 @@ public final class ReflectionUtils {
 	/**
 	 * @since 1.11
 	 */
-	public static Stream<Resource> streamAllResourcesInClasspathRoot(URI root, Predicate<Resource> resourceFilter) {
+	public static Stream<Resource> streamAllResourcesInClasspathRoot(URI root, ResourceFilter resourceFilter) {
 		return findAllResourcesInClasspathRoot(root, resourceFilter).stream();
 	}
 
@@ -1161,7 +1162,7 @@ public final class ReflectionUtils {
 	/**
 	 * @since 1.11
 	 */
-	public static List<Resource> findAllResourcesInPackage(String basePackageName, Predicate<Resource> resourceFilter) {
+	public static List<Resource> findAllResourcesInPackage(String basePackageName, ResourceFilter resourceFilter) {
 		return Collections.unmodifiableList(
 			classpathScanner.scanForResourcesInPackage(basePackageName, resourceFilter));
 	}
@@ -1176,8 +1177,7 @@ public final class ReflectionUtils {
 	/**
 	 * @since 1.11
 	 */
-	public static Stream<Resource> streamAllResourcesInPackage(String basePackageName,
-			Predicate<Resource> resourceFilter) {
+	public static Stream<Resource> streamAllResourcesInPackage(String basePackageName, ResourceFilter resourceFilter) {
 		return findAllResourcesInPackage(basePackageName, resourceFilter).stream();
 	}
 
@@ -1210,7 +1210,7 @@ public final class ReflectionUtils {
 	/**
 	 * @since 1.11
 	 */
-	public static List<Resource> findAllResourcesInModule(String moduleName, Predicate<Resource> resourceFilter) {
+	public static List<Resource> findAllResourcesInModule(String moduleName, ResourceFilter resourceFilter) {
 		return Collections.unmodifiableList(ModuleUtils.findAllResourcesInModule(moduleName, resourceFilter));
 	}
 
@@ -1224,7 +1224,7 @@ public final class ReflectionUtils {
 	/**
 	 * @since 1.11
 	 */
-	public static Stream<Resource> streamAllResourcesInModule(String moduleName, Predicate<Resource> resourceFilter) {
+	public static Stream<Resource> streamAllResourcesInModule(String moduleName, ResourceFilter resourceFilter) {
 		return findAllResourcesInModule(moduleName, resourceFilter).stream();
 	}
 
