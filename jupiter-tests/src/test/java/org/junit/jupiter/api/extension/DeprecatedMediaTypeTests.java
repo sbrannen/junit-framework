@@ -24,9 +24,13 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * Unit tests for {@link MediaType}.
+ * Unit tests for the deprecated {@link MediaType}.
+ *
+ * @see org.junit.jupiter.api.MediaTypeTests
+ * @see MediaTypeInteroperabilityTests
  */
-class MediaTypeTests {
+@SuppressWarnings("deprecation")
+class DeprecatedMediaTypeTests {
 
 	@Test
 	void equals() {

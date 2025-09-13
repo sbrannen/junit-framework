@@ -46,7 +46,6 @@ import com.tngtech.archunit.library.GeneralCodingRules;
 
 import org.apiguardian.api.API;
 import org.junit.jupiter.api.TestReporter;
-import org.junit.jupiter.api.extension.MediaType;
 import org.junit.platform.commons.PreconditionViolationException;
 import org.junit.platform.commons.support.Resource;
 import org.junit.platform.commons.support.scanning.ClasspathScanner;
@@ -106,7 +105,7 @@ class ArchUnitTests {
 					org.junit.platform.commons.util.PreconditionViolationException.class) //
 
 				// https://github.com/junit-team/junit-framework/issues/4886
-				.ignoreDependency(TestReporter.class, MediaType.class) //
+				.ignoreDependency(TestReporter.class, org.junit.jupiter.api.extension.MediaType.class) //
 
 				// https://github.com/junit-team/junit-framework/issues/4885
 				.ignoreDependency(ModuleUtils.class, Resource.class) //
