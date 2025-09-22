@@ -37,6 +37,8 @@ val downloadPreviousReleaseJar by tasks.registering(Download::class) {
 	dest(layout.buildDirectory.dir("japicmp"))
 	overwrite(false)
 	quiet(true)
+	retries(2)
+	outputs.cacheIf { true }
 }
 
 val checkBackwardCompatibility by tasks.registering(JapicmpTask::class) {
