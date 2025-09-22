@@ -12,10 +12,10 @@ used to build custom reporting. See <<running-tests-listeners>> for details.
 [[junit-platform-reporting-output-directory]]
 ==== Output Directory
 
-The JUnit Platform provides an `{OutputDirectoryProvider}` via
-`{EngineDiscoveryRequest}` and `{TestPlan}` to registered <<test-engines, test engines>>
-and <<running-tests-listeners, listeners>>, respectively. Its root directory can be
-configured via the following <<running-tests-config-params, configuration parameter>>:
+The JUnit Platform provides an `{OutputDirectoryCreator}` via `{EngineDiscoveryRequest}`
+and `{TestPlan}` to registered <<test-engines, test engines>> and
+<<running-tests-listeners, listeners>>, respectively. Its root directory can be configured
+via the following <<running-tests-config-params, configuration parameter>>:
 
 `junit.platform.reporting.output.dir=<path>`::
   Configure the output directory for reporting. By default, `build` is used if a Gradle

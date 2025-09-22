@@ -591,7 +591,7 @@ class SuiteEngineTests {
 	}
 
 	@Test
-	void passesOutputDirectoryProviderToEnginesInSuite() {
+	void passesOutputDirectoryCreatorToEnginesInSuite() {
 		// @formatter:off
 		EngineTestKit.Builder builder = EngineTestKit.engine(ENGINE_ID)
 				.selectors(selectClass(SelectClassesSuite.class));
