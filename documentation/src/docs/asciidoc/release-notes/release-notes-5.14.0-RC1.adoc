@@ -16,7 +16,9 @@ repository on GitHub.
 [[release-notes-5.14.0-RC1-junit-platform-bug-fixes]]
 ==== Bug Fixes
 
-* ❓
+* The `Launcher` (specifically `LauncherDiscoveryResult`) now retains the original
+  `TestEngine` registration order after pruning test engines without tests, thereby
+  ensuring reliable test execution order of multiple test engines.
 
 [[release-notes-5.14.0-RC1-junit-platform-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
