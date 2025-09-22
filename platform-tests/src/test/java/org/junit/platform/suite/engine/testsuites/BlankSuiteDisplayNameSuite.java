@@ -18,7 +18,7 @@ import org.junit.platform.suite.engine.testcases.SingleTestTestCase;
 /**
  * Test suite with blank @SuiteDisplayName to verify validation.
  *
- * @since 6.0
+ * @since 5.14
  */
 @Suite
 @SelectClasses(SingleTestTestCase.class)
