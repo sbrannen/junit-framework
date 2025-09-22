@@ -89,6 +89,14 @@ repository on GitHub.
 [[release-notes-5.14.0-RC1-junit-vintage-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
 
+* `org.junit.jupiter.api.extension.MediaType` is now deprecated in favor of the new
+  `org.junit.jupiter.api.MediaType`.
+* The `publishFile(...)` methods in `TestReporter` which accept an
+  `org.junit.jupiter.api.extension.MediaType` are now deprecated in favor of new variants
+  which accept an `org.junit.jupiter.api.MediaType`.
+* The `publishFile(...)` method in `ExtensionContext` which accepts an
+  `org.junit.jupiter.api.extension.MediaType` is now deprecated in favor of a new variant
+  which accepts an `org.junit.jupiter.api.MediaType`.
 * `org.junit.jupiter.params.support.ParameterInfo` is now deprecated in favor of the new
   `org.junit.jupiter.params.ParameterInfo`.
 
