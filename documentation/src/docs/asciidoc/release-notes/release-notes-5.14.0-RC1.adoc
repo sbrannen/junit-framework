@@ -40,6 +40,9 @@ repository on GitHub.
 * To help diagnosing potentially invalid invocations, the Console Launcher now logs
   warnings for nonexistent classpath roots added via `--classpath` or `--scan-classpath`
   rather than silently ignoring them.
+* New `FileSource.withPosition(FilePosition)` method to avoid the overhead of redundant
+  canonicalization of files when using `FileSource.from(File, FilePosition)` with many
+  different `FilePosition` instances for the same `File`.
 
 
 [[release-notes-5.14.0-RC1-junit-jupiter]]
