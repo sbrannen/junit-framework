@@ -17,7 +17,6 @@ import static org.junit.platform.commons.test.PreconditionAssertions.assertPreco
 import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationNotNullFor;
 import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationNotNullOrBlankFor;
 
-import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -44,8 +43,7 @@ class MediaTypeTests {
 		@ParameterizedTest
 		@NullAndEmptySource
 		@ValueSource(strings = { "   ", " \t " })
-		@SuppressWarnings("DataFlowIssue") // MediaType.create() parameters are not @Nullable
-		void parseWithNullOrBlankMediaType(@Nullable String mediaType) {
+		void parseWithNullOrBlankMediaType(String mediaType) {
 			assertPreconditionViolationNotNullOrBlankFor("value", () -> MediaType.parse(mediaType));
 		}
 
@@ -70,38 +68,33 @@ class MediaTypeTests {
 		@ParameterizedTest
 		@NullAndEmptySource
 		@ValueSource(strings = { "   ", " \t " })
-		@SuppressWarnings("DataFlowIssue") // MediaType.create() parameters are not @Nullable
-		void createWithNullOrBlankType(@Nullable String type) {
+		void createWithNullOrBlankType(String type) {
 			assertPreconditionViolationNotNullOrBlankFor("type", () -> MediaType.create(type, "json"));
 		}
 
 		@ParameterizedTest
 		@NullAndEmptySource
 		@ValueSource(strings = { "   ", " \t " })
-		@SuppressWarnings("DataFlowIssue") // MediaType.create() parameters are not @Nullable
-		void createWithNullOrBlankTypeAndCharset(@Nullable String type) {
+		void createWithNullOrBlankTypeAndCharset(String type) {
 			assertPreconditionViolationNotNullOrBlankFor("type", () -> MediaType.create(type, "json", UTF_8));
 		}
 
 		@ParameterizedTest
 		@NullAndEmptySource
 		@ValueSource(strings = { "   ", " \t " })
-		@SuppressWarnings("DataFlowIssue") // MediaType.create() parameters are not @Nullable
-		void createWithNullOrBlankSubtype(@Nullable String subtype) {
+		void createWithNullOrBlankSubtype(String subtype) {
 			assertPreconditionViolationNotNullOrBlankFor("subtype", () -> MediaType.create("application", subtype));
 		}
 
 		@ParameterizedTest
 		@NullAndEmptySource
 		@ValueSource(strings = { "   ", " \t " })
-		@SuppressWarnings("DataFlowIssue") // MediaType.create() parameters are not @Nullable
-		void createWithNullOrBlankSubtypeAndCharset(@Nullable String subtype) {
+		void createWithNullOrBlankSubtypeAndCharset(String subtype) {
 			assertPreconditionViolationNotNullOrBlankFor("subtype",
 				() -> MediaType.create("application", subtype, UTF_8));
 		}
 
 		@Test
-		@SuppressWarnings("DataFlowIssue") // MediaType.create() parameters are not @Nullable
 		void createWithNullCharset() {
 			assertPreconditionViolationNotNullFor("charset", () -> MediaType.create("application", "json", null));
 		}

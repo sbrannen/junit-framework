@@ -113,7 +113,7 @@ public class MediaType {
 	public static MediaType create(String type, String subtype) {
 		Preconditions.notBlank(type, "type must not be null or blank");
 		Preconditions.notBlank(subtype, "subtype must not be null or blank");
-		return new MediaType(type.strip() + "/" + subtype.strip());
+		return new MediaType(type.trim() + "/" + subtype.trim());
 	}
 
 	/**
@@ -128,14 +128,14 @@ public class MediaType {
 		Preconditions.notBlank(type, "type must not be null or blank");
 		Preconditions.notBlank(subtype, "subtype must not be null or blank");
 		Preconditions.notNull(charset, "charset must not be null");
-		return new MediaType(type.strip() + "/" + subtype.strip() + "; charset=" + charset.name());
+		return new MediaType(type.trim() + "/" + subtype.trim() + "; charset=" + charset.name());
 	}
 
 	private MediaType(String value) {
-		String strippedValue = Preconditions.notBlank(value, "value must not be null or blank").strip();
-		Matcher matcher = PATTERN.matcher(strippedValue);
-		Preconditions.condition(matcher.matches(), () -> "Invalid media type: '" + strippedValue + "'");
-		this.value = strippedValue;
+		String trimmedValue = Preconditions.notBlank(value, "value must not be null or blank").trim();
+		Matcher matcher = PATTERN.matcher(trimmedValue);
+		Preconditions.condition(matcher.matches(), () -> "Invalid media type: '" + trimmedValue + "'");
+		this.value = trimmedValue;
 	}
 
 	/**
