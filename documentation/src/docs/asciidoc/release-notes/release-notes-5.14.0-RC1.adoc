@@ -23,7 +23,15 @@ repository on GitHub.
 [[release-notes-5.14.0-RC1-junit-platform-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
 
-* ❓
+* Deprecate `OutputDirectoryProvider` interface in favor of the new
+  `OutputDirectoryCreator` interface to resolve cyclic package dependency along
+  with the following APIs (which all have replacements working with
+  `OutputDirectoryCreator`):
+  - `EngineDiscoveryRequest.getOutputDirectoryProvider()`
+  - `ExecutionRequest.getOutputDirectoryProvider()`
+  - `LauncherDiscoveryRequestBuilder.outputDirectoryProvider(OutputDirectoryProvider)`
+  - `TestPlan.getOutputDirectoryProvider()`
+  - `EngineTestKit.Builder.outputDirectoryProvider(OutputDirectoryProvider)`
 
 [[release-notes-5.14.0-RC1-junit-platform-new-features-and-improvements]]
 ==== New Features and Improvements
