@@ -26,7 +26,7 @@ repository on GitHub.
 [[release-notes-5.14.0-RC1-junit-platform-new-features-and-improvements]]
 ==== New Features and Improvements
 
-* ❓
+* Emit warning when `@SuiteDisplayName` is used with a blank string
 
 
 [[release-notes-5.14.0-RC1-junit-jupiter]]
