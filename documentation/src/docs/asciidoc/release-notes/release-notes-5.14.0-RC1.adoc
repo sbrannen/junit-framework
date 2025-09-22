@@ -29,6 +29,9 @@ repository on GitHub.
 ==== New Features and Improvements
 
 * Emit warning when `@SuiteDisplayName` is used with a blank string
+* To help diagnosing potentially invalid invocations, the Console Launcher now logs
+  warnings for nonexistent classpath roots added via `--classpath` or `--scan-classpath`
+  rather than silently ignoring them.
 
 
 [[release-notes-5.14.0-RC1-junit-jupiter]]
