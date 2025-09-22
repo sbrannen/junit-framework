@@ -68,7 +68,7 @@ public class MediaType {
 	 * @deprecated Use {@link #APPLICATION_JSON} instead.
 	 */
 	@Deprecated
-	@API(status = DEPRECATED, since = "6.0")
+	@API(status = DEPRECATED, since = "5.14")
 	public static final MediaType APPLICATION_JSON_UTF_8 = create("application", "json", UTF_8);
 
 	/**
