@@ -42,7 +42,9 @@ repository on GitHub.
 [[release-notes-5.14.0-RC1-junit-jupiter-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
 
-* ❓
+* `MediaType.APPLICATION_JSON_UTF_8` is now deprecated in favor of using
+  `MediaType.APPLICATION_JSON`, since the industry considers UTF-8 to be the implicit
+  default encoding for the `application/json` media type.
 
 [[release-notes-5.14.0-RC1-junit-jupiter-new-features-and-improvements]]
 ==== New Features and Improvements
