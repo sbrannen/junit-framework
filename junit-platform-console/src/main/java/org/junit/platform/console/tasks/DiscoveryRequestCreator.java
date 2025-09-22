@@ -108,7 +108,7 @@ class DiscoveryRequestCreator {
 				valid.add(root);
 			}
 			else {
-				logger.warn(() -> "Ignoring nonexistent classpath root: %s".formatted(root));
+				logger.warn(() -> String.format("Ignoring nonexistent classpath root: %s", root));
 			}
 		}
 

@@ -383,7 +383,7 @@ class DiscoveryRequestCreatorTests {
 	void logsInvalidSearchPathRoots(@TrackLogRecords LogRecordListener listener) {
 		var opts = new TestDiscoveryOptions();
 		opts.setScanClasspath(true);
-		var missingPath = Path.of("/does/not/exist");
+		var missingPath = Paths.get("/does/not/exist");
 		opts.setSelectedClasspathEntries(List.of(missingPath));
 
 		DiscoveryRequestCreator.toDiscoveryRequestBuilder(opts);
@@ -398,7 +398,7 @@ class DiscoveryRequestCreatorTests {
 	void logsInvalidAdditionalClasspathRoots(@TrackLogRecords LogRecordListener listener) {
 		var opts = new TestDiscoveryOptions();
 		opts.setScanClasspath(true);
-		var missingPath = Path.of("/also/does/not/exist");
+		var missingPath = Paths.get("/also/does/not/exist");
 		opts.setAdditionalClasspathEntries(List.of(missingPath));
 
 		DiscoveryRequestCreator.toDiscoveryRequestBuilder(opts);
