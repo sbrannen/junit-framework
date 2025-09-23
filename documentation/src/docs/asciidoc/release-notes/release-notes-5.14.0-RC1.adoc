@@ -71,6 +71,9 @@ repository on GitHub.
 * New `FileSource.withPosition(FilePosition)` method to avoid the overhead of redundant
   canonicalization of files when using `FileSource.from(File, FilePosition)` with many
   different `FilePosition` instances for the same `File`.
+* New classpath resource abstraction in `org.junit.platform.commons.io.Resource` with
+  support for loading resources or finding them on the classpath via static utility
+  methods in the new `org.junit.platform.commons.support.ResourceSupport` class.
 
 
 [[release-notes-5.14.0-RC1-junit-jupiter]]
