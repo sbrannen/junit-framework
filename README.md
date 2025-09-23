@@ -13,7 +13,9 @@ This repository is the home of _JUnit 5_.
 ## Latest Releases
 
 - General Availability (GA): [JUnit 5.13.4](https://github.com/junit-team/junit-framework/releases/tag/r5.13.4) (July 21, 2025)
-- Preview (Milestone/Release Candidate): [JUnit 6.0.0-RC3](https://github.com/junit-team/junit-framework/releases/tag/r6.0.0-RC3) (September 14, 2025)
+- Preview (Milestone/Release Candidate):
+  - [JUnit 5.14.0-RC1](https://github.com/junit-team/junit-framework/releases/tag/r5.14.0-RC1) (September 23, 2025)
+  - [JUnit 6.0.0-RC3](https://github.com/junit-team/junit-framework/releases/tag/r6.0.0-RC3) (September 14, 2025)
 
 ## Documentation
 
