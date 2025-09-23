@@ -101,7 +101,7 @@ public interface TestReporter {
 	 * @deprecated Use {@link #publishFile(Path, MediaType)} instead.
 	 */
 	@Deprecated
-	@API(status = DEPRECATED, since = "6.0")
+	@API(status = DEPRECATED, since = "5.14")
 	default void publishFile(Path file, org.junit.jupiter.api.extension.MediaType mediaType) {
 		Preconditions.notNull(mediaType, "mediaType must not be null");
 		publishFile(file, MediaType.parse(mediaType.toString()));
@@ -116,9 +116,9 @@ public interface TestReporter {
 	 * @param file the file to be published; never {@code null}
 	 * @param mediaType the media type of the file; never {@code null}; use
 	 * {@link MediaType#APPLICATION_OCTET_STREAM} if unknown
-	 * @since 6.0
+	 * @since 5.14
 	 */
-	@API(status = MAINTAINED, since = "6.0")
+	@API(status = MAINTAINED, since = "5.14")
 	default void publishFile(Path file, MediaType mediaType) {
 		Preconditions.notNull(file, "file must not be null");
 		Preconditions.notNull(mediaType, "mediaType must not be null");
@@ -179,7 +179,7 @@ public interface TestReporter {
 	 * @deprecated Use {@link #publishFile(String, MediaType, ThrowingConsumer)} instead.
 	 */
 	@Deprecated
-	@API(status = DEPRECATED, since = "6.0")
+	@API(status = DEPRECATED, since = "5.14")
 	default void publishFile(String name, org.junit.jupiter.api.extension.MediaType mediaType,
 			ThrowingConsumer<Path> action) {
 
@@ -199,9 +199,9 @@ public interface TestReporter {
 	 * @param mediaType the media type of the file; never {@code null}; use
 	 * {@link MediaType#APPLICATION_OCTET_STREAM} if unknown
 	 * @param action the action to be executed to write the file; never {@code null}
-	 * @since 6.0
+	 * @since 5.14
 	 */
-	@API(status = MAINTAINED, since = "6.0")
+	@API(status = MAINTAINED, since = "5.14")
 	default void publishFile(String name, MediaType mediaType, ThrowingConsumer<Path> action) {
 		throw new UnsupportedOperationException();
 	}

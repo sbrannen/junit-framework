@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
  * Interoperability tests for {@link org.junit.jupiter.api.MediaType} and the
  * deprecated {@link org.junit.jupiter.api.extension.MediaType}.
  *
- * @since 6.0
+ * @since 1.14
  * @see DeprecatedMediaTypeTests
  */
 class MediaTypeInteroperabilityTests {

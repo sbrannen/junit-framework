@@ -31,7 +31,7 @@ import org.junit.platform.commons.util.Preconditions;
  * @deprecated Use {@link org.junit.jupiter.api.MediaType} instead.
  */
 @Deprecated
-@API(status = DEPRECATED, since = "6.0")
+@API(status = DEPRECATED, since = "5.14")
 public class MediaType extends org.junit.jupiter.api.MediaType {
 
 	/**

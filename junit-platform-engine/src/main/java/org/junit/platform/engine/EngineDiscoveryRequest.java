@@ -93,7 +93,7 @@ public interface EngineDiscoveryRequest {
 	 * @deprecated Please use {@link #getOutputDirectoryCreator()} instead
 	 */
 	@Deprecated
-	@API(status = DEPRECATED, since = "6.0")
+	@API(status = DEPRECATED, since = "1.14")
 	default org.junit.platform.engine.reporting.OutputDirectoryProvider getOutputDirectoryProvider() {
 		return org.junit.platform.engine.reporting.OutputDirectoryProvider.castOrAdapt(getOutputDirectoryCreator());
 	}
@@ -102,9 +102,9 @@ public interface EngineDiscoveryRequest {
 	 * Get the {@link OutputDirectoryCreator} for this request.
 	 *
 	 * @return the output directory creator; never {@code null}
-	 * @since 6.0
+	 * @since 1.14
 	 */
-	@API(status = MAINTAINED, since = "6.0")
+	@API(status = MAINTAINED, since = "1.14")
 	default OutputDirectoryCreator getOutputDirectoryCreator() {
 		throw new JUnitException(
 			"OutputDirectoryCreator not available; probably due to unaligned versions of the junit-platform-engine and junit-platform-launcher jars on the classpath/module path.");

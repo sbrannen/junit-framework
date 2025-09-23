@@ -17,7 +17,7 @@ import org.junit.platform.engine.OutputDirectoryCreator;
 import org.junit.platform.engine.TestDescriptor;
 
 /**
- * @since 6.0
+ * @since 1.14
  */
 @SuppressWarnings("deprecation")
 class OutputDirectoryProviderAdapter implements OutputDirectoryProvider {

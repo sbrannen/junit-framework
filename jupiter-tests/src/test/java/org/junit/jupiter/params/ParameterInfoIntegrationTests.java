@@ -23,7 +23,7 @@ import org.junit.jupiter.engine.AbstractJupiterTestEngineTests;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * @since 6.0
+ * @since 1.14
  */
 class ParameterInfoIntegrationTests extends AbstractJupiterTestEngineTests {
 

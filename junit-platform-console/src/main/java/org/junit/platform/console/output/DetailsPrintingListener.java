@@ -21,7 +21,7 @@ import org.junit.platform.launcher.TestPlan;
 /**
  * @since 1.0
  */
-@API(status = INTERNAL, since = "6.0")
+@API(status = INTERNAL, since = "1.14")
 public interface DetailsPrintingListener extends TestExecutionListener {
 
 	Pattern LINE_START_PATTERN = Pattern.compile("(?m)^");

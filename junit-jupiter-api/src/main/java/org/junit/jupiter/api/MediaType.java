@@ -28,12 +28,12 @@ import org.junit.platform.commons.util.Preconditions;
  *
  * <p><strong>WARNING</strong>: This type should not be extended by third parties.
  *
- * @since 6.0
+ * @since 5.14
  * @see TestReporter#publishFile(Path, MediaType)
  * @see TestReporter#publishFile(String, MediaType, org.junit.jupiter.api.function.ThrowingConsumer)
  * @see org.junit.jupiter.api.extension.ExtensionContext#publishFile(String, MediaType, org.junit.jupiter.api.function.ThrowingConsumer)
  */
-@API(status = MAINTAINED, since = "6.0")
+@API(status = MAINTAINED, since = "5.14")
 public class MediaType {
 
 	private static final Pattern PATTERN;

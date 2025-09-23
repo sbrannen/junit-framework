@@ -27,7 +27,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 /**
  * Unit tests for {@link MediaType}.
  *
- * @since 6.0
+ * @since 1.14
  * @see org.junit.jupiter.api.extension.DeprecatedMediaTypeTests
  */
 class MediaTypeTests {

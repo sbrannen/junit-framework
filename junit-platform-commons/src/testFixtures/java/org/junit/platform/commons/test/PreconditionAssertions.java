@@ -20,7 +20,7 @@ import org.junit.platform.commons.util.Preconditions;
 /**
  * Collection of assertions for working with {@link Preconditions}.
  *
- * @since 6.0
+ * @since 1.14
  */
 public final class PreconditionAssertions {
 

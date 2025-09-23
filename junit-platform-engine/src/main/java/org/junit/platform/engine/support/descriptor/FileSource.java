@@ -121,9 +121,9 @@ public class FileSource implements FileSystemSource {
 	 * canonical path resolution.
 	 *
 	 * @param filePosition the position in the source file; may be {@code null}
-	 * @since 6.0
+	 * @since 1.14
 	 */
-	@API(status = EXPERIMENTAL, since = "6.0")
+	@API(status = EXPERIMENTAL, since = "1.14")
 	public FileSource withPosition(FilePosition filePosition) {
 		if (Objects.equals(this.filePosition, filePosition)) {
 			return this;

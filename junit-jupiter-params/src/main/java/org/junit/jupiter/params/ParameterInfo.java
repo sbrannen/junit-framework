@@ -43,11 +43,11 @@ import org.junit.jupiter.params.support.ParameterDeclarations;
  * retrieving the {@code ParameterInfo} instance from the
  * {@link ExtensionContext.Store Store}.
  *
- * @since 6.0
+ * @since 5.14
  * @see ParameterizedClass
  * @see ParameterizedTest
  */
-@API(status = EXPERIMENTAL, since = "6.0")
+@API(status = EXPERIMENTAL, since = "5.14")
 public interface ParameterInfo {
 
 	/**

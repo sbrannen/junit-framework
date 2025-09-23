@@ -27,7 +27,7 @@ import org.junit.platform.launcher.TestPlan;
 /**
  * @since 1.0
  */
-@API(status = INTERNAL, since = "6.0")
+@API(status = INTERNAL, since = "1.14")
 public class TreePrintingListener implements DetailsPrintingListener {
 
 	private final Map<UniqueId, TreeNode> nodesByUniqueId = new ConcurrentHashMap<>();

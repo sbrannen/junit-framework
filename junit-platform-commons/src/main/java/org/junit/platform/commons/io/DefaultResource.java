@@ -18,7 +18,7 @@ import org.junit.platform.commons.PreconditionViolationException;
 /**
  * Default implementation of {@link Resource}.
  *
- * @since 6.0
+ * @since 1.14
  */
 class DefaultResource implements Resource {
 

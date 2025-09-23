@@ -19,7 +19,7 @@ import org.junit.platform.commons.util.Preconditions;
 import org.junit.platform.engine.support.store.Namespace;
 import org.junit.platform.engine.support.store.NamespacedHierarchicalStore;
 
-@API(status = INTERNAL, since = "6.0")
+@API(status = INTERNAL, since = "5.14")
 public class LauncherStoreFacade {
 
 	private final NamespacedHierarchicalStore<Namespace> requestLevelStore;

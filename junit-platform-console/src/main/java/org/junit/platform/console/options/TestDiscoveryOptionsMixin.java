@@ -37,7 +37,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Option;
 
-@API(status = INTERNAL, since = "6.0")
+@API(status = INTERNAL, since = "1.14")
 public class TestDiscoveryOptionsMixin {
 
 	private static final String CP_OPTION = "cp";

@@ -23,7 +23,7 @@ import org.junit.platform.console.output.Theme;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Option;
 
-@API(status = INTERNAL, since = "6.0")
+@API(status = INTERNAL, since = "1.14")
 public class TestConsoleOutputOptionsMixin {
 
 	@ArgGroup(validate = false, order = 5, heading = "%n@|bold CONSOLE OUTPUT|@%n%n")

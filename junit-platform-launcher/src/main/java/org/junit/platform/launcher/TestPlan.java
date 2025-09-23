@@ -85,7 +85,7 @@ public class TestPlan {
 	 * this test plan; never {@code null}
 	 * @return a new test plan
 	 */
-	@API(status = INTERNAL, since = "6.0")
+	@API(status = INTERNAL, since = "1.14")
 	public static TestPlan from(boolean containsTests, Collection<TestDescriptor> engineDescriptors,
 			ConfigurationParameters configurationParameters, OutputDirectoryCreator outputDirectoryCreator) {
 		Preconditions.notNull(engineDescriptors, "Cannot create TestPlan from a null collection of TestDescriptors");
@@ -302,7 +302,7 @@ public class TestPlan {
 	 * @since 1.12
 	 * @deprecated Please use {@link #getOutputDirectoryCreator()} instead
 	 */
-	@API(status = DEPRECATED, since = "6.0")
+	@API(status = DEPRECATED, since = "1.14")
 	@Deprecated
 	public org.junit.platform.engine.reporting.OutputDirectoryProvider getOutputDirectoryProvider() {
 		return org.junit.platform.engine.reporting.OutputDirectoryProvider.castOrAdapt(getOutputDirectoryCreator());
@@ -312,9 +312,9 @@ public class TestPlan {
 	 * Get the {@link OutputDirectoryCreator} for this test plan.
 	 *
 	 * @return the output directory creator; never {@code null}
-	 * @since 6.0
+	 * @since 1.14
 	 */
-	@API(status = MAINTAINED, since = "6.0")
+	@API(status = MAINTAINED, since = "1.14")
 	public OutputDirectoryCreator getOutputDirectoryCreator() {
 		return outputDirectoryCreator;
 	}

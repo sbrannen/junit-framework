@@ -49,7 +49,7 @@ import org.junit.jupiter.params.ParameterizedTest;
  * @deprecated Please use {@link org.junit.jupiter.params.ParameterInfo} instead
  */
 @Deprecated
-@API(status = DEPRECATED, since = "6.0")
+@API(status = DEPRECATED, since = "5.14")
 public interface ParameterInfo extends org.junit.jupiter.params.ParameterInfo {
 
 	/**
@@ -59,7 +59,7 @@ public interface ParameterInfo extends org.junit.jupiter.params.ParameterInfo {
 	 * {@link org.junit.jupiter.params.ParameterInfo#NAMESPACE} instead
 	 */
 	@Deprecated
-	@API(status = DEPRECATED, since = "6.0")
+	@API(status = DEPRECATED, since = "5.14")
 	Namespace NAMESPACE = Namespace.create(ParameterInfo.class);
 
 	/**
@@ -69,7 +69,7 @@ public interface ParameterInfo extends org.junit.jupiter.params.ParameterInfo {
 	 * {@link org.junit.jupiter.params.ParameterInfo#KEY} instead
 	 */
 	@Deprecated
-	@API(status = DEPRECATED, since = "6.0")
+	@API(status = DEPRECATED, since = "5.14")
 	Object KEY = ParameterInfo.class;
 
 	/**
@@ -80,7 +80,7 @@ public interface ParameterInfo extends org.junit.jupiter.params.ParameterInfo {
 	 * instead
 	 */
 	@Deprecated
-	@API(status = DEPRECATED, since = "6.0")
+	@API(status = DEPRECATED, since = "5.14")
 	static ParameterInfo get(ExtensionContext context) {
 		return context.getStore(NAMESPACE).get(KEY, ParameterInfo.class);
 	}

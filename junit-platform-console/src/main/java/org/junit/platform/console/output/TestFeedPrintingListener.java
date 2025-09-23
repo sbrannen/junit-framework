@@ -24,7 +24,7 @@ import org.junit.platform.engine.UniqueId;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 
-@API(status = INTERNAL, since = "6.0")
+@API(status = INTERNAL, since = "1.14")
 public class TestFeedPrintingListener implements DetailsPrintingListener {
 
 	private static final String INDENTATION = "\t";

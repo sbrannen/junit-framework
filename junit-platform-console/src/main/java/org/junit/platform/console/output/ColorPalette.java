@@ -28,7 +28,7 @@ import org.apiguardian.api.API;
 /**
  * @since 1.9
  */
-@API(status = INTERNAL, since = "6.0")
+@API(status = INTERNAL, since = "1.14")
 public class ColorPalette {
 
 	public static final ColorPalette SINGLE_COLOR = new ColorPalette(singleColorPalette(), false);

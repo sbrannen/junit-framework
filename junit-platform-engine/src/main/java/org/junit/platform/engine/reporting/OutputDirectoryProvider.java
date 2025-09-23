@@ -26,16 +26,16 @@ import org.junit.platform.engine.OutputDirectoryCreator;
  * @deprecated Please implement {@link OutputDirectoryCreator} instead
  */
 @Deprecated
-@API(status = DEPRECATED, since = "6.0")
+@API(status = DEPRECATED, since = "1.14")
 public interface OutputDirectoryProvider extends OutputDirectoryCreator {
 
 	/**
 	 * Cast or adapt an {@link OutputDirectoryCreator} to a
 	 * {@code OutputDirectoryProvider}.
 	 *
-	 * @since 6.0
+	 * @since 1.14
 	 */
-	@API(status = INTERNAL, since = "6.0")
+	@API(status = INTERNAL, since = "1.14")
 	static OutputDirectoryProvider castOrAdapt(OutputDirectoryCreator outputDirectoryCreator) {
 		if (outputDirectoryCreator instanceof OutputDirectoryProvider) {
 			return (OutputDirectoryProvider) outputDirectoryCreator;

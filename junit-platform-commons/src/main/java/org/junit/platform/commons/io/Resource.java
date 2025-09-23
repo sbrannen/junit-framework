@@ -26,7 +26,7 @@ import org.apiguardian.api.API;
  * implementations since a {@code Resource} may potentially be stored in a
  * collection or map.
  *
- * @since 6.0
+ * @since 1.14
  * @see org.junit.platform.commons.support.ResourceSupport#findAllResourcesInClasspathRoot(URI, ResourceFilter)
  * @see org.junit.platform.commons.support.ResourceSupport#findAllResourcesInPackage(String, ResourceFilter)
  * @see org.junit.platform.commons.support.ResourceSupport#findAllResourcesInModule(String, ResourceFilter)
@@ -34,7 +34,7 @@ import org.apiguardian.api.API;
  * @see org.junit.platform.commons.support.ResourceSupport#streamAllResourcesInPackage(String, ResourceFilter)
  * @see org.junit.platform.commons.support.ResourceSupport#streamAllResourcesInModule(String, ResourceFilter)
  */
-@API(status = MAINTAINED, since = "6.0")
+@API(status = MAINTAINED, since = "1.14")
 public interface Resource {
 
 	/**
@@ -43,7 +43,7 @@ public interface Resource {
 	 * @param name the name of the resource; never {@code null}
 	 * @param uri the URI of the resource; never {@code null}
 	 * @return a new {@code Resource}
-	 * @since 6.0
+	 * @since 1.14
 	 */
 	static Resource of(String name, URI uri) {
 		return new DefaultResource(name, uri);

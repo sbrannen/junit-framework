@@ -418,7 +418,7 @@ public interface ExtensionContext {
 	 * instead.
 	 */
 	@Deprecated
-	@API(status = DEPRECATED, since = "6.0")
+	@API(status = DEPRECATED, since = "5.14")
 	default void publishFile(String name, org.junit.jupiter.api.extension.MediaType mediaType,
 			ThrowingConsumer<Path> action) {
 
@@ -438,10 +438,10 @@ public interface ExtensionContext {
 	 * @param mediaType the media type of the file; never {@code null}; use
 	 * {@link MediaType#APPLICATION_OCTET_STREAM} if unknown
 	 * @param action the action to be executed to write the file; never {@code null}
-	 * @since 6.0
+	 * @since 5.14
 	 * @see org.junit.platform.engine.EngineExecutionListener#fileEntryPublished
 	 */
-	@API(status = MAINTAINED, since = "6.0")
+	@API(status = MAINTAINED, since = "5.14")
 	void publishFile(String name, MediaType mediaType, ThrowingConsumer<Path> action);
 
 	/**

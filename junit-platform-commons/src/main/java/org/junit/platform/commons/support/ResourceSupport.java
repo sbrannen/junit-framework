@@ -33,13 +33,13 @@ import org.junit.platform.commons.util.ReflectionUtils;
  * authors are encouraged to use these supported methods in order to align with
  * the behavior of the JUnit Platform.
  *
- * @since 6.0
+ * @since 1.14
  * @see AnnotationSupport
  * @see ClassSupport
  * @see ModifierSupport
  * @see ReflectionSupport
  */
-@API(status = MAINTAINED, since = "6.0")
+@API(status = MAINTAINED, since = "1.14")
 public class ResourceSupport {
 
 	/**

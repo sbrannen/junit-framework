@@ -25,7 +25,7 @@ import org.junit.platform.launcher.TestPlan;
 /**
  * @since 1.0
  */
-@API(status = INTERNAL, since = "6.0")
+@API(status = INTERNAL, since = "1.14")
 public class FlatPrintingListener implements DetailsPrintingListener {
 
 	static final String INDENTATION = "             ";

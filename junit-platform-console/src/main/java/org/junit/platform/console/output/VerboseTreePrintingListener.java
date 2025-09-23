@@ -28,7 +28,7 @@ import org.junit.platform.launcher.TestPlan;
 /**
  * @since 1.0
  */
-@API(status = INTERNAL, since = "6.0")
+@API(status = INTERNAL, since = "1.14")
 public class VerboseTreePrintingListener implements DetailsPrintingListener {
 
 	private final PrintWriter out;

@@ -21,10 +21,10 @@ import org.apiguardian.api.API;
  * Provider of output directories for test engines to write reports and other
  * output files to.
  *
- * @since 6.0
+ * @since 1.14
  * @see EngineDiscoveryRequest#getOutputDirectoryCreator()
  */
-@API(status = MAINTAINED, since = "1.13.3")
+@API(status = MAINTAINED, since = "1.14")
 public interface OutputDirectoryCreator {
 
 	/**
