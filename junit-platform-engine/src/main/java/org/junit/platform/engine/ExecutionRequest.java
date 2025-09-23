@@ -151,7 +151,6 @@ public class ExecutionRequest {
 	 */
 	@Deprecated
 	@API(status = DEPRECATED, since = "6.0")
-	@SuppressWarnings("removal")
 	public org.junit.platform.engine.reporting.OutputDirectoryProvider getOutputDirectoryProvider() {
 		return org.junit.platform.engine.reporting.OutputDirectoryProvider.castOrAdapt(getOutputDirectoryCreator());
 	}
