@@ -33,12 +33,10 @@ tasks.test {
 	}
 }
 
-val initializeAtBuildTime = mapOf(
+val initializeAtBuildTime = mapOf<String, List<String>>(
 	// These need to be added to native-build-tools
 	"5.14" to listOf(
 		"org.junit.platform.commons.util.DefaultClasspathScanner",
-		"org.junit.platform.commons.util.KotlinReflectionUtils",
-		"org.junit.platform.launcher.core.DiscoveryIssueNotifier\$1",
 		"org.junit.platform.launcher.core.HierarchicalOutputDirectoryCreator",
 	),
 )
