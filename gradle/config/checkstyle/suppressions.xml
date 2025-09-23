@@ -6,4 +6,6 @@
 		files="junit-platform-console[\\/]src[\\/]main[\\/]java.+?[\\/]org[\\/]junit[\\/]platform[\\/]console[\\/]*"/>
 	<suppress checks="JavadocPackage"
 		files="junit-jupiter-api[\\/]build[\\/]generated[\\/]sources[\\/]jte[\\/]main[\\/]org[\\/]junit[\\/]jupiter[\\/]api[\\/]condition[\\/]*"/>
+	<suppress checks="NoHttp"
+		files="documentation[\\/]src[\\/]docs[\\/]asciidoc[\\/]user-guide[\\/]images[\\/]extensions_StoreHierarchy.svg"/>
 </suppressions>
