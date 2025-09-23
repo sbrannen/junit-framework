@@ -854,14 +854,27 @@ to provide their functionality.
 
 Usually, an extension is instantiated only once. So the question becomes relevant: How do
 you keep the state from one invocation of an extension to the next? The
-`ExtensionContext` API provides a `Store` exactly for this purpose. Extensions may put
-values into a store for later retrieval. See the
-`<<extensions-lifecycle-callbacks-timing-extension, TimingExtension>>` for an example of
-using the `Store` with a method-level scope. It is important to remember that values
-stored in an `ExtensionContext` during test execution will not be available in the
-surrounding `ExtensionContext`. Since `ExtensionContexts` may be nested, the scope of
-inner contexts may also be limited. Consult the corresponding Javadoc for details on the
-methods available for storing and retrieving values via the `{ExtensionContext_Store}`.
+`{ExtensionContext}` API provides a `{ExtensionContext_Store}` exactly for this purpose.
+Extensions may put values into a store for later retrieval.
+
+TIP: See the `<<extensions-lifecycle-callbacks-timing-extension, TimingExtension>>` for an
+example of using the `Store` with a method-level scope.
+
+.The `ExtensionContext` and `Store` hierarchy
+image::extensions_StoreHierarchy.svg[alt=UML diagram,role=text-center]
+
+As illustrated by the diagram above, stores are hierarchical in nature. When looking up a
+value, if no value is stored in the current `ExtensionContext` for the supplied key, the
+stores of the context's ancestors will be queried for a value with the same key in the
+`Namespace` used to create this store. The root `ExtensionContext` represents the engine
+level so its `Store` may be used to store or cache values that are used by multiple test
+classes or extension. The `{ExtensionContext_StoreScope}` enum allows to go beyond even
+that and access the stores on the level of the current `{LauncherExecutionRequest}` or
+`{LauncherSession}` which can be used to share data across test engines or inject data
+from a registered
+<<launcher-api-launcher-session-listeners-custom, `LauncherSessionListener`>>,
+respectively. Please consult the Javadoc of `{ExtensionContext}`,
+`{ExtensionContext_Store}`, and `{ExtensionContext_StoreScope}` for details.
 
 [[extensions-keeping-state-autocloseable-support]]
 .Resource management via `_AutoCloseable_`
