@@ -15,6 +15,10 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-reporting:$platformVersion")
 }
 
+tasks.withType<JavaCompile>().configureEach {
+	options.release = 21
+}
+
 tasks.test {
 	useJUnitPlatform {
 		includeEngines("junit-platform-suite")
@@ -36,7 +40,7 @@ val initializeAtBuildTime = mapOf(
 		"org.junit.platform.commons.util.KotlinReflectionUtils",
 		"org.junit.platform.launcher.core.DiscoveryIssueNotifier\$1",
 		"org.junit.platform.launcher.core.HierarchicalOutputDirectoryCreator",
-	)
+	),
 )
 
 graalvmNative {
