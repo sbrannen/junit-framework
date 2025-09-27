@@ -14,5 +14,5 @@ dependencies {
 }
 
 japicmp {
-	acceptedIncompatibilities.empty()
+	enabled = false // already checked by individual projects
 }
