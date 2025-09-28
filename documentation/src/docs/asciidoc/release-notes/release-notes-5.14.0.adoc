@@ -1,7 +1,7 @@
-[[release-notes-5.14.0-RC1]]
-== 5.14.0-RC1
+[[release-notes-5.14.0]]
+== 5.14.0
 
-*Date of Release:* September 23, 2025
+*Date of Release:* September 30, 2025
 
 *Scope:*
 
@@ -9,21 +9,29 @@
 * Deprecations along with new APIs to ease migration to the upcoming 6.0 release
 
 For a complete list of all _closed_ issues and pull requests for this release, consult the
-link:{junit-framework-repo}+/milestone/108?closed=1+[5.14.0-RC1] milestone page in the JUnit
+link:{junit-framework-repo}+/milestone/108?closed=1+[5.14.0-RC1] and
+link:{junit-framework-repo}+/milestone/109?closed=1+[5.14.0] milestone pages in the JUnit
 repository on GitHub.
 
+[TIP]
+.Migration Guide
+====
+Please refer to the
+https://github.com/junit-team/junit-framework/wiki/Upgrading-to-JUnit-5.14[wiki] for
+guidance on upgrading to JUnit 5.14.
+====
 
-[[release-notes-5.14.0-RC1-junit-platform]]
+[[release-notes-5.14.0-junit-platform]]
 === JUnit Platform
 
-[[release-notes-5.14.0-RC1-junit-platform-bug-fixes]]
+[[release-notes-5.14.0-junit-platform-bug-fixes]]
 ==== Bug Fixes
 
 * The `Launcher` (specifically `LauncherDiscoveryResult`) now retains the original
   `TestEngine` registration order after pruning test engines without tests, thereby
   ensuring reliable test execution order of multiple test engines.
 
-[[release-notes-5.14.0-RC1-junit-platform-deprecations-and-breaking-changes]]
+[[release-notes-5.14.0-junit-platform-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
 
 * Deprecate `OutputDirectoryProvider` interface in favor of the new
@@ -59,7 +67,7 @@ repository on GitHub.
   - `scanForResourcesInPackage(String, Predicate)`
   - `scanForResourcesInClasspathRoot(URI, Predicate)`
 
-[[release-notes-5.14.0-RC1-junit-platform-new-features-and-improvements]]
+[[release-notes-5.14.0-junit-platform-new-features-and-improvements]]
 ==== New Features and Improvements
 
 * Emit warning when `@SuiteDisplayName` is used with a blank string
@@ -79,10 +87,10 @@ repository on GitHub.
   methods in the new `org.junit.platform.commons.support.ResourceSupport` class.
 
 
-[[release-notes-5.14.0-RC1-junit-jupiter]]
+[[release-notes-5.14.0-junit-jupiter]]
 === JUnit Jupiter
 
-[[release-notes-5.14.0-RC1-junit-jupiter-deprecations-and-breaking-changes]]
+[[release-notes-5.14.0-junit-jupiter-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
 
 * `MediaType.APPLICATION_JSON_UTF_8` is now deprecated in favor of using
@@ -99,7 +107,7 @@ repository on GitHub.
 * `org.junit.jupiter.params.support.ParameterInfo` is now deprecated in favor of the new
   `org.junit.jupiter.params.ParameterInfo`.
 
-[[release-notes-5.14.0-RC1-junit-jupiter-new-features-and-improvements]]
+[[release-notes-5.14.0-junit-jupiter-new-features-and-improvements]]
 ==== New Features and Improvements
 
 * `MediaType` now trims leading and trailing whitespace from a supplied `value`, `type`,
@@ -107,7 +115,7 @@ repository on GitHub.
 * `MediaType` now eagerly rejects a _blank_ `value`, `type`, or `subtype`.
 
 
-[[release-notes-5.14.0-RC1-junit-vintage]]
+[[release-notes-5.14.0-junit-vintage]]
 === JUnit Vintage
 
 No changes.
