@@ -6,7 +6,7 @@
 *Scope:*
 
 * Bug fixes and enhancements since 5.13.x
-* Deprecations along with new APIs to ease migration to the upcoming 6.0 release
+* Deprecations along with new APIs to ease migration to JUnit 6
 
 For a complete list of all _closed_ issues and pull requests for this release, consult the
 link:{junit-framework-repo}+/milestone/108?closed=1+[5.14.0-RC1] and
@@ -20,6 +20,7 @@ Please refer to the
 https://github.com/junit-team/junit-framework/wiki/Upgrading-to-JUnit-5.14[wiki] for
 guidance on upgrading to JUnit 5.14.
 ====
+
 
 [[release-notes-5.14.0-junit-platform]]
 === JUnit Platform
@@ -35,7 +36,7 @@ guidance on upgrading to JUnit 5.14.
 ==== Deprecations and Breaking Changes
 
 * Deprecate `OutputDirectoryProvider` interface in favor of the new
-  `OutputDirectoryCreator` interface to resolve cyclic package dependency along
+  `OutputDirectoryCreator` interface to resolve a cyclic package dependency along
   with the following APIs (which all have replacements working with
   `OutputDirectoryCreator`):
   - `EngineDiscoveryRequest.getOutputDirectoryProvider()`
@@ -44,9 +45,9 @@ guidance on upgrading to JUnit 5.14.
   - `TestPlan.getOutputDirectoryProvider()`
   - `EngineTestKit.Builder.outputDirectoryProvider(OutputDirectoryProvider)`
 * Deprecate `org.junit.platform.commons.support.Resource` interface in favor of the new
-  `org.junit.platform.commons.io.Resource` one.
+  `org.junit.platform.commons.io.Resource` interface.
 * Deprecate `Resource`-related methods in `ReflectionSupport` in favor of corresponding
-  methods in new `ResourceSupport` class:
+  methods in the new `ResourceSupport` class:
   - `findAllResourcesInClasspathRoot(URI, Predicate)`
   - `findAllResourcesInModule(String, Predicate)`
   - `findAllResourcesInPackage(String, Predicate)`
@@ -59,7 +60,7 @@ guidance on upgrading to JUnit 5.14.
   `selectClasspathResourceByName(Set)`.
 * Deprecate `ClasspathResourceSelector.getClasspathResources()` method in favor of
   `getResources()`.
-* Deprecate
+* Deprecate the
   `EngineDiscoveryRequestResolver.Builder.addResourceContainerSelectorResolver(Predicate)`
   method in favor of `addResourceContainerSelectorResolver(ResourceFilter)`.
 * Deprecate `Resource`-related methods in `ClasspathScanner` in favor of new methods using
@@ -70,7 +71,7 @@ guidance on upgrading to JUnit 5.14.
 [[release-notes-5.14.0-junit-platform-new-features-and-improvements]]
 ==== New Features and Improvements
 
-* Emit warning when `@SuiteDisplayName` is used with a blank string
+* Emit discovery warning when `@SuiteDisplayName` is used with a blank string.
 * To help diagnosing potentially invalid invocations, the Console Launcher now logs
   warnings for nonexistent classpath roots added via `--classpath` or `--scan-classpath`
   rather than silently ignoring them.
