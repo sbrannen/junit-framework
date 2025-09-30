@@ -29,9 +29,7 @@ val extension = extensions.create<JApiCmpExtension>("japicmp").apply {
 		finalizeValueOnRead()
 	}
 	previousVersion.apply {
-		convention(provider {
-			if (group == "org.junit.platform") "1.14.0-RC1" else "5.14.0-RC1"
-		})
+		convention(providers.gradleProperty("apiBaselineVersion"))
 		finalizeValueOnRead()
 	}
 }
