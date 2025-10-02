@@ -667,11 +667,11 @@ class MethodArgumentsProviderTests {
 			var exception = assertThrows(PreconditionViolationException.class,
 				() -> provideArguments(TestCase.class, false, factoryMethod).toArray());
 
-			assertThat(exception.getMessage())//
-					.containsSubsequence("Could not find valid factory method [" + factoryMethod + "] for test class [",
-						testClass + "]", //
-						"but found the following invalid candidate: ",
-						"static java.lang.Object " + factoryClass + ".factoryWithInvalidReturnType()");
+			assertThat(exception).hasMessage("""
+					Could not find valid factory method [%s] for test class [%s] \
+					but found the following invalid candidate: \
+					static java.lang.Object %s.factoryWithInvalidReturnType()\
+					""".formatted(factoryMethod, testClass, factoryClass));
 		}
 
 		@Test
