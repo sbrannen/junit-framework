@@ -56,8 +56,9 @@ class NestedMethodSelectorTests {
 		var selector = new NestedMethodSelector(null, List.of("EnclosingClass"), "NestedTestClass", "method",
 			"int, boolean");
 
-		assertPreconditionViolationFor(selector::getEnclosingClasses).withMessage(
-			"Could not load class with name: EnclosingClass").withCauseInstanceOf(ClassNotFoundException.class);
+		assertPreconditionViolationFor(selector::getEnclosingClasses)//
+				.withMessage("Could not load class with name: EnclosingClass")//
+				.withCauseInstanceOf(ClassNotFoundException.class);
 	}
 
 	@Test
@@ -65,8 +66,9 @@ class NestedMethodSelectorTests {
 		var selector = new NestedMethodSelector(null, List.of("EnclosingClass"), "NestedTestClass", "method",
 			"int, boolean");
 
-		assertPreconditionViolationFor(selector::getNestedClass).withMessage(
-			"Could not load class with name: NestedTestClass").withCauseInstanceOf(ClassNotFoundException.class);
+		assertPreconditionViolationFor(selector::getNestedClass)//
+				.withMessage("Could not load class with name: NestedTestClass")//
+				.withCauseInstanceOf(ClassNotFoundException.class);
 	}
 
 	@Test

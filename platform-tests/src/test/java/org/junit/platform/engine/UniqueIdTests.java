@@ -292,7 +292,7 @@ class UniqueIdTests {
 
 	}
 
-	private void assertSegment(Segment segment, String expectedType, String expectedValue) {
+	private static void assertSegment(Segment segment, String expectedType, String expectedValue) {
 		assertEquals(expectedType, segment.getType(), "segment type");
 		assertEquals(expectedValue, segment.getValue(), "segment value");
 	}

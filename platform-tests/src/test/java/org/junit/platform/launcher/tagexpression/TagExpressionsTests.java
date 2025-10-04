@@ -37,8 +37,8 @@ class TagExpressionsTests {
 
 	@Test
 	void rejectInvalidTestTags() {
-		assertPreconditionViolationFor(() -> tag("tags with spaces are not allowed")).withMessageContaining(
-			"tags with spaces are not allowed");
+		assertPreconditionViolationFor(() -> tag("tags with spaces are not allowed"))//
+				.withMessageContaining("tags with spaces are not allowed");
 	}
 
 	@Test

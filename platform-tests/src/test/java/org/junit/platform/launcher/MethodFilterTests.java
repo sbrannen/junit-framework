@@ -45,8 +45,8 @@ class MethodFilterTests {
 		assertPreconditionViolationNotNullOrEmptyFor("patterns array",
 			() -> includeMethodNamePatterns((String[]) null));
 		assertPreconditionViolationNotNullOrEmptyFor("patterns array", () -> includeMethodNamePatterns(new String[0]));
-		assertPreconditionViolationFor(() -> includeMethodNamePatterns(new String[] { null })).withMessage(
-			"patterns array must not contain null elements");
+		assertPreconditionViolationFor(() -> includeMethodNamePatterns(new String[] { null }))//
+				.withMessage("patterns array must not contain null elements");
 	}
 
 	@Test
@@ -89,8 +89,8 @@ class MethodFilterTests {
 		assertPreconditionViolationNotNullOrEmptyFor("patterns array",
 			() -> excludeMethodNamePatterns((String[]) null));
 		assertPreconditionViolationNotNullOrEmptyFor("patterns array", () -> excludeMethodNamePatterns(new String[0]));
-		assertPreconditionViolationFor(() -> excludeMethodNamePatterns(new String[] { null })).withMessage(
-			"patterns array must not contain null elements");
+		assertPreconditionViolationFor(() -> excludeMethodNamePatterns(new String[] { null }))//
+				.withMessage("patterns array must not contain null elements");
 	}
 
 	@Test

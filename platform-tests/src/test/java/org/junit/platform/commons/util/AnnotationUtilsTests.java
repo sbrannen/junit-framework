@@ -209,8 +209,8 @@ class AnnotationUtilsTests {
 
 	@Test
 	void findRepeatableAnnotationsForNotRepeatableAnnotation() {
-		assertPreconditionViolationFor(() -> findRepeatableAnnotations(getClass(), Inherited.class)).withMessage(
-			Inherited.class.getName() + " must be @Repeatable");
+		assertPreconditionViolationFor(() -> findRepeatableAnnotations(getClass(), Inherited.class))//
+				.withMessage(Inherited.class.getName() + " must be @Repeatable");
 	}
 
 	@Test

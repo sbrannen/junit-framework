@@ -27,18 +27,18 @@ class ValueArgumentsProviderTests {
 
 	@Test
 	void multipleInputsAreNotAllowed() {
-		assertPreconditionViolationFor(
-			() -> provideArguments(new short[1], new byte[0], new int[1], new long[0], new float[0], new double[0],
-				new char[0], new boolean[0], new String[0], new Class<?>[0]).findAny()).withMessageContaining(
-					"Exactly one type of input must be provided in the @ValueSource annotation, but there were 2");
+		assertPreconditionViolationFor(() -> provideArguments(new short[1], new byte[0], new int[1], new long[0],
+			new float[0], new double[0], new char[0], new boolean[0], new String[0], new Class<?>[0]).findAny())//
+					.withMessageContaining(
+						"Exactly one type of input must be provided in the @ValueSource annotation, but there were 2");
 	}
 
 	@Test
 	void onlyEmptyInputsAreNotAllowed() {
-		assertPreconditionViolationFor(
-			() -> provideArguments(new short[0], new byte[0], new int[0], new long[0], new float[0], new double[0],
-				new char[0], new boolean[0], new String[0], new Class<?>[0]).findAny()).withMessageContaining(
-					"Exactly one type of input must be provided in the @ValueSource annotation, but there were 0");
+		assertPreconditionViolationFor(() -> provideArguments(new short[0], new byte[0], new int[0], new long[0],
+			new float[0], new double[0], new char[0], new boolean[0], new String[0], new Class<?>[0]).findAny())//
+					.withMessageContaining(
+						"Exactly one type of input must be provided in the @ValueSource annotation, but there were 0");
 	}
 
 	/**

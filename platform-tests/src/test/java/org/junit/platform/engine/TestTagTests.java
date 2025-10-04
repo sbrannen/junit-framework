@@ -97,8 +97,9 @@ class TestTagTests {
 	}
 
 	private void assertSyntaxViolation(String tag) {
-		assertPreconditionViolationFor(() -> TestTag.create(tag)).withMessageStartingWith(
-			"Tag name").withMessageEndingWith("must be syntactically valid");
+		assertPreconditionViolationFor(() -> TestTag.create(tag))//
+				.withMessageStartingWith("Tag name")//
+				.withMessageEndingWith("must be syntactically valid");
 	}
 
 }

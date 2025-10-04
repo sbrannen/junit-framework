@@ -1294,13 +1294,13 @@ class ReflectionUtilsTests {
 
 			assertPreconditionViolationNotNullOrBlankFor("Method name", () -> findMethod(String.class, "   "));
 
-			assertPreconditionViolationNotNullFor("Parameter types array",//
+			assertPreconditionViolationNotNullFor("Parameter types array",
 					() -> findMethod(Files.class, "copy", (Class<?>[]) null));
 
-			assertPreconditionViolationNotNullFor("Individual parameter types",//
+			assertPreconditionViolationNotNullFor("Individual parameter types",
 					() -> findMethod(Files.class, "copy", (Class<?>) null));
 
-			assertPreconditionViolationNotNullFor("Individual parameter types",//
+			assertPreconditionViolationNotNullFor("Individual parameter types",
 					() -> findMethod(Files.class, "copy", new Class<?>[] { Path.class, null }));
 			// @formatter:on
 		}
@@ -1910,8 +1910,9 @@ class ReflectionUtilsTests {
 			var field = MyClass.class.getDeclaredField("instanceField");
 			assertThat(tryToReadFieldValue(field, instance).getNonNull()).isEqualTo(42);
 
-			assertPreconditionViolationFor(() -> tryToReadFieldValue(field, null).get()).withMessageStartingWith(
-				"Cannot read non-static field").withMessageEndingWith("on a null instance.");
+			assertPreconditionViolationFor(() -> tryToReadFieldValue(field, null).get())//
+					.withMessageStartingWith("Cannot read non-static field")//
+					.withMessageEndingWith("on a null instance.");
 		}
 
 	}

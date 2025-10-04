@@ -65,8 +65,8 @@ class CollectionUtilsTests {
 
 		@Test
 		void emptyCollection() {
-			assertPreconditionViolationFor(() -> CollectionUtils.getOnlyElement(Set.of())).withMessage(
-				"collection must contain exactly one element: []");
+			assertPreconditionViolationFor(() -> CollectionUtils.getOnlyElement(Set.of()))//
+					.withMessage("collection must contain exactly one element: []");
 		}
 
 		@Test
@@ -78,8 +78,8 @@ class CollectionUtilsTests {
 
 		@Test
 		void multiElementCollection() {
-			assertPreconditionViolationFor(() -> CollectionUtils.getOnlyElement(List.of("foo", "bar"))).withMessage(
-				"collection must contain exactly one element: [foo, bar]");
+			assertPreconditionViolationFor(() -> CollectionUtils.getOnlyElement(List.of("foo", "bar")))//
+					.withMessage("collection must contain exactly one element: [foo, bar]");
 		}
 	}
 
@@ -185,8 +185,8 @@ class CollectionUtilsTests {
 
 		@Test
 		void toStreamWithUnsupportedObjectType() {
-			assertPreconditionViolationFor(() -> CollectionUtils.toStream("unknown")).withMessage(
-				"Cannot convert instance of java.lang.String into a Stream: unknown");
+			assertPreconditionViolationFor(() -> CollectionUtils.toStream("unknown"))//
+					.withMessage("Cannot convert instance of java.lang.String into a Stream: unknown");
 		}
 
 		@Test
@@ -281,9 +281,9 @@ class CollectionUtilsTests {
 		@Test
 		void throwWhenIteratorNamedMethodDoesNotReturnAnIterator() {
 			var o = new UnusableIteratorProvider("Test");
-			assertPreconditionViolationFor(() -> CollectionUtils.toStream(o)).withMessage(
-				"Cannot convert instance of %s into a Stream: %s".formatted(UnusableIteratorProvider.class.getName(),
-					o));
+			assertPreconditionViolationFor(() -> CollectionUtils.toStream(o))//
+					.withMessage("Cannot convert instance of %s into a Stream: %s".formatted(
+						UnusableIteratorProvider.class.getName(), o));
 		}
 
 		@Test

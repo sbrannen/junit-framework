@@ -30,8 +30,8 @@ class PackageNameFilterTests {
 			() -> PackageNameFilter.includePackageNames((String[]) null));
 		assertPreconditionViolationNotNullOrEmptyFor("packageNames array",
 			() -> PackageNameFilter.includePackageNames(new String[0]));
-		assertPreconditionViolationFor(() -> PackageNameFilter.includePackageNames(new String[] { null })).withMessage(
-			"packageNames array must not contain null elements");
+		assertPreconditionViolationFor(() -> PackageNameFilter.includePackageNames(new String[] { null }))//
+				.withMessage("packageNames array must not contain null elements");
 	}
 
 	@Test
@@ -79,8 +79,8 @@ class PackageNameFilterTests {
 			() -> PackageNameFilter.excludePackageNames((String[]) null));
 		assertPreconditionViolationNotNullOrEmptyFor("packageNames",
 			() -> PackageNameFilter.excludePackageNames(new String[0]));
-		assertPreconditionViolationFor(() -> PackageNameFilter.excludePackageNames(new String[] { null })).withMessage(
-			"packageNames must not contain null elements");
+		assertPreconditionViolationFor(() -> PackageNameFilter.excludePackageNames(new String[] { null }))//
+				.withMessage("packageNames must not contain null elements");
 	}
 
 	@Test

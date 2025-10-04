@@ -54,8 +54,8 @@ public interface TestDescriptorOrderChildrenTests {
 	@Test
 	default void orderChildrenEmptyList() {
 		var testDescriptor = createTestDescriptorWithChildren();
-		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(children -> emptyList())).withMessage(
-			"orderer may not add or remove test descriptors");
+		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(children -> emptyList()))//
+				.withMessage("orderer may not add or remove test descriptors");
 	}
 
 	@Test
@@ -77,8 +77,8 @@ public interface TestDescriptorOrderChildrenTests {
 			children.remove(1);
 			return children;
 		};
-		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(orderer)).withMessage(
-			"orderer may not add or remove test descriptors");
+		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(orderer))//
+				.withMessage("orderer may not add or remove test descriptors");
 	}
 
 	@Test
@@ -88,8 +88,8 @@ public interface TestDescriptorOrderChildrenTests {
 			children.add(1, new StubTestDescriptor(UniqueId.root("extra", "extra1")));
 			return children;
 		};
-		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(orderer)).withMessage(
-			"orderer may not add or remove test descriptors");
+		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(orderer))//
+				.withMessage("orderer may not add or remove test descriptors");
 	}
 
 	@Test
@@ -99,8 +99,8 @@ public interface TestDescriptorOrderChildrenTests {
 			children.set(1, new StubTestDescriptor(UniqueId.root("replaced", "replaced1")));
 			return children;
 		};
-		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(orderer)).withMessage(
-			"orderer may not add or remove test descriptors");
+		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(orderer))//
+				.withMessage("orderer may not add or remove test descriptors");
 	}
 
 	@Test
@@ -110,16 +110,16 @@ public interface TestDescriptorOrderChildrenTests {
 			children.add(1, children.getLast());
 			return children;
 		};
-		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(orderer)).withMessage(
-			"orderer may not add or remove test descriptors");
+		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(orderer))//
+				.withMessage("orderer may not add or remove test descriptors");
 	}
 
 	@SuppressWarnings("DataFlowIssue")
 	@Test
 	default void orderChildrenOrdererReturnsNull() {
 		var testDescriptor = createTestDescriptorWithChildren();
-		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(children -> null)).withMessage(
-			"orderer may not return null");
+		assertPreconditionViolationFor(() -> testDescriptor.orderChildren(children -> null))//
+				.withMessage("orderer may not return null");
 	}
 
 	@Test

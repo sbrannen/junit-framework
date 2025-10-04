@@ -42,9 +42,9 @@ class NestedClassSelectorTests {
 		var selector = new NestedClassSelector(null, List.of("org.example.EnclosingTestClass"),
 			"org.example.NestedTestClass");
 
-		assertPreconditionViolationFor(selector::getEnclosingClasses).withMessage(
-			"Could not load class with name: org.example.EnclosingTestClass").withCauseInstanceOf(
-				ClassNotFoundException.class);
+		assertPreconditionViolationFor(selector::getEnclosingClasses)//
+				.withMessage("Could not load class with name: org.example.EnclosingTestClass")//
+				.withCauseInstanceOf(ClassNotFoundException.class);
 	}
 
 	@Test
@@ -52,9 +52,9 @@ class NestedClassSelectorTests {
 		var selector = new NestedClassSelector(null, List.of("org.example.EnclosingTestClass"),
 			"org.example.NestedTestClass");
 
-		assertPreconditionViolationFor(selector::getNestedClass).withMessage(
-			"Could not load class with name: org.example.NestedTestClass").withCauseInstanceOf(
-				ClassNotFoundException.class);
+		assertPreconditionViolationFor(selector::getNestedClass)//
+				.withMessage("Could not load class with name: org.example.NestedTestClass")//
+				.withCauseInstanceOf(ClassNotFoundException.class);
 	}
 
 	@Test

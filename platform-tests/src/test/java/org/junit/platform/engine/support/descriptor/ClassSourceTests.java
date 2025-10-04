@@ -60,8 +60,8 @@ class ClassSourceTests extends AbstractTestSourceTests {
 		assertThat(source.getClassName()).isEqualTo(testClassName);
 		assertThat(source.getPosition()).isEmpty();
 
-		assertPreconditionViolationFor(source::getJavaClass).withMessage(
-			"Could not load class with name: " + testClassName);
+		assertPreconditionViolationFor(source::getJavaClass)//
+				.withMessage("Could not load class with name: " + testClassName);
 	}
 
 	@Test

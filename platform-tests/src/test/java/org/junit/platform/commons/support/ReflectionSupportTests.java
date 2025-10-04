@@ -382,8 +382,8 @@ class ReflectionSupportTests {
 		assertPreconditionViolationNotNullFor("Method", () -> ReflectionSupport.invokeMethod(null, null, "true"));
 
 		var method = Boolean.class.getMethod("toString");
-		assertPreconditionViolationFor(() -> ReflectionSupport.invokeMethod(method, null)).withMessage(
-			"Cannot invoke non-static method [" + method.toGenericString() + "] on a null target.");
+		assertPreconditionViolationFor(() -> ReflectionSupport.invokeMethod(method, null))//
+				.withMessage("Cannot invoke non-static method [" + method.toGenericString() + "] on a null target.");
 	}
 
 	@Test
@@ -430,9 +430,9 @@ class ReflectionSupportTests {
 		assertPreconditionViolationNotNullFor("Field", () -> ReflectionSupport.tryToReadFieldValue(null, this));
 
 		var instanceField = getClass().getDeclaredField("instanceField");
-		assertPreconditionViolationFor(
-			() -> ReflectionSupport.tryToReadFieldValue(instanceField, null)).withMessageStartingWith(
-				"Cannot read non-static field").withMessageEndingWith("on a null instance.");
+		assertPreconditionViolationFor(() -> ReflectionSupport.tryToReadFieldValue(instanceField, null))//
+				.withMessageStartingWith("Cannot read non-static field")//
+				.withMessageEndingWith("on a null instance.");
 	}
 
 	@Test

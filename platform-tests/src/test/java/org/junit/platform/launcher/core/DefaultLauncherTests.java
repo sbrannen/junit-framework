@@ -105,8 +105,8 @@ class DefaultLauncherTests {
 	void constructLauncherWithoutAnyEngines() {
 		var launcher = createLauncher();
 
-		assertPreconditionViolationFor(() -> launcher.discover(request().build())).withMessageContaining(
-			"Cannot create Launcher without at least one TestEngine");
+		assertPreconditionViolationFor(() -> launcher.discover(request().build()))//
+				.withMessageContaining("Cannot create Launcher without at least one TestEngine");
 	}
 
 	@Test
@@ -600,8 +600,8 @@ class DefaultLauncherTests {
 		launcher.execute(executionRequest);
 		verify(engine, times(1)).execute(any());
 
-		assertPreconditionViolationFor(() -> launcher.execute(executionRequest)).withMessage(
-			"TestPlan must only be executed once");
+		assertPreconditionViolationFor(() -> launcher.execute(executionRequest))//
+				.withMessage("TestPlan must only be executed once");
 	}
 
 	@Test

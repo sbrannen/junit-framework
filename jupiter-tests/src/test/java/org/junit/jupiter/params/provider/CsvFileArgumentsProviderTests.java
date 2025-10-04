@@ -476,9 +476,8 @@ class CsvFileArgumentsProviderTests {
 				.files(csvFile.toAbsolutePath().toString())//
 				.build();
 
-		assertPreconditionViolationFor(
-			() -> provideArguments(new CsvFileArgumentsProvider(), annotation).findAny()).withMessageStartingWith(
-				"maxCharsPerColumn must be a positive number or -1: " + maxCharsPerColumn);
+		assertPreconditionViolationFor(() -> provideArguments(new CsvFileArgumentsProvider(), annotation).findAny())//
+				.withMessageStartingWith("maxCharsPerColumn must be a positive number or -1: " + maxCharsPerColumn);
 	}
 
 	@Test

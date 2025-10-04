@@ -287,9 +287,9 @@ class SuiteLauncherDiscoveryRequestBuilderTests {
 		class Suite {
 		}
 
-		assertPreconditionViolationFor(
-			() -> builder.applySelectorsAndFiltersFromSuite(Suite.class)).withMessageMatching(
-				"@SelectClasses on class \\[" + Pattern.quote(SuiteLauncherDiscoveryRequestBuilderTests.class.getName())
+		assertPreconditionViolationFor(() -> builder.applySelectorsAndFiltersFromSuite(Suite.class))//
+				.withMessageMatching("@SelectClasses on class \\["
+						+ Pattern.quote(SuiteLauncherDiscoveryRequestBuilderTests.class.getName())
 						+ "\\$\\d+Suite] must declare at least one class reference or name");
 	}
 
@@ -428,8 +428,9 @@ class SuiteLauncherDiscoveryRequestBuilderTests {
 					var expectedFailureMessage = entry.getValue();
 					return dynamicTest(suiteClassName.getSimpleName(), () -> {
 						assertPreconditionViolationFor(
-							() -> request().applySelectorsAndFiltersFromSuite(suiteClassName)).withMessage(
-								"@SelectMethod on class [" + suiteClassName.getName() + "]: " + expectedFailureMessage);
+							() -> request().applySelectorsAndFiltersFromSuite(suiteClassName))//
+									.withMessage("@SelectMethod on class [" + suiteClassName.getName() + "]: "
+											+ expectedFailureMessage);
 					});
 				});
 	}

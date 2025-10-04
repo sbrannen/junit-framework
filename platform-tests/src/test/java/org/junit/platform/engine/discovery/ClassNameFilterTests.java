@@ -30,9 +30,8 @@ class ClassNameFilterTests {
 			() -> ClassNameFilter.includeClassNamePatterns((String[]) null));
 		assertPreconditionViolationNotNullOrEmptyFor("patterns array",
 			() -> ClassNameFilter.includeClassNamePatterns(new String[0]));
-		assertPreconditionViolationFor(
-			() -> ClassNameFilter.includeClassNamePatterns(new String[] { null })).withMessage(
-				"patterns array must not contain null elements");
+		assertPreconditionViolationFor(() -> ClassNameFilter.includeClassNamePatterns(new String[] { null }))//
+				.withMessage("patterns array must not contain null elements");
 	}
 
 	@Test
@@ -91,9 +90,8 @@ class ClassNameFilterTests {
 			() -> ClassNameFilter.excludeClassNamePatterns((String[]) null));
 		assertPreconditionViolationNotNullOrEmptyFor("patterns array",
 			() -> ClassNameFilter.excludeClassNamePatterns(new String[0]));
-		assertPreconditionViolationFor(
-			() -> ClassNameFilter.excludeClassNamePatterns(new String[] { null })).withMessage(
-				"patterns array must not contain null elements");
+		assertPreconditionViolationFor(() -> ClassNameFilter.excludeClassNamePatterns(new String[] { null }))//
+				.withMessage("patterns array must not contain null elements");
 	}
 
 	@Test

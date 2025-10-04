@@ -225,10 +225,9 @@ class LauncherDiscoveryRequestBuilderTests {
 
 		@Test
 		void exceptionForIllegalFilterClass() {
-			assertPreconditionViolationFor(
-				() -> discoveryRequest().filters(o -> excluded("reason"))).withMessageStartingWith(
-					"Filter").withMessageEndingWith(
-						"must implement EngineFilter, PostDiscoveryFilter, or DiscoveryFilter.");
+			assertPreconditionViolationFor(() -> discoveryRequest().filters(o -> excluded("reason")))//
+					.withMessageStartingWith("Filter")//
+					.withMessageEndingWith("must implement EngineFilter, PostDiscoveryFilter, or DiscoveryFilter.");
 		}
 	}
 

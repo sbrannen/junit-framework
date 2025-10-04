@@ -37,8 +37,9 @@ class ClassSelectorTests {
 	void preservesOriginalExceptionWhenTryingToLoadClass() {
 		var selector = new ClassSelector(null, "org.example.TestClass");
 
-		assertPreconditionViolationFor(selector::getJavaClass).withMessage(
-			"Could not load class with name: org.example.TestClass").withCauseInstanceOf(ClassNotFoundException.class);
+		assertPreconditionViolationFor(selector::getJavaClass)//
+				.withMessage("Could not load class with name: org.example.TestClass")//
+				.withCauseInstanceOf(ClassNotFoundException.class);
 	}
 
 	@Test
