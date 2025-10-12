@@ -6,6 +6,7 @@ import junitbuild.compatibility.japicmp.AcceptedViolationsPostProcessRule
 import junitbuild.compatibility.japicmp.BreakingSuperClassChangeRule
 import junitbuild.compatibility.japicmp.InternalApiFilter
 import junitbuild.compatibility.japicmp.SourceIncompatibleRule
+import junitbuild.compatibility.roseau.RoseauDiff
 import junitbuild.extensions.dependencyFromLibs
 import junitbuild.extensions.javaModuleName
 import me.champeau.gradle.japicmp.JapicmpTask
@@ -61,46 +62,18 @@ val downloadPreviousReleaseJar by tasks.registering(Download::class) {
 
 val roseauCsvFile = layout.buildDirectory.file("reports/roseau/breaking-changes.csv")
 
-val roseau by tasks.registering(JavaExec::class) {
+val roseau by tasks.registering(RoseauDiff::class) {
 	if (gradle.startParameter.isOffline) {
 		enabled = false
 	}
 	onlyIf { extension.enabled.get() }
 	onlyIf("https://github.com/alien-tools/roseau/issues/90") { !OperatingSystem.current().isWindows }
 
-	mainClass = "io.github.alien.roseau.cli.RoseauCLI"
-	classpath = files(roseauClasspath)
-
-	inputs.files(configurations.compileClasspath)
-		.withNormalizer(CompileClasspathNormalizer::class)
-		.withPropertyName("apiClasspath")
-
-	val v1Jar = downloadPreviousReleaseJar.map { it.outputFiles.single() }
-	inputs.file(v1Jar)
-		.withNormalizer(CompileClasspathNormalizer::class)
-		.withPropertyName("v1")
-
-	val v2Jar = tasks.jar.flatMap { it.archiveFile }.map { it.asFile }
-	inputs.file(v2Jar)
-		.withNormalizer(CompileClasspathNormalizer::class)
-		.withPropertyName("v2")
-
-	outputs.file(roseauCsvFile)
-		.withPropertyName("report")
-
-	argumentProviders.add(CommandLineArgumentProvider {
-		listOf(
-			"--classpath", configurations.compileClasspath.get().asPath,
-			"--v1", v1Jar.get().absolutePath,
-			"--v2", v2Jar.get().absolutePath,
-			"--diff",
-			"--report", roseauCsvFile.get().asFile.absolutePath,
-		)
-	})
-
-	doFirst {
-		roseauCsvFile.get().asFile.parentFile.mkdirs()
-	}
+	toolClasspath.from(roseauClasspath)
+	libraryClasspath.from(configurations.compileClasspath)
+	v1 = downloadPreviousReleaseJar.map { it.outputFiles.single() }
+	v2 = tasks.jar.flatMap { it.archiveFile }.map { it.asFile }
+	csvReport = layout.buildDirectory.file("reports/roseau/breaking-changes.csv")
 }
 
 val japicmp by tasks.registering(JapicmpTask::class) {
