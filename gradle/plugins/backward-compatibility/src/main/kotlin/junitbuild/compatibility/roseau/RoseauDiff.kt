@@ -3,6 +3,7 @@ package junitbuild.compatibility.roseau
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.CompileClasspath
 import org.gradle.api.tasks.OutputFile
@@ -12,6 +13,7 @@ import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
+@CacheableTask
 abstract class RoseauDiff : DefaultTask() {
 
     @get:Inject
