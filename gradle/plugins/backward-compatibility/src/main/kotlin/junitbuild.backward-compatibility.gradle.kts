@@ -26,6 +26,14 @@ val roseauClasspath = configurations.resolvable("roseauClasspath") {
 }
 dependencies {
 	roseauDependencies(dependencyFromLibs("roseau-cli"))
+	constraints {
+		roseauDependencies("org.apache.commons:commons-lang3") {
+			version {
+				require("3.18.0")
+			}
+			because("Workaround for CVE-2025-48924")
+		}
+	}
 }
 
 val extension = extensions.create<BackwardCompatibilityChecksExtension>("backwardCompatibilityChecks").apply {
