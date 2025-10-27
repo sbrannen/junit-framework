@@ -45,7 +45,8 @@ repository on GitHub.
 [[release-notes-5.14.1-junit-jupiter-new-features-and-improvements]]
 ==== New Features and Improvements
 
-* ❓
+* Improve error message when using `@ParameterizedClass` with field injection and not
+  providing enough arguments.
 
 
 [[release-notes-5.14.1-junit-vintage]]
