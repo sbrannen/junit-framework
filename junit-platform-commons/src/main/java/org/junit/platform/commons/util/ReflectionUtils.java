@@ -1997,7 +1997,7 @@ public final class ReflectionUtils {
 			}
 
 			// Cannot override a package-private method in another package.
-			if (isPackagePrivate(upper) && !declaredInSamePackage(upper, lower)) {
+			if (isPackagePrivate(upper) && !isDeclaredInSamePackage(upper, lower)) {
 				return false;
 			}
 		}
@@ -2005,13 +2005,25 @@ public final class ReflectionUtils {
 		return hasCompatibleSignature(upper, lower.getName(), lower.getParameterTypes());
 	}
 
-	private static boolean isPackagePrivate(Member member) {
+	/**
+	 * @since 6.0.1
+	 */
+	@API(status = INTERNAL, since = "6.0.1")
+	public static boolean isPackagePrivate(Member member) {
 		int modifiers = member.getModifiers();
 		return !(Modifier.isPublic(modifiers) || Modifier.isProtected(modifiers) || Modifier.isPrivate(modifiers));
 	}
 
-	private static boolean declaredInSamePackage(Method m1, Method m2) {
-		return getPackageName(m1.getDeclaringClass()).equals(getPackageName(m2.getDeclaringClass()));
+	private static boolean isDeclaredInSamePackage(Method m1, Method m2) {
+		return isDeclaredInSamePackage(m1.getDeclaringClass(), m2.getDeclaringClass());
+	}
+
+	/**
+	 * @since 6.0.1
+	 */
+	@API(status = INTERNAL, since = "6.0.1")
+	public static boolean isDeclaredInSamePackage(Class<?> c1, Class<?> c2) {
+		return getPackageName(c1).equals(getPackageName(c2));
 	}
 
 	/**

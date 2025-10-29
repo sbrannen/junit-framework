@@ -35,7 +35,8 @@ repository on GitHub.
 [[release-notes-5.14.1-junit-jupiter-bug-fixes]]
 ==== Bug Fixes
 
-* ❓
+* Fix support for test methods with the same signature as a package-private methods
+  declared in super classes in different packages.
 
 [[release-notes-5.14.1-junit-jupiter-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
