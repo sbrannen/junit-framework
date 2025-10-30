@@ -10,6 +10,7 @@
 
 package org.junit.jupiter.engine.discovery;
 
+import static org.junit.platform.commons.util.ReflectionUtils.isDeclaredInSamePackage;
 import static org.junit.platform.commons.util.ReflectionUtils.isPackagePrivate;
 
 import java.lang.reflect.Method;
@@ -40,8 +41,7 @@ class MethodSegmentResolver {
 	 */
 	String formatMethodSpecPart(Method method, Class<?> testClass) {
 		var parameterTypes = ClassUtils.nullSafeToString(method.getParameterTypes());
-		if (isPackagePrivate(method)
-				&& !method.getDeclaringClass().getPackageName().equals(testClass.getPackageName())) {
+		if (isPackagePrivate(method) && !isDeclaredInSamePackage(method.getDeclaringClass(), testClass)) {
 			return "%s#%s(%s)".formatted(method.getDeclaringClass().getName(), method.getName(), parameterTypes);
 		}
 		return "%s(%s)".formatted(method.getName(), parameterTypes);
