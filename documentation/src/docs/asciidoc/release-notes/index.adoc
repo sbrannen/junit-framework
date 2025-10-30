@@ -21,4 +21,6 @@ include::{basedir}/release-notes-6.0.1.adoc[]
 
 include::{basedir}/release-notes-6.0.0.adoc[]
 
+include::{basedir}/release-notes-5.14.1.adoc[]
+
 include::{basedir}/release-notes-5.14.0.adoc[]
