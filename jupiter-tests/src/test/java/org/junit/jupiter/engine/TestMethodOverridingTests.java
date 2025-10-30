@@ -29,7 +29,7 @@ import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.testkit.engine.EngineExecutionResults;
 
 /**
- * @since 6.0.1
+ * @since 5.14.1
  */
 class TestMethodOverridingTests extends AbstractJupiterTestEngineTests {
 

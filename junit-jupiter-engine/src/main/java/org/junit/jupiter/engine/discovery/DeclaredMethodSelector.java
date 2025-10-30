@@ -29,7 +29,7 @@ import org.junit.platform.engine.discovery.MethodSelector;
  * that case both methods should be discovered because the one declared in the
  * subclass does <em>not</em> override the one in the super class.
  *
- * @since 6.0.1
+ * @since 5.14.1
  */
 final class DeclaredMethodSelector implements DiscoverySelector {
 
