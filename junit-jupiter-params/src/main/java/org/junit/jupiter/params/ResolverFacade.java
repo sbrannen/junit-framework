@@ -96,7 +96,8 @@ class ResolverFacade {
 		Stream.concat(uniqueIndexedParameters.values().stream(), aggregatorParameters.stream()) //
 				.forEach(declaration -> makeAccessible(declaration.getField()));
 
-		var requiredParameterCount = new RequiredParameterCount(uniqueIndexedParameters.size(), "field injection");
+		RequiredParameterCount requiredParameterCount = new RequiredParameterCount(uniqueIndexedParameters.size(),
+			"field injection");
 
 		return new ResolverFacade(clazz, uniqueIndexedParameters, aggregatorParameters, 0, requiredParameterCount);
 	}
@@ -155,12 +156,12 @@ class ResolverFacade {
 	private final Map<ParameterDeclaration, Resolver> resolvers;
 	private final DefaultParameterDeclarations indexedParameterDeclarations;
 	private final Set<? extends ResolvableParameterDeclaration> aggregatorParameters;
-	private final @Nullable RequiredParameterCount requiredParameterCount;
+	private final RequiredParameterCount requiredParameterCount;
 
 	private ResolverFacade(AnnotatedElement sourceElement,
 			NavigableMap<Integer, ? extends ResolvableParameterDeclaration> indexedParameters,
 			Set<? extends ResolvableParameterDeclaration> aggregatorParameters, int parameterIndexOffset,
-			@Nullable RequiredParameterCount requiredParameterCount) {
+			RequiredParameterCount requiredParameterCount) {
 		this.aggregatorParameters = aggregatorParameters;
 		this.parameterIndexOffset = parameterIndexOffset;
 		this.resolvers = new ConcurrentHashMap<>(indexedParameters.size() + aggregatorParameters.size());
@@ -172,7 +173,6 @@ class ResolverFacade {
 		return this.indexedParameterDeclarations;
 	}
 
-	@Nullable
 	RequiredParameterCount getRequiredParameterCount() {
 		return this.requiredParameterCount;
 	}
@@ -781,6 +781,21 @@ class ResolverFacade {
 		}
 	}
 
-	record RequiredParameterCount(int value, String reason) {
+	static class RequiredParameterCount {
+		private final int value;
+		private final String reason;
+
+		RequiredParameterCount(int value, String reason) {
+			this.value = value;
+			this.reason = reason;
+		}
+
+		int value() {
+			return value;
+		}
+
+		String reason() {
+			return reason;
+		}
 	}
 }
