@@ -1849,9 +1849,9 @@ public final class ReflectionUtils {
 	}
 
 	/**
-	 * @since 6.0.1
+	 * @since 5.14.1
 	 */
-	@API(status = INTERNAL, since = "6.0.1")
+	@API(status = INTERNAL, since = "5.14.1")
 	public static boolean isPackagePrivate(Member member) {
 		int modifiers = member.getModifiers();
 		return !(Modifier.isPublic(modifiers) || Modifier.isProtected(modifiers) || Modifier.isPrivate(modifiers));
@@ -1862,9 +1862,9 @@ public final class ReflectionUtils {
 	}
 
 	/**
-	 * @since 6.0.1
+	 * @since 5.14.1
 	 */
-	@API(status = INTERNAL, since = "6.0.1")
+	@API(status = INTERNAL, since = "5.14.1")
 	public static boolean isDeclaredInSamePackage(Class<?> c1, Class<?> c2) {
 		return c1.getPackageName().equals(c2.getPackageName());
 	}
