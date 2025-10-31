@@ -40,6 +40,11 @@ repository on GitHub.
 * Fix support for test methods with the same signature as a package-private methods
   declared in super classes in different packages.
 
+[[release-notes-6.0.1-junit-jupiter-deprecations-and-breaking-changes]]
+==== Deprecations and Breaking Changes
+
+* Mark `org.junit.jupiter.migrationsupport` module descriptor as deprecated for removal.
+
 [[release-notes-6.0.1-junit-jupiter-new-features-and-improvements]]
 ==== New Features and Improvements
 
