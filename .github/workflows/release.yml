@@ -84,6 +84,7 @@ jobs:
           token: ${{ secrets.JUNIT_BUILDS_GITHUB_TOKEN_EXAMPLES_REPO }}
           fetch-depth: 1
           path: junit-examples
+          ref: releases/5.14.x
       - name: Set up JDK
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
@@ -242,6 +243,7 @@ jobs:
           repository: ${{ github.repository_owner }}/junit-examples
           token: ${{ secrets.JUNIT_BUILDS_GITHUB_TOKEN_EXAMPLES_REPO }}
           fetch-depth: 1
+          ref: releases/5.14.x
       - name: Set up JDK
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
@@ -264,12 +266,6 @@ jobs:
         if: ${{ inputs.dryRun == false }}
         run: |
           git push origin "${{ env.RELEASE_TAG }}"
-      - name: Update main branch (only for GA releases)
-        if: ${{ inputs.dryRun == false && !contains(inputs.releaseVersion, '-') }}
-        run: |
-          git switch main
-          git merge --ff-only "${{ env.RELEASE_TAG }}"
-          git push origin main
 
   create_github_release:
     name: Create GitHub release
