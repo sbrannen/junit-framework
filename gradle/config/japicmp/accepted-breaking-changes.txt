@@ -1,4 +1,0 @@
-org.junit.jupiter.api.extension.ExtensionContext#publishFile
-org.junit.jupiter.api.extension.MediaType
-org.junit.platform.commons.support.scanning.ClasspathScanner#scanForResourcesInClasspathRoot
-org.junit.platform.commons.support.scanning.ClasspathScanner#scanForResourcesInPackage

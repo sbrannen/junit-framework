@@ -22,20 +22,9 @@
     - [ ] [Mastodon](https://fosstodon.org/@junit)
     - [ ] [Bluesky](https://bsky.app/profile/junit.org)
 
-### Preview releases (milestones and release candidates)
-
-- [ ] Fast-forward merge the release branch to `main` and push to GitHub
-- [ ] Create release notes for the next preview or feature release from the template
-
-### Feature releases (x.y.0)
-
-- [ ] Fast-forward merge the release branch to `main` and push to GitHub
-- [ ] Update the [security policy](https://github.com/junit-team/junit-framework/blob/main/SECURITY.md) and commit with message "Update security policy to reflect 5.x release" or similar
-- [ ] Create release notes for the next feature release from the template
-- [ ] Update [JBang catalog](https://github.com/junit-team/jbang-catalog/blob/main/jbang-catalog.json)
-
 ### Patch releases (x.y.z)
 
 - [ ] Cherry-pick the tagged commit from the release branch to `main` and resolve the conflict in `gradle.properties` by choosing the version of the `main` branch
+- [ ] Clear `accepted-breaking-changes.txt`, change `previousVersion` in `junitbuild.japicmp.gradle.kts` to `x.y.z` on the release branch, and commit with message "Update API baseline and clear accepted breaking changes"
 - [ ] Include the release notes of the patch release on `main` if not already present
 - [ ] Update [JBang catalog](https://github.com/junit-team/jbang-catalog/blob/main/jbang-catalog.json)
