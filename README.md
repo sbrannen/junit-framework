@@ -10,11 +10,6 @@ This repository is the home of _JUnit 5_.
 * **Silver Sponsors:** [Micromata](https://www.micromata.de), [Quo Card](https://quo-digital.jp)
 * **Bronze Sponsors:** [Premium Minds](https://www.premium-minds.com), [codefortynine](https://codefortynine.com), [Info Support](https://www.infosupport.com), [Code Intelligence](https://www.code-intelligence.com), [Route4Me](https://route4me.com/), [Testiny](https://www.testiny.io/), [LambdaTest](https://www.lambdatest.com)
 
-## Latest Releases
-
-- General Availability (GA): [JUnit 5.14.0](https://github.com/junit-team/junit-framework/releases/tag/r5.14.0) (September 30, 2025)
-- Preview (Milestone/Release Candidate): [JUnit 6.0.0-RC3](https://github.com/junit-team/junit-framework/releases/tag/r6.0.0-RC3) (September 14, 2025)
-
 ## Documentation
 
 - [User Guide]
