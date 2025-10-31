@@ -1,9 +1,9 @@
 [[release-notes-6.0.1]]
 == 6.0.1
 
-*Date of Release:* ❓
+*Date of Release:* October 31, 2025
 
-*Scope:* ❓
+*Scope:* Bug fixes and enhancements since 6.0.0
 
 For a complete list of all _closed_ issues and pull requests for this release, consult the
 link:{junit-framework-repo}+/milestone/110?closed=1+[6.0.1] milestone page in the JUnit
@@ -19,16 +19,6 @@ repository on GitHub.
 * The `jdk.jfr` package is now an optional import when using the `junit-platform-launcher`
   as an OSGi bundle.
 * Remove remnants of Java 8 compatibility from User Guide.
-
-[[release-notes-6.0.1-junit-platform-deprecations-and-breaking-changes]]
-==== Deprecations and Breaking Changes
-
-* ❓
-
-[[release-notes-6.0.1-junit-platform-new-features-and-improvements]]
-==== New Features and Improvements
-
-* ❓
 
 
 [[release-notes-6.0.1-junit-jupiter]]
@@ -50,11 +40,6 @@ repository on GitHub.
 * Fix support for test methods with the same signature as a package-private methods
   declared in super classes in different packages.
 
-[[release-notes-6.0.1-junit-jupiter-deprecations-and-breaking-changes]]
-==== Deprecations and Breaking Changes
-
-* ❓
-
 [[release-notes-6.0.1-junit-jupiter-new-features-and-improvements]]
 ==== New Features and Improvements
 
@@ -68,16 +53,6 @@ repository on GitHub.
 
 [[release-notes-6.0.1-junit-vintage]]
 === JUnit Vintage
-
-[[release-notes-6.0.1-junit-vintage-bug-fixes]]
-==== Bug Fixes
-
-* ❓
-
-[[release-notes-6.0.1-junit-vintage-deprecations-and-breaking-changes]]
-==== Deprecations and Breaking Changes
-
-* ❓
 
 [[release-notes-6.0.1-junit-vintage-new-features-and-improvements]]
 ==== New Features and Improvements
