@@ -40,7 +40,10 @@ graalvmNative {
 	binaries {
 		named("test") {
 			buildArgs.add("-H:+ReportExceptionStackTraces")
-			buildArgs.add("--initialize-at-build-time=${initializeAtBuildTime.values.flatten().joinToString(",")}")
+			val classNames = initializeAtBuildTime.values.flatten()
+			if (classNames.isNotEmpty()) {
+				buildArgs.add("--initialize-at-build-time=${classNames.joinToString(",")}")
+			}
 		}
 	}
 }
