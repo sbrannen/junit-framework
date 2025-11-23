@@ -16,7 +16,7 @@ repository on GitHub.
 [[v5.14.2-junit-platform-bug-fixes]]
 ==== Bug Fixes
 
-* ❓
+* Make `ConsoleLauncher` compatible with JDK 26 by avoiding final field mutations.
 
 [[v5.14.2-junit-platform-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
