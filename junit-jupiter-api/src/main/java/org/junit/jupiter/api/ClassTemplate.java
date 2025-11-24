@@ -46,7 +46,7 @@ import org.junit.platform.commons.annotation.Testable;
  *
  * <h2>Inheritance</h2>
  *
- * <p>This annotation is inherited by subclasses.
+ * <p>This annotation is {@linkplain Inherited inherited} within class hierarchies.
  *
  * @since 5.13
  * @see TestTemplate @TestTemplate
