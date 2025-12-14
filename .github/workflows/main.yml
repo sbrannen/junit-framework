@@ -105,12 +105,10 @@ jobs:
       with:
         subject-path: documentation/build/attestation/*.jar
 
-  documentation:
+  build_documentation:
     name: Build Documentation
     needs: macOS
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
     steps:
     - name: Check out repository
       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -138,3 +136,16 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: gh workflow run deploy-docs.yml --ref docs-site
+
+  deploy_documentation:
+    name: Deploy Documentation
+    needs: build_documentation
+    if: github.event_name == 'push' && github.repository == 'junit-team/junit-framework' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Trigger documentation site deployment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy-docs.yml --repo junit-team/junit-framework --ref docs-site
