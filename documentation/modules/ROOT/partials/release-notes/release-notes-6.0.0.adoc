@@ -288,3 +288,5 @@ guidance on upgrading from JUnit 5.x.y to 6.0.0.
 ==== New Features and Improvements
 
 * Cancellation support for the Vintage test engine.
+For complete details consult the
+https://docs.junit.org/6.0.0/release-notes.html[6.0.0 Release Notes] online.
