@@ -10,6 +10,7 @@ antora:
 site:
   title: JUnit User Guide
   url: https://docs.junit.org
+  start_page: junit::overview.adoc
 content:
   sources:
   - url: @GIT_REPO_ROOT@
