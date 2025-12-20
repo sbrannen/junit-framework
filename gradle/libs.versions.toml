@@ -29,7 +29,7 @@ bndlib = { module = "biz.aQute.bnd:biz.aQute.bndlib", version.ref = "bnd" }
 checkstyle = { module = "com.puppycrawl.tools:checkstyle", version.ref = "checkstyle" }
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.184" }
 commons-io = { module = "commons-io:commons-io", version = "2.20.0" }
-errorProne-core = { module = "com.google.errorprone:error_prone_core", version = "2.42.0" }
+errorProne-core = { module = "com.google.errorprone:error_prone_core", version = "2.45.0" }
 fastcsv = { module = "de.siegmar:fastcsv", version = "4.1.0" }
 groovy = { module = "org.apache.groovy:groovy", version = "5.0.1" }
 groovy2-bom = { module = "org.codehaus.groovy:groovy-bom", version = "2.5.23" }
@@ -54,7 +54,7 @@ mockito-bom = { module = "org.mockito:mockito-bom", version = "5.20.0" }
 mockito-core = { module = "org.mockito:mockito-core" }
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter" }
 nohttp-checkstyle = { module = "io.spring.nohttp:nohttp-checkstyle", version = "0.0.11" }
-nullaway = { module = "com.uber.nullaway:nullaway", version = "0.12.10" }
+nullaway = { module = "com.uber.nullaway:nullaway", version = "0.12.14" }
 opentest4j = { module = "org.opentest4j:opentest4j", version.ref = "opentest4j" }
 openTestReporting-cli = { module = "org.opentest4j.reporting:open-test-reporting-cli", version.ref = "openTestReporting" }
 openTestReporting-events = { module = "org.opentest4j.reporting:open-test-reporting-events", version.ref = "openTestReporting" }
