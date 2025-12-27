@@ -346,7 +346,7 @@ tasks {
 		from(inputDir) {
 			filesMatching("**/*.html") {
 				val favicon =
-                    """
+					"""
 						<link rel="icon" type="image/png" href="https://junit.org/assets/img/junit-diamond.png">
 						<link rel="icon" type="image/svg+xml" href="https://junit.org/assets/img/junit-diamond-adaptive.svg" sizes="any">
 						""".trimIndent()
