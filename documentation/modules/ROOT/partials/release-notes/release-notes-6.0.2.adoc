@@ -17,6 +17,9 @@ repository on GitHub.
 ==== Bug Fixes
 
 * Make `ConsoleLauncher` compatible with JDK 26 by avoiding final field mutations.
+* Recheck done condition before rejecting extraneous worker in `WorkerThreadPoolHierarchicalTestExecutorService`
+* Enable recursive updates when using `NamespacedHierarchicalStore.computeIfAbsent(N, K, Function)`.
+  This provides parity with the deprecated `NamespacedHierarchicalStore.getOrComputeIfAbsent(N, K, Function)`
 
 [[release-notes-6.0.2-junit-platform-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
