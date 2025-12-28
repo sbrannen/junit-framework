@@ -40,6 +40,8 @@ repository on GitHub.
 
 * Allow using `@ResourceLock` on classes annotated with `@ClassTemplate` (or
   `@ParameterizedClass`).
+* Change API status of recommended method in `ArgumentsProvider` as well as
+  `ParameterDeclaration(s)` as "maintained" rather than "experimental".
 
 [[release-notes-6.0.2-junit-jupiter-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
