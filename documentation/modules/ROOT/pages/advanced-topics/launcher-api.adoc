@@ -385,6 +385,7 @@ At the time of writing, the following test engines support cancellation:
 * `{junit-jupiter-engine}`
 * `{junit-vintage-engine}`
 * `{junit-platform-suite-engine}`
+* https://github.com/junit-team/testng-engine[`testng-engine`] (version 1.1.0 and later)
 * Any `{TestEngine}` extending `{HierarchicalTestEngine}` such as Spock and Cucumber
 ====
 
