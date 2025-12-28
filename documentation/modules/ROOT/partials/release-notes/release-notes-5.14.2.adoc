@@ -3,7 +3,7 @@
 
 *Date of Release:* ❓
 
-*Scope:* ❓
+*Scope:* Bug fixes and enhancements since 5.14.1
 
 For a complete list of all _closed_ issues and pull requests for this release, consult the
 link:{junit-framework-repo}+/milestone/115?closed=1+[5.14.2] milestone page in the JUnit
@@ -35,7 +35,8 @@ repository on GitHub.
 [[v5.14.2-junit-jupiter-bug-fixes]]
 ==== Bug Fixes
 
-* ❓
+* Allow using `@ResourceLock` on classes annotated with `@ClassTemplate` (or
+  `@ParameterizedClass`).
 
 [[v5.14.2-junit-jupiter-deprecations-and-breaking-changes]]
 ==== Deprecations and Breaking Changes
