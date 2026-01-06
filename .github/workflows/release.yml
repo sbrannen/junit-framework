@@ -193,6 +193,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run deploy-docs.yml --repo junit-team/junit-framework --ref docs-site
+      - name: Install Poppler (for pdfinfo)
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes poppler-utils
       - name: Wait for deployment
         if: ${{ inputs.dryRun == false }}
         id: pagesDeployment
