@@ -30,7 +30,7 @@ val extension = extensions.create<JApiCmpExtension>("japicmp").apply {
 	}
 	previousVersion.apply {
 		convention(provider {
-			if (group == "org.junit.platform") "1.14.1" else "5.14.1"
+			if (group == "org.junit.platform") "1.14.2" else "5.14.2"
 		})
 		finalizeValueOnRead()
 	}
