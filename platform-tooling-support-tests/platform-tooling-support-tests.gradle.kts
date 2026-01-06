@@ -22,6 +22,9 @@ spotless {
 	java {
 		target(files(project.java.sourceSets.map { it.allJava }), "projects/**/*.java")
 	}
+	format("moduleAndPackageInfo") {
+		target("projects/**/module-info.java", "projects/**/package-info.java")
+	}
 	kotlin {
 		target("projects/**/*.kt")
 	}
