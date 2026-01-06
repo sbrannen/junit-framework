@@ -60,7 +60,7 @@ abstract class GenerateJreRelatedSourceCode : DefaultTask() {
             val params = mapOf(
                 "jres" to jres,
                 "jresSortedByStringValue" to jres.sortedBy { it.version.toString() },
-                "licenseHeader" to licenseHeaderFile.asFile.get().readText()
+                "licenseHeader" to licenseHeaderFile.asFile.get().readText().trimEnd() + "\n",
             )
             templates.forEach {
                 val targetFile = mainTargetDir.toPath().resolve(it.resolveSibling(it.nameWithoutExtension).path)
