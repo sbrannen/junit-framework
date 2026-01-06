@@ -87,6 +87,7 @@ jobs:
           token: ${{ secrets.JUNIT_BUILDS_GITHUB_TOKEN_EXAMPLES_REPO }}
           fetch-depth: 1
           path: junit-examples
+          ref: releases/6.0.x
           persist-credentials: false
       - name: Set up JDK
         uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
@@ -197,6 +198,7 @@ jobs:
           repository: ${{ github.repository_owner }}/junit-examples
           token: ${{ secrets.JUNIT_BUILDS_GITHUB_TOKEN_EXAMPLES_REPO }}
           fetch-depth: 1
+          ref: releases/6.0.x
           persist-credentials: true
       - name: Set up JDK
         uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
