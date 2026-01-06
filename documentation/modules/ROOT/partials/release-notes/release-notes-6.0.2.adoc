@@ -1,9 +1,9 @@
 [[release-notes-6.0.2]]
 == 6.0.2
 
-*Date of Release:* ❓
+*Date of Release:* January 6, 2026
 
-*Scope:* ❓
+*Scope:* Bug fixes and enhancements since 6.0.1
 
 For a complete list of all _closed_ issues and pull requests for this release, consult the
 link:{junit-framework-repo}+/milestone/113?closed=1+[6.0.2] milestone page in the JUnit
@@ -70,3 +70,4 @@ repository on GitHub.
 ==== New Features and Improvements
 
 * ❓
+No changes.
