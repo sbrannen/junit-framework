@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava19;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava8;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava9;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onKnownVersion;
+import static org.junit.jupiter.api.condition.JavaVersionPredicates.onOtherVersion;
 import static org.junit.platform.commons.test.PreconditionAssertions.assertPreconditionViolationFor;
 
 import org.junit.jupiter.api.Test;
@@ -266,7 +267,7 @@ class DisabledForJreRangeConditionTests extends AbstractExecutionConditionTests 
 	@Test
 	void minOtherMaxOther() {
 		evaluateCondition();
-		assertDisabledOnCurrentJreIf(!onKnownVersion());
+		assertDisabledOnCurrentJreIf(!(onKnownVersion() || onOtherVersion()));
 	}
 
 	/**

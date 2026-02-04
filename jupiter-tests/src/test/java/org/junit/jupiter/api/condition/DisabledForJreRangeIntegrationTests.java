@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava19;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava8;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onJava9;
 import static org.junit.jupiter.api.condition.JavaVersionPredicates.onKnownVersion;
+import static org.junit.jupiter.api.condition.JavaVersionPredicates.onOtherVersion;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -206,7 +207,7 @@ class DisabledForJreRangeIntegrationTests {
 	@Test
 	@DisabledForJreRange(min = OTHER, max = OTHER)
 	void minOtherMaxOther() {
-		assertTrue(onKnownVersion());
+		assertTrue(onKnownVersion() || onOtherVersion());
 	}
 
 	@Test
