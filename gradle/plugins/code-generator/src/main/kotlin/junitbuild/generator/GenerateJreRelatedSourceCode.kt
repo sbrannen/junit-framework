@@ -37,8 +37,16 @@ abstract class GenerateJreRelatedSourceCode : DefaultTask() {
 
     @TaskAction
     fun generateSourceCode() {
+        // TODO Consider renaming mainTargetDir, since it can refer to
+        // "main", "testFixtures", or "test".
         val mainTargetDir = targetDir.get().asFile
+        // TODO We probably only need to have test-target specific logic
+        // when the mainTargetDir actually refers to "main".
+        val testTargetDir = mainTargetDir.toPath().resolveSibling("test").toFile()
         mainTargetDir.deleteRecursively()
+
+        logger.error(">>>>> Main " + mainTargetDir);
+        logger.error(">>>>> Test " + testTargetDir);
 
         val templateDir = templateDir.get().asFile
         val codeResolver = DirectoryCodeResolver(templateDir.toPath())
@@ -59,20 +67,44 @@ abstract class GenerateJreRelatedSourceCode : DefaultTask() {
             }
             val minRuntimeVersion = 17
             val supportedJres = jres.filter { it.version >= minRuntimeVersion }
+            val testDoubleJres = jres.filter { it.version <= 22 }
             val params = mapOf(
+                "classNamePrefix" to "",
                 "minRuntimeVersion" to minRuntimeVersion,
                 "allJres" to jres,
                 "supportedJres" to supportedJres,
                 "supportedJresSortedByStringValue" to supportedJres.sortedBy { it.version.toString() },
                 "licenseHeader" to licenseHeaderFile.asFile.get().readText().trimEnd() + "\n",
             )
+            val testDoubleParams = mapOf(
+                "classNamePrefix" to "TestDouble",
+                "minRuntimeVersion" to minRuntimeVersion,
+                "allJres" to testDoubleJres,
+                "supportedJres" to supportedJres,
+                "supportedJresSortedByStringValue" to supportedJres.sortedBy { it.version.toString() },
+                "licenseHeader" to licenseHeaderFile.asFile.get().readText().trimEnd() + "\n",
+            )
             templates.forEach {
-                val targetFile = mainTargetDir.toPath().resolve(it.resolveSibling(it.nameWithoutExtension).path)
+                val fileName = it.nameWithoutExtension
+                val targetFile = mainTargetDir.toPath().resolve(it.resolveSibling(fileName).path)
+                logger.error(">>>>> TARGET: " + targetFile)
 
                 FileOutput(targetFile).use { output ->
                     // JTE does not support Windows paths, so we need to replace them
                     val safePath = it.path.replace('\\', '/')
-                    templateEngine.render(safePath, params, output)
+                    templateEngine.render(safePath, params, output);
+                }
+
+                if (fileName == "JRE.java") {
+                    // TODO Figure out why the file is not created in the testTargetDir.
+                    // val testDoubleTargetFile = testTargetDir.toPath().resolve(it.resolveSibling("TestDouble" + fileName).path)
+                    val testDoubleTargetFile = mainTargetDir.toPath().resolve(it.resolveSibling("TestDouble" + fileName).path)
+                    logger.error(">>>>> TEST DOUBLE: " + testDoubleTargetFile)
+                    FileOutput(testDoubleTargetFile).use { output ->
+                        // JTE does not support Windows paths, so we need to replace them
+                        val safePath = it.path.replace('\\', '/')
+                        templateEngine.render(safePath, testDoubleParams, output)
+                    }
                 }
             }
         }
