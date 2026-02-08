@@ -8,22 +8,20 @@
  * https://www.eclipse.org/legal/epl-v20.html
  */
 
-package example;
+package example.kotlin
 
 // tag::user_guide[]
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import example.util.Calculator;
-
-import org.junit.jupiter.api.Test;
+import example.util.Calculator
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class MyFirstJUnitJupiterTests {
+    private val calculator = Calculator()
 
-	private final Calculator calculator = new Calculator();
-
-	@Test
-	void addition() {
-		assertEquals(2, calculator.add(1, 1));
-	}
+    @Test
+    fun addition() {
+        assertEquals(2, calculator.add(1, 1))
+    }
 }
 // end::user_guide[]

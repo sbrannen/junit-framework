@@ -10,20 +10,22 @@
 
 package example;
 
-// tag::user_guide[]
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import example.util.Calculator;
+import example.extensions.Random;
 
 import org.junit.jupiter.api.Test;
 
-class MyFirstJUnitJupiterTests {
+// tag::user_guide[]
+class MyRandomParametersTest {
 
-	private final Calculator calculator = new Calculator();
+	MyRandomParametersTest(@Random int randomNumber) {
+		// Use randomNumber in constructor.
+	}
 
 	@Test
-	void addition() {
-		assertEquals(2, calculator.add(1, 1));
+	void injectsInteger(@Random int i, @Random int j) {
+		assertNotEquals(i, j);
 	}
 }
 // end::user_guide[]
