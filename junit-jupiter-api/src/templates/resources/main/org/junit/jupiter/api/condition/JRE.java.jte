@@ -2,7 +2,7 @@
 @import gg.jte.support.ForSupport
 @import junitbuild.generator.model.JRE
 
-@param String classNamePrefix
+@param String classNamePrefix = ""
 @param int minRuntimeVersion
 @param List<JRE> allJres
 @param String licenseHeader
