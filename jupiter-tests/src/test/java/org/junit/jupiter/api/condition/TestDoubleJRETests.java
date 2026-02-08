@@ -25,9 +25,10 @@ public class TestDoubleJRETests {
 
 	@Test
 	@EnabledForJreRange(min = JAVA_23)
-	void otherOnUnsupportedJre() {
+	void currentJreIsOtherForUnsupportedJre() {
 		assertEquals(TestDoubleJRE.OTHER, TestDoubleJRE.currentJre());
 		assertTrue(TestDoubleJRE.OTHER.isCurrentVersion());
 		assertTrue(TestDoubleJRE.isCurrentVersion(TestDoubleJRE.OTHER.version()));
 	}
+
 }
