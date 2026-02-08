@@ -191,7 +191,7 @@ public enum ${classNamePrefix}JRE {
 	 */
 	@API(status = MAINTAINED, since = "5.13.3")
 	public static boolean isCurrentVersion(int version) {
-		return (version == CURRENT_VERSION) || (version == JRE.currentJre().version);
+		return (version == CURRENT_VERSION) || (version == ${classNamePrefix}JRE.currentJre().version);
 	}
 
 	static boolean isCurrentVersionWithinRange(int min, int max) {
